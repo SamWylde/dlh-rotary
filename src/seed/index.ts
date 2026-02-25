@@ -234,6 +234,7 @@ export const seed = async (
       clubName: 'Rotary Club of Downtown Lock Haven',
       tagline: 'Service Above Self',
       email: 'dlhrotary@gmail.com',
+      phone: '(814) 571-5324',
       address: 'PO Box 634\nLock Haven, PA 17745',
       presidentContact: {
         name: 'Lisa Schropp',
@@ -471,7 +472,7 @@ export const seed = async (
         ),
         h2('Attend Bingo'),
         p(
-          'Join us for our annual Bingo Fundraiser on September 27, 2026 at KBR Bingo Hall. Enjoy basket raffles, 50-50 drawings, door prizes, and special games. Proceeds support club projects and scholarships.',
+          'Join us for our annual Bingo Fundraiser on September 20, 2026 at KBR Bingo Hall. Enjoy basket raffles, 50-50 drawings, door prizes, and special games. Proceeds support club projects and scholarships.',
         ),
         h2('Corporate Sponsorships'),
         p(
@@ -570,7 +571,7 @@ export const seed = async (
           'Our annual bingo fundraiser features basket raffles (goal: 50+ baskets), a 50-50 drawing, door prizes, rip tickets, and special bingo games.',
         ),
         p(
-          'The 2026 Bingo is scheduled for Sunday, September 27 at KBR Bingo Hall. It was rescheduled from March 1 to avoid a conflict with a Keystone Central Foundation event.',
+          'The 2026 Bingo is scheduled for Sunday, September 20 at KBR Bingo Hall. It was rescheduled from March 1 to avoid a conflict with a Keystone Central Foundation event.',
         ),
         p(
           'Donations of gift cards or basket items from local businesses are welcome. Past supporters include SWC Realty, First Quality, Truck-Lite, West Pharmaceutical, Just Born (Peeps), Fox\'s Restaurant, Weis Market, Dunkin\' Donuts, Pearl\'s Cafe, and many more.',
@@ -740,7 +741,7 @@ export const seed = async (
     {
       slug: 'bingo-fundraiser-2026',
       title: 'Bingo Fundraiser',
-      date: '2026-09-27T13:00:00.000Z',
+      date: '2026-09-20T13:00:00.000Z',
       eventType: 'fundraiser',
       location: 'KBR Bingo Hall, Lock Haven',
       description:
@@ -842,7 +843,7 @@ export const seed = async (
       membersOnly: false,
       _status: 'published',
       content: lexicalParagraph(
-        'Our annual Bingo Fundraiser has been rescheduled from March 1 to Sunday, September 27, 2026 at KBR Bingo Hall. The change was made to avoid a conflict with an event from the Keystone Central Foundation. We look forward to seeing you there for baskets, 50-50, door prizes, and great fun!',
+        'Our annual Bingo Fundraiser has been rescheduled from March 1 to Sunday, September 20, 2026 at KBR Bingo Hall. The change was made to avoid a conflict with an event from the Keystone Central Foundation. We look forward to seeing you there for baskets, 50-50, door prizes, and great fun!',
       ),
     },
   })

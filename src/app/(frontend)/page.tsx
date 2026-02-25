@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 
 import { LatestAnnouncements } from '@/components/announcements/LatestAnnouncements'
 import { UpcomingEvents } from '@/components/events/UpcomingEvents'
+import { FacebookFeed } from '@/components/layout/FacebookFeed'
 import { getCurrentUser } from '@/lib/auth'
 import { getRecentAnnouncements, getUpcomingEvents } from '@/lib/content'
 
@@ -32,20 +33,45 @@ async function LatestAnnouncementsSection() {
 export default function HomePage() {
   return (
     <div className="grid gap-8">
-      <section className="rounded-xl border border-border bg-card p-8">
-        <p className="text-sm uppercase tracking-wide text-muted-foreground">Service Above Self</p>
-        <h1 className="mt-2 text-4xl font-semibold">Rotary Club of Downtown Lock Haven</h1>
-        <p className="mt-3 max-w-2xl text-muted-foreground">
+      {/* Hero */}
+      <section
+        className="rounded-xl p-8"
+        style={{ background: 'linear-gradient(135deg, #003DA5 0%, #17458F 55%, #2360a5 100%)' }}
+      >
+        <p className="text-sm uppercase tracking-wide text-white/70">Service Above Self</p>
+        <h1 className="mt-2 text-4xl font-semibold text-white">Rotary Club of Downtown Lock Haven</h1>
+        <p className="mt-3 max-w-2xl text-white/80">
           Community projects, scholarships, and weekly fellowship in Clinton County.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link className="rounded bg-primary px-4 py-2 text-primary-foreground" href="/join">
+          <Link className="rounded bg-white px-4 py-2 font-medium text-[#003DA5]" href="/join">
             Join Us
           </Link>
-          <Link className="rounded border border-border px-4 py-2" href="/projects">
+          <Link className="rounded border border-white/60 px-4 py-2 text-white hover:bg-white/10" href="/projects">
             View Projects
           </Link>
         </div>
+      </section>
+
+      {/* Meeting Callout */}
+      <div className="rounded-xl bg-[#003DA5] px-6 py-4 text-white">
+        <p className="font-medium">📍 We meet every Tuesday at 5:30 PM (social time at 5:15)</p>
+        <p className="mt-0.5 text-sm text-white/80">Poorman Gallery, 352 E. Water Street, Lock Haven, PA</p>
+      </div>
+
+      {/* About Blurb */}
+      <section className="rounded-xl border border-border bg-card px-6 py-5">
+        <p className="text-muted-foreground">
+          The Rotary Club of Downtown Lock Haven has been serving Clinton County for over 22 years. We&apos;re
+          neighbors, friends, and community leaders who come together each week to create positive, lasting change
+          — locally and around the world. All are welcome.
+        </p>
+        <Link
+          className="mt-3 inline-block text-sm font-medium text-primary underline-offset-4 hover:underline"
+          href="/about"
+        >
+          Learn More →
+        </Link>
       </section>
 
       <Suspense fallback={<SectionSkeleton />}>
@@ -54,6 +80,12 @@ export default function HomePage() {
       <Suspense fallback={<SectionSkeleton />}>
         <LatestAnnouncementsSection />
       </Suspense>
+
+      {/* Facebook Feed */}
+      <section className="rounded-xl border border-border bg-card p-6">
+        <h2 className="mb-4 text-xl font-semibold">Follow Us on Facebook</h2>
+        <FacebookFeed />
+      </section>
     </div>
   )
 }

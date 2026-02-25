@@ -23,6 +23,9 @@ export default async function FrontendLayout({
   children: React.ReactNode
 }) {
   let email: string | undefined
+  let phone: string | undefined
+  let address: string | undefined
+  let facebookUrl: string | undefined
   let mainNav: MainNavEntry[] = []
   let footerNav: FooterNavEntry[] = []
   let activeTheme: string | undefined
@@ -40,6 +43,9 @@ export default async function FrontendLayout({
     ])
 
     email = siteSettings.email ?? undefined
+    phone = siteSettings.phone ?? undefined
+    address = siteSettings.address ?? undefined
+    facebookUrl = siteSettings.socialMedia?.facebook ?? undefined
     mainNav = navigation.mainNav ?? []
     footerNav = navigation.footerNav ?? []
     activeTheme = theme.activeTheme ?? undefined
@@ -59,7 +65,7 @@ export default async function FrontendLayout({
       <body className="flex flex-col">
         <SiteHeader nav={mainNav} user={auth.user} />
         <main className="mx-auto w-full max-w-6xl px-4 py-8">{children}</main>
-        <SiteFooter contactEmail={email} nav={footerNav} />
+        <SiteFooter contactEmail={email} contactPhone={phone} address={address} facebookUrl={facebookUrl} nav={footerNav} />
       </body>
     </html>
   )
