@@ -10,6 +10,8 @@ import { getPayloadClient } from '@/lib/payload'
 
 import './globals.css'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Rotary Club of Downtown Lock Haven',
   description: 'Service Above Self',
