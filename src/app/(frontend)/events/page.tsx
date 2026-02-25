@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
+import { EventCard } from '@/components/events/EventCard'
 import { PaginationControls } from '@/components/layout/PaginationControls'
 import { getCurrentUser } from '@/lib/auth'
 import { getEventsPage } from '@/lib/content'
@@ -42,16 +43,7 @@ export default async function EventsPage({
       ) : (
         <div className="grid gap-3">
           {events.docs.map((event) => (
-            <Link
-              className="rounded-lg border border-border bg-card p-4 hover:border-primary"
-              href={`/events/${event.slug}`}
-              key={event.id}
-            >
-              <p className="font-medium">{event.title}</p>
-              <p className="text-sm text-muted-foreground">
-                {new Date(event.date).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}
-              </p>
-            </Link>
+            <EventCard event={event} key={event.id} />
           ))}
         </div>
       )}

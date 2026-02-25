@@ -41,23 +41,22 @@ export const getConfiguredForm = async (
   key: SiteSettingsFormKey,
   user?: SessionUser | null,
 ): Promise<Form | null> => {
-  const payload = await getPayloadClient()
-  const siteSettings = await payload.findGlobal({
-    slug: 'site-settings',
-    depth: 0,
-    overrideAccess: false,
-    user: user || undefined,
-  })
-  const formID = getRelationshipID(siteSettings.forms?.[key])
+  const siteSettings = await getSiteSettings(user)
+  return getFormByID(siteSettings.forms?.[key], user)
+}
 
-  if (!formID) {
+export const getFormByID = async (formID: unknown, user?: SessionUser | null): Promise<Form | null> => {
+  const payload = await getPayloadClient()
+  const normalizedID = getRelationshipID(formID)
+
+  if (!normalizedID) {
     return null
   }
 
   try {
     return await payload.findByID({
       collection: 'forms',
-      id: formID,
+      id: normalizedID,
       depth: 0,
       overrideAccess: false,
       user: user || undefined,
@@ -209,8 +208,9 @@ export const getRecentAnnouncements = async (limit = 5, user?: SessionUser | nul
   })
 }
 
-export const getOfficers = async (user?: SessionUser | null) => {
+export const getOfficers = async (user?: SessionUser | null, limit = 100) => {
   const payload = await getPayloadClient()
+  const safeLimit = Number.isInteger(limit) && limit > 0 ? limit : 100
 
   return payload.find({
     collection: 'users',
@@ -222,7 +222,7 @@ export const getOfficers = async (user?: SessionUser | null) => {
     } as Where,
     sort: 'fullName',
     depth: 1,
-    limit: 100,
+    limit: safeLimit,
     overrideAccess: false,
     user: user || undefined,
   })

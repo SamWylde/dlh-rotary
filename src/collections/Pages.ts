@@ -59,7 +59,7 @@ const pageLayoutBlocks: Block[] = [
   },
   {
     slug: 'ctaBlock',
-    interfaceName: 'CTASectionBlock',
+    interfaceName: 'CTABlock',
     labels: {
       singular: 'CTA Block',
       plural: 'CTA Blocks',

@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import { LatestAnnouncements } from '@/components/announcements/LatestAnnouncements'
+import { UpcomingEvents } from '@/components/events/UpcomingEvents'
 import { getCurrentUser } from '@/lib/auth'
 import { getRecentAnnouncements, getUpcomingEvents } from '@/lib/content'
 
@@ -28,59 +30,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="grid gap-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">Upcoming Events</h2>
-          <Link className="text-sm underline" href="/events">
-            View all
-          </Link>
-        </div>
-        <div className="grid gap-3">
-          {events.docs.length === 0 ? (
-            <p className="text-muted-foreground">No events posted yet.</p>
-          ) : (
-            events.docs.map((event) => (
-              <Link
-                className="rounded-lg border border-border bg-card p-4 hover:border-primary"
-                href={`/events/${event.slug}`}
-                key={event.id}
-              >
-                <p className="font-medium">{event.title}</p>
-                <p className="text-sm text-muted-foreground">
-                  {new Date(event.date).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}
-                </p>
-              </Link>
-            ))
-          )}
-        </div>
-      </section>
-
-      <section className="grid gap-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">Latest Announcements</h2>
-          <Link className="text-sm underline" href="/announcements">
-            View all
-          </Link>
-        </div>
-        <div className="grid gap-3">
-          {announcements.docs.length === 0 ? (
-            <p className="text-muted-foreground">No announcements yet.</p>
-          ) : (
-            announcements.docs.map((announcement) => (
-              <Link
-                className="rounded-lg border border-border bg-card p-4 hover:border-primary"
-                href={`/announcements/${announcement.slug}`}
-                key={announcement.id}
-              >
-                <p className="font-medium">{announcement.title}</p>
-                <p className="text-sm text-muted-foreground">
-                  {new Date(announcement.publishedDate).toLocaleDateString('en-US')}
-                </p>
-              </Link>
-            ))
-          )}
-        </div>
-      </section>
+      <UpcomingEvents events={events.docs} viewAllHref="/events" />
+      <LatestAnnouncements announcements={announcements.docs} viewAllHref="/announcements" />
     </div>
   )
 }

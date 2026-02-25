@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
+import { AnnouncementCard } from '@/components/announcements/AnnouncementCard'
 import { PaginationControls } from '@/components/layout/PaginationControls'
 import { getCurrentUser } from '@/lib/auth'
 import { getAnnouncementsPage } from '@/lib/content'
@@ -37,17 +37,7 @@ export default async function AnnouncementsPage({
       ) : (
         <div className="grid gap-3">
           {announcements.docs.map((announcement) => (
-            <Link
-              className="rounded-lg border border-border bg-card p-4 hover:border-primary"
-              href={`/announcements/${announcement.slug}`}
-              key={announcement.id}
-            >
-              <p className="font-medium">{announcement.title}</p>
-              <p className="text-sm text-muted-foreground">
-                {new Date(announcement.publishedDate).toLocaleDateString('en-US')}
-              </p>
-              <p className="text-sm">Priority: {announcement.priority}</p>
-            </Link>
+            <AnnouncementCard announcement={announcement} key={announcement.id} />
           ))}
         </div>
       )}
