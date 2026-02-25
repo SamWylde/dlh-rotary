@@ -1,10 +1,8 @@
-import { getPayloadClient } from '@/lib/payload'
+import { getSiteSettings } from '@/lib/content'
 
 export default async function DonatePage() {
-  const payload = await getPayloadClient()
-  const siteSettings = await payload.findGlobal({ slug: 'site-settings', overrideAccess: false })
-
-  const links = (siteSettings as { donationLinks?: Record<string, string | undefined> }).donationLinks || {}
+  const siteSettings = await getSiteSettings()
+  const links = siteSettings.donationLinks || {}
 
   return (
     <section className="grid gap-4">
@@ -12,7 +10,7 @@ export default async function DonatePage() {
       <p>Support local scholarships and service projects.</p>
       <ul className="list-disc space-y-1 pl-5">
         {Object.entries(links)
-          .filter(([, value]) => Boolean(value))
+          .filter((entry): entry is [string, string] => typeof entry[1] === 'string' && entry[1].length > 0)
           .map(([provider, value]) => (
             <li key={provider}>
               <a className="underline" href={value} rel="noreferrer" target="_blank">

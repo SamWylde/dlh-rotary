@@ -5,7 +5,7 @@ import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { ThemeLoader } from '@/components/layout/ThemeLoader'
 import { getCurrentUser } from '@/lib/auth'
-import type { NavEntry } from '@/lib/nav'
+import type { FooterNavEntry, MainNavEntry } from '@/lib/nav'
 import { getPayloadClient } from '@/lib/payload'
 
 import './globals.css'
@@ -23,8 +23,8 @@ export default async function FrontendLayout({
   children: React.ReactNode
 }) {
   let email: string | undefined
-  let mainNav: NavEntry[] = []
-  let footerNav: NavEntry[] = []
+  let mainNav: MainNavEntry[] = []
+  let footerNav: FooterNavEntry[] = []
   let activeTheme: string | undefined
   let customAccentColor: string | undefined
   let auth: Awaited<ReturnType<typeof getCurrentUser>> = { token: null, user: null }
@@ -34,19 +34,20 @@ export default async function FrontendLayout({
 
     const [siteSettings, navigation, theme, authResult] = await Promise.all([
       payload.findGlobal({ slug: 'site-settings', overrideAccess: false }),
-      payload.findGlobal({ slug: 'navigation', overrideAccess: false }),
+      payload.findGlobal({ slug: 'navigation', depth: 1, overrideAccess: false }),
       payload.findGlobal({ slug: 'theme', overrideAccess: false }),
       getCurrentUser(),
     ])
 
     email = siteSettings.email ?? undefined
-    mainNav = (navigation.mainNav ?? []) as NavEntry[]
-    footerNav = (navigation.footerNav ?? []) as NavEntry[]
+    mainNav = navigation.mainNav ?? []
+    footerNav = navigation.footerNav ?? []
     activeTheme = theme.activeTheme ?? undefined
     customAccentColor = theme.customAccentColor ?? undefined
     auth = authResult
-  } catch {
+  } catch (error) {
     // Degrade gracefully if DB is unavailable (e.g. Neon cold start timeout)
+    console.error('Failed to load layout data:', error)
   }
 
   return (

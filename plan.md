@@ -230,9 +230,9 @@
 12. **Pages layout blocks** â€” Add heroBlock, contentBlock, etc. for flexible page layouts.
 13. **Admin panel branding** â€” Custom Logo and Icon components.
 14. **Notification system** â€” Email on new announcements via Payload hooks + Resend.
-15. **Navigation dropdown children** â€” mainNav supports children array but frontend doesn't render submenus.
-16. **Pagination** â€” List pages currently load up to 200 items with no pagination.
-17. **Import generated Payload types** â€” Replace manual `as` casts with proper types from payload-types.ts.
+15. **Navigation dropdown children** - Completed on February 25, 2026. Header and mobile nav now render child links with access-aware visibility.
+16. **Pagination** - Completed on February 25, 2026. Heavy list pages now support server-rendered `?page=` pagination.
+17. **Import generated Payload types** - In progress. High-value frontend shared-path casts were replaced in this sprint.
 
 ### Deferred (post-launch):
 
@@ -260,5 +260,6 @@
 *Original specification V2 by Thomas Darby â€” February 2026*
 *Implementation by AI agent, reviewed and hardened February 25, 2026*
 *Status tracking added February 25, 2026*
+
 
 

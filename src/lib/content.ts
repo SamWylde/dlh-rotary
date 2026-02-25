@@ -5,6 +5,10 @@ import { getPayloadClient } from '@/lib/payload'
 import type { Form, SiteSetting } from '@/payload-types'
 
 export type SiteSettingsFormKey = 'joinForm' | 'contactForm'
+type PaginationArgs = {
+  page: number
+  limit: number
+}
 
 const getRelationshipID = (value: unknown): number | null => {
   if (typeof value === 'number' && Number.isFinite(value)) return value
@@ -61,6 +65,117 @@ export const getConfiguredForm = async (
   } catch {
     return null
   }
+}
+
+const normalizePagination = ({ page, limit }: PaginationArgs): PaginationArgs => {
+  const safePage = Number.isInteger(page) && page > 0 ? page : 1
+  const safeLimit = Number.isInteger(limit) && limit > 0 ? limit : 12
+
+  return {
+    page: safePage,
+    limit: safeLimit,
+  }
+}
+
+export const getAnnouncementsPage = async ({ page, limit }: PaginationArgs, user?: SessionUser | null) => {
+  const payload = await getPayloadClient()
+  const args = normalizePagination({ page, limit })
+
+  return payload.find({
+    collection: 'announcements',
+    sort: '-publishedDate',
+    page: args.page,
+    limit: args.limit,
+    depth: 1,
+    overrideAccess: false,
+    user: user || undefined,
+  })
+}
+
+export const getEventsPage = async ({ page, limit }: PaginationArgs, user?: SessionUser | null) => {
+  const payload = await getPayloadClient()
+  const args = normalizePagination({ page, limit })
+
+  return payload.find({
+    collection: 'events',
+    sort: 'date',
+    page: args.page,
+    limit: args.limit,
+    depth: 1,
+    overrideAccess: false,
+    user: user || undefined,
+  })
+}
+
+export const getProjectsPage = async ({ page, limit }: PaginationArgs, user?: SessionUser | null) => {
+  const payload = await getPayloadClient()
+  const args = normalizePagination({ page, limit })
+
+  return payload.find({
+    collection: 'projects',
+    sort: 'title',
+    page: args.page,
+    limit: args.limit,
+    depth: 1,
+    overrideAccess: false,
+    user: user || undefined,
+  })
+}
+
+export const getDocumentsPage = async ({ page, limit }: PaginationArgs, user?: SessionUser | null) => {
+  const payload = await getPayloadClient()
+  const args = normalizePagination({ page, limit })
+
+  return payload.find({
+    collection: 'documents',
+    sort: '-updatedAt',
+    page: args.page,
+    limit: args.limit,
+    depth: 1,
+    overrideAccess: false,
+    user: user || undefined,
+  })
+}
+
+export const getMembersPage = async ({ page, limit }: PaginationArgs, user: SessionUser) => {
+  const payload = await getPayloadClient()
+  const args = normalizePagination({ page, limit })
+
+  return payload.find({
+    collection: 'users',
+    where: {
+      showInDirectory: {
+        equals: true,
+      },
+    },
+    sort: 'fullName',
+    page: args.page,
+    limit: args.limit,
+    depth: 1,
+    overrideAccess: false,
+    user,
+  })
+}
+
+export const getOfficersPage = async ({ page, limit }: PaginationArgs, user?: SessionUser | null) => {
+  const payload = await getPayloadClient()
+  const args = normalizePagination({ page, limit })
+
+  return payload.find({
+    collection: 'users',
+    where: {
+      and: [
+        { showInDirectory: { equals: true } },
+        { role: { in: ['admin', 'officer'] } },
+      ],
+    } as Where,
+    sort: 'fullName',
+    page: args.page,
+    limit: args.limit,
+    depth: 1,
+    overrideAccess: false,
+    user: user || undefined,
+  })
 }
 
 export const getUpcomingEvents = async (limit = 5, user?: SessionUser | null) => {
