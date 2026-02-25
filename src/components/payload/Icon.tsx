@@ -22,6 +22,7 @@ const Icon = async () => {
 
     if (iconURL) {
       return (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           alt="Rotary DLH"
           src={iconURL}

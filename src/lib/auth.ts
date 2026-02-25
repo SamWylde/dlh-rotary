@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -10,7 +11,7 @@ export type SessionUser = {
   fullName?: string
 }
 
-export const getCurrentUser = async (): Promise<{
+const fetchCurrentUser = async (): Promise<{
   token: string | null
   user: SessionUser | null
 }> => {
@@ -21,7 +22,7 @@ export const getCurrentUser = async (): Promise<{
     return { token: null, user: null }
   }
 
-  const baseURL = await getServerURL()
+  const baseURL = getServerURL()
 
   const meReq = await fetch(`${baseURL}/api/users/me`, {
     headers: {
@@ -41,6 +42,8 @@ export const getCurrentUser = async (): Promise<{
     user: body.user || null,
   }
 }
+
+export const getCurrentUser = cache(fetchCurrentUser)
 
 export const requireUser = async (): Promise<SessionUser> => {
   const { user } = await getCurrentUser()

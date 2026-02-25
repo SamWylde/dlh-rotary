@@ -17,7 +17,13 @@ export const POST = async (request: Request): Promise<NextResponse> => {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const body = (await request.json()) as Body
+  let body: Body
+
+  try {
+    body = (await request.json()) as Body
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON in request body' }, { status: 400 })
+  }
 
   if (!body.eventID || !body.status || !['yes', 'no', 'maybe'].includes(body.status)) {
     return NextResponse.json({ error: 'Invalid RSVP payload' }, { status: 400 })

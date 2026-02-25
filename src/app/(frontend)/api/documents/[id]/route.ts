@@ -2,17 +2,8 @@ import { NextResponse } from 'next/server'
 
 import { getCurrentUser } from '@/lib/auth'
 import { getPayloadClient } from '@/lib/payload'
-
-const getRelationshipID = (value: unknown): string | null => {
-  if (typeof value === 'string') return value
-
-  if (value && typeof value === 'object' && 'id' in value) {
-    const id = (value as { id?: unknown }).id
-    return typeof id === 'string' ? id : null
-  }
-
-  return null
-}
+import { getServerURL } from '@/lib/url'
+import { getRelationshipID } from '@/utilities/getRelationshipID'
 
 export const GET = async (
   _request: Request,
@@ -66,6 +57,15 @@ export const GET = async (
 
   if (!fileURL) {
     return NextResponse.json({ error: 'File URL unavailable' }, { status: 500 })
+  }
+
+  try {
+    const parsed = new URL(fileURL, getServerURL())
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return NextResponse.json({ error: 'Invalid file URL protocol' }, { status: 500 })
+    }
+  } catch {
+    return NextResponse.json({ error: 'Invalid file URL' }, { status: 500 })
   }
 
   const upstream = await fetch(fileURL)

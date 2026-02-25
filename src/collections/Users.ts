@@ -75,7 +75,7 @@ export const Users: CollectionConfig = {
         { label: 'Officer', value: 'officer' },
         { label: 'Member', value: 'member' },
       ],
-      access: { update: isAdminFieldAccess },
+      access: { create: isAdminFieldAccess, update: isAdminFieldAccess },
     },
     { name: 'title', type: 'text' },
     { name: 'phone', type: 'text' },

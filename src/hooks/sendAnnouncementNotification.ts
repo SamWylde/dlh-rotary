@@ -38,6 +38,7 @@ const getRecipientEmails = async (hook: Parameters<CollectionAfterChangeHook>[0]
       limit: 100,
       page,
       overrideAccess: true,
+      req: hook.req,
     })
 
     for (const user of users.docs) {

@@ -2,15 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { revalidatePath } from 'next/cache'
 
 import { isAdmin, isAdminOrOfficer } from '@/access'
-
-const getRelationshipID = (value: unknown): string | null => {
-  if (typeof value === 'string') return value
-  if (value && typeof value === 'object' && 'id' in value) {
-    const id = (value as { id?: unknown }).id
-    return typeof id === 'string' ? id : null
-  }
-  return null
-}
+import { getRelationshipID } from '@/utilities/getRelationshipID'
 
 export const Documents: CollectionConfig = {
   slug: 'documents',

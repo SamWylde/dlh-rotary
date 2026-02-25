@@ -22,6 +22,7 @@ const Logo = async () => {
 
     if (logoURL) {
       return (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           alt="Rotary Club of Downtown Lock Haven"
           src={logoURL}
