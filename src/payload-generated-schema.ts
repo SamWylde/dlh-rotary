@@ -1153,6 +1153,9 @@ export const projects = pgTable(
     impactStats_customStat: varchar('impact_stats_custom_stat'),
     impactStats_customStatValue: varchar('impact_stats_custom_stat_value'),
     volunteerSignupEnabled: boolean('volunteer_signup_enabled').default(false),
+    volunteerForm: integer('volunteer_form_id').references(() => forms.id, {
+      onDelete: 'set null',
+    }),
     meta_title: varchar('meta_title'),
     meta_description: varchar('meta_description'),
     meta_image: integer('meta_image_id').references(() => media.id, {
@@ -1169,6 +1172,7 @@ export const projects = pgTable(
   (columns) => [
     uniqueIndex('projects_slug_idx').on(columns.slug),
     index('projects_featured_image_idx').on(columns.featuredImage),
+    index('projects_volunteer_form_idx').on(columns.volunteerForm),
     index('projects_meta_meta_image_idx').on(columns.meta_image),
     index('projects_updated_at_idx').on(columns.updatedAt),
     index('projects_created_at_idx').on(columns.createdAt),
@@ -1253,6 +1257,9 @@ export const _projects_v = pgTable(
     version_impactStats_customStat: varchar('version_impact_stats_custom_stat'),
     version_impactStats_customStatValue: varchar('version_impact_stats_custom_stat_value'),
     version_volunteerSignupEnabled: boolean('version_volunteer_signup_enabled').default(false),
+    version_volunteerForm: integer('version_volunteer_form_id').references(() => forms.id, {
+      onDelete: 'set null',
+    }),
     version_meta_title: varchar('version_meta_title'),
     version_meta_description: varchar('version_meta_description'),
     version_meta_image: integer('version_meta_image_id').references(() => media.id, {
@@ -1281,6 +1288,7 @@ export const _projects_v = pgTable(
     index('_projects_v_parent_idx').on(columns.parent),
     index('_projects_v_version_version_slug_idx').on(columns.version_slug),
     index('_projects_v_version_version_featured_image_idx').on(columns.version_featuredImage),
+    index('_projects_v_version_version_volunteer_form_idx').on(columns.version_volunteerForm),
     index('_projects_v_version_meta_version_meta_image_idx').on(columns.version_meta_image),
     index('_projects_v_version_version_updated_at_idx').on(columns.version_updatedAt),
     index('_projects_v_version_version_created_at_idx').on(columns.version_createdAt),
@@ -2493,6 +2501,11 @@ export const relations_projects = relations(projects, ({ one, many }) => ({
   partners: many(projects_partners, {
     relationName: 'partners',
   }),
+  volunteerForm: one(forms, {
+    fields: [projects.volunteerForm],
+    references: [forms.id],
+    relationName: 'volunteerForm',
+  }),
   meta_image: one(media, {
     fields: [projects.meta_image],
     references: [media.id],
@@ -2545,6 +2558,11 @@ export const relations__projects_v = relations(_projects_v, ({ one, many }) => (
   }),
   version_partners: many(_projects_v_version_partners, {
     relationName: 'version_partners',
+  }),
+  version_volunteerForm: one(forms, {
+    fields: [_projects_v.version_volunteerForm],
+    references: [forms.id],
+    relationName: 'version_volunteerForm',
   }),
   version_meta_image: one(media, {
     fields: [_projects_v.version_meta_image],

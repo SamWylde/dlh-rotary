@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
+import { ProjectCard } from '@/components/projects/ProjectCard'
 import { PaginationControls } from '@/components/layout/PaginationControls'
 import { getCurrentUser } from '@/lib/auth'
 import { getProjectsPage } from '@/lib/content'
 import { buildPageHref, parsePageParam } from '@/lib/pagination'
-import { lexicalToPlainText } from '@/lib/richText'
 
 export const metadata: Metadata = {
   title: 'Projects | Rotary Club of Downtown Lock Haven',
@@ -38,15 +37,7 @@ export default async function ProjectsPage({
       ) : (
         <div className="grid gap-3 md:grid-cols-2">
           {projects.docs.map((project) => (
-            <Link
-              className="rounded-lg border border-border bg-card p-4 hover:border-primary"
-              href={`/projects/${project.slug}`}
-              key={project.id}
-            >
-              <p className="font-medium">{project.title}</p>
-              <p className="text-sm text-muted-foreground">{project.category}</p>
-              <p className="mt-2 text-sm">{lexicalToPlainText(project.description).slice(0, 160)}</p>
-            </Link>
+            <ProjectCard key={project.id} project={project} />
           ))}
         </div>
       )}

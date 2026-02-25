@@ -87,6 +87,15 @@ export const Projects: CollectionConfig = {
       ],
     },
     { name: 'volunteerSignupEnabled', type: 'checkbox', defaultValue: false },
+    {
+      name: 'volunteerForm',
+      type: 'relationship',
+      relationTo: 'forms',
+      admin: {
+        condition: (_, siblingData) => Boolean(siblingData?.volunteerSignupEnabled),
+        description: 'Form shown on the project page when volunteer signup is enabled.',
+      },
+    },
   ],
   versions: {
     drafts: true,

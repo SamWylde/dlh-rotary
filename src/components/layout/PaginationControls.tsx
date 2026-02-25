@@ -1,20 +1,21 @@
 import Link from 'next/link'
 
-import { buildPageHref } from '@/lib/pagination'
+import { buildPageHref, type PaginationQuery } from '@/lib/pagination'
 
 type PaginationControlsProps = {
   basePath: string
   currentPage: number
   totalPages: number
+  query?: PaginationQuery
 }
 
-export const PaginationControls = ({ basePath, currentPage, totalPages }: PaginationControlsProps) => {
+export const PaginationControls = ({ basePath, currentPage, totalPages, query }: PaginationControlsProps) => {
   if (totalPages <= 1) {
     return null
   }
 
-  const previousHref = currentPage > 1 ? buildPageHref(basePath, currentPage - 1) : null
-  const nextHref = currentPage < totalPages ? buildPageHref(basePath, currentPage + 1) : null
+  const previousHref = currentPage > 1 ? buildPageHref(basePath, currentPage - 1, query) : null
+  const nextHref = currentPage < totalPages ? buildPageHref(basePath, currentPage + 1, query) : null
 
   return (
     <nav aria-label="Pagination" className="flex items-center justify-between gap-4 pt-2">

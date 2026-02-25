@@ -1,13 +1,16 @@
-import { PayloadFormRenderer } from '@/components/forms/PayloadFormRenderer'
+import type { Metadata } from 'next'
+
+import { ContactForm } from '@/components/forms/ContactForm'
 import { getCurrentUser } from '@/lib/auth'
-import { getConfiguredForm, getSiteSettings } from '@/lib/content'
+import { getSiteSettings } from '@/lib/content'
+
+export const metadata: Metadata = {
+  title: 'Contact | Rotary Club of Downtown Lock Haven',
+}
 
 export default async function ContactPage() {
   const { user } = await getCurrentUser()
-  const [siteSettings, contactForm] = await Promise.all([
-    getSiteSettings(user),
-    getConfiguredForm('contactForm', user),
-  ])
+  const siteSettings = await getSiteSettings(user)
 
   return (
     <section className="grid gap-4">
@@ -16,14 +19,7 @@ export default async function ContactPage() {
       <p>
         Meeting: {siteSettings.meetingInfo?.day} {siteSettings.meetingInfo?.time}
       </p>
-      {contactForm ? (
-        <PayloadFormRenderer form={contactForm} />
-      ) : (
-        <p className="rounded border border-dashed border-border bg-card p-4 text-sm text-muted-foreground">
-          Contact form is not configured. In Payload Admin, open Site Settings and select a form for the{' '}
-          <b>Contact Form</b> field.
-        </p>
-      )}
+      <ContactForm user={user} />
     </section>
   )
 }

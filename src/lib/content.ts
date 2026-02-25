@@ -2,12 +2,20 @@ import type { Where } from 'payload'
 
 import type { SessionUser } from '@/lib/auth'
 import { getPayloadClient } from '@/lib/payload'
-import type { Form, SiteSetting } from '@/payload-types'
+import type { Document, Form, Project, SiteSetting, User } from '@/payload-types'
 
 export type SiteSettingsFormKey = 'joinForm' | 'contactForm'
 type PaginationArgs = {
   page: number
   limit: number
+}
+type MembersPageArgs = PaginationArgs & {
+  q?: string
+  role?: User['role']
+}
+type DocumentsPageArgs = PaginationArgs & {
+  category?: Document['category']
+  q?: string
 }
 
 const getRelationshipID = (value: unknown): number | null => {
@@ -76,6 +84,12 @@ const normalizePagination = ({ page, limit }: PaginationArgs): PaginationArgs =>
   }
 }
 
+const normalizeQuery = (value: string | undefined): string | undefined => {
+  if (typeof value !== 'string') return undefined
+  const normalized = value.trim()
+  return normalized.length > 0 ? normalized : undefined
+}
+
 export const getAnnouncementsPage = async ({ page, limit }: PaginationArgs, user?: SessionUser | null) => {
   const payload = await getPayloadClient()
   const args = normalizePagination({ page, limit })
@@ -121,12 +135,45 @@ export const getProjectsPage = async ({ page, limit }: PaginationArgs, user?: Se
   })
 }
 
-export const getDocumentsPage = async ({ page, limit }: PaginationArgs, user?: SessionUser | null) => {
+export const getDocumentsPage = async (
+  { page, limit, category, q }: DocumentsPageArgs,
+  user?: SessionUser | null,
+) => {
   const payload = await getPayloadClient()
   const args = normalizePagination({ page, limit })
+  const query = normalizeQuery(q)
+  const filters: Where[] = []
+
+  if (category) {
+    filters.push({
+      category: {
+        equals: category,
+      },
+    })
+  }
+
+  if (query) {
+    filters.push({
+      or: [
+        {
+          title: {
+            contains: query,
+          },
+        },
+        {
+          description: {
+            contains: query,
+          },
+        },
+      ],
+    } as Where)
+  }
+
+  const where = filters.length > 0 ? ({ and: filters } as Where) : undefined
 
   return payload.find({
     collection: 'documents',
+    where,
     sort: '-updatedAt',
     page: args.page,
     limit: args.limit,
@@ -136,17 +183,46 @@ export const getDocumentsPage = async ({ page, limit }: PaginationArgs, user?: S
   })
 }
 
-export const getMembersPage = async ({ page, limit }: PaginationArgs, user: SessionUser) => {
+export const getMembersPage = async ({ page, limit, q, role }: MembersPageArgs, user: SessionUser) => {
   const payload = await getPayloadClient()
   const args = normalizePagination({ page, limit })
-
-  return payload.find({
-    collection: 'users',
-    where: {
+  const query = normalizeQuery(q)
+  const filters: Where[] = [
+    {
       showInDirectory: {
         equals: true,
       },
     },
+  ]
+
+  if (role) {
+    filters.push({
+      role: {
+        equals: role,
+      },
+    })
+  }
+
+  if (query) {
+    filters.push({
+      or: [
+        {
+          fullName: {
+            contains: query,
+          },
+        },
+        {
+          title: {
+            contains: query,
+          },
+        },
+      ],
+    } as Where)
+  }
+
+  return payload.find({
+    collection: 'users',
+    where: { and: filters } as Where,
     sort: 'fullName',
     page: args.page,
     limit: args.limit,
@@ -287,6 +363,17 @@ export const getProjectBySlug = async (slug: string, user?: SessionUser | null) 
   })
 
   return result.docs[0] || null
+}
+
+export const getProjectVolunteerForm = async (
+  project: Pick<Project, 'volunteerSignupEnabled' | 'volunteerForm'>,
+  user?: SessionUser | null,
+): Promise<Form | null> => {
+  if (!project.volunteerSignupEnabled) {
+    return null
+  }
+
+  return getFormByID(project.volunteerForm, user)
 }
 
 export const getEvents = async (user?: SessionUser | null) => {

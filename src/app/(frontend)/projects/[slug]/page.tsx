@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import { VolunteerSignup } from '@/components/forms/VolunteerSignup'
+import { ImpactStats } from '@/components/projects/ImpactStats'
+import { ProjectGallery } from '@/components/projects/ProjectGallery'
 import { getCurrentUser } from '@/lib/auth'
 import { getProjectBySlug } from '@/lib/content'
 import { lexicalToPlainText } from '@/lib/richText'
@@ -32,20 +35,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         {project.category} - {project.projectStatus}
       </p>
       <p>{lexicalToPlainText(project.description)}</p>
-      {project.impactStats ? (
-        <div className="grid gap-2 rounded border border-border bg-background p-4 text-sm">
-          {project.impactStats.dollarsRaised ? <p>Dollars Raised: ${project.impactStats.dollarsRaised}</p> : null}
-          {project.impactStats.peopleServed ? <p>People Served: {project.impactStats.peopleServed}</p> : null}
-          {project.impactStats.volunteersInvolved ? (
-            <p>Volunteers: {project.impactStats.volunteersInvolved}</p>
-          ) : null}
-          {project.impactStats.customStat && project.impactStats.customStatValue ? (
-            <p>
-              {project.impactStats.customStat}: {project.impactStats.customStatValue}
-            </p>
-          ) : null}
-        </div>
-      ) : null}
+      <ImpactStats impactStats={project.impactStats} />
+      <ProjectGallery gallery={project.gallery} />
+      <VolunteerSignup project={project} user={user} />
     </article>
   )
 }

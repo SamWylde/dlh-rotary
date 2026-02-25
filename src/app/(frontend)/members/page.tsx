@@ -2,50 +2,48 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 import { PaginationControls } from '@/components/layout/PaginationControls'
+import { MemberDirectory } from '@/components/members/MemberDirectory'
 import { requireUser } from '@/lib/auth'
 import { getMembersPage } from '@/lib/content'
-import { buildPageHref, parsePageParam } from '@/lib/pagination'
+import { buildPageHref, parseEnumParam, parsePageParam, parseStringParam } from '@/lib/pagination'
+import type { User } from '@/payload-types'
 
 export const metadata: Metadata = {
   title: 'Member Directory | Rotary Club of Downtown Lock Haven',
 }
 
 const PER_PAGE = 20
+const MEMBER_ROLES = ['admin', 'officer', 'member'] as const
+type MemberRole = (typeof MEMBER_ROLES)[number]
 
 export default async function MembersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string | string[] }>
+  searchParams: Promise<{ page?: string | string[]; q?: string | string[]; role?: string | string[] }>
 }) {
   const user = await requireUser()
-  const { page: pageParam } = await searchParams
+  const { page: pageParam, q: qParam, role: roleParam } = await searchParams
   const page = parsePageParam(pageParam)
-  const members = await getMembersPage({ page, limit: PER_PAGE }, user)
+  const q = parseStringParam(qParam)
+  const role = parseEnumParam(roleParam, MEMBER_ROLES) as MemberRole | undefined
+  const query = {
+    q,
+    role,
+  }
+
+  const members = await getMembersPage({ page, limit: PER_PAGE, q, role: role as User['role'] | undefined }, user)
   const currentPage = members.page ?? page
   const totalPages = members.totalPages ?? 1
 
   if (members.totalPages && page > members.totalPages) {
-    redirect(buildPageHref('/members', members.totalPages))
+    redirect(buildPageHref('/members', members.totalPages, query))
   }
 
   return (
     <section className="grid gap-4">
       <h1 className="text-3xl font-semibold">Member Directory</h1>
-      {members.docs.length === 0 ? (
-        <p className="text-muted-foreground">No members in the directory yet.</p>
-      ) : (
-        <div className="grid gap-3 md:grid-cols-2">
-          {members.docs.map((member) => (
-            <article className="rounded-lg border border-border bg-card p-4" key={member.id}>
-              <p className="font-medium">{member.fullName}</p>
-              {member.title ? <p className="text-sm text-muted-foreground">{member.title}</p> : null}
-              {member.email ? <p className="mt-2 text-sm">{member.email}</p> : null}
-              {member.phone ? <p className="text-sm">{member.phone}</p> : null}
-            </article>
-          ))}
-        </div>
-      )}
-      <PaginationControls basePath="/members" currentPage={currentPage} totalPages={totalPages} />
+      <MemberDirectory members={members.docs} query={q} role={role} />
+      <PaginationControls basePath="/members" currentPage={currentPage} totalPages={totalPages} query={query} />
     </section>
   )
 }

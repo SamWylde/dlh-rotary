@@ -3,6 +3,7 @@ import type { CollectionConfig, Where } from 'payload'
 import { isAdmin, isAdminOrOfficer } from '@/access'
 import { formatSlug } from '@/hooks/formatSlug'
 import { revalidateAfterChange, revalidateAfterDelete } from '@/hooks/revalidate'
+import { sendAnnouncementNotification } from '@/hooks/sendAnnouncementNotification'
 
 export const Announcements: CollectionConfig = {
   slug: 'announcements',
@@ -35,7 +36,7 @@ export const Announcements: CollectionConfig = {
   },
   hooks: {
     beforeChange: [formatSlug],
-    afterChange: [revalidateAfterChange],
+    afterChange: [revalidateAfterChange, sendAnnouncementNotification],
     afterDelete: [revalidateAfterDelete],
   },
   fields: [

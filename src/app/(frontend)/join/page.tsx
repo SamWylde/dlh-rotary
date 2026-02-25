@@ -1,10 +1,14 @@
-import { PayloadFormRenderer } from '@/components/forms/PayloadFormRenderer'
+import type { Metadata } from 'next'
+
+import { InterestForm } from '@/components/forms/InterestForm'
 import { getCurrentUser } from '@/lib/auth'
-import { getConfiguredForm } from '@/lib/content'
+
+export const metadata: Metadata = {
+  title: 'Join Us | Rotary Club of Downtown Lock Haven',
+}
 
 export default async function JoinPage() {
   const { user } = await getCurrentUser()
-  const joinForm = await getConfiguredForm('joinForm', user)
 
   return (
     <section className="grid gap-4">
@@ -13,14 +17,7 @@ export default async function JoinPage() {
         All are welcome to join us for fun, fellowship, and guest speakers. Use the contact form to express interest,
         and an officer will follow up.
       </p>
-      {joinForm ? (
-        <PayloadFormRenderer form={joinForm} />
-      ) : (
-        <p className="rounded border border-dashed border-border bg-card p-4 text-sm text-muted-foreground">
-          Join form is not configured. In Payload Admin, open Site Settings and select a form for the <b>Join Form</b>{' '}
-          field.
-        </p>
-      )}
+      <InterestForm user={user} />
     </section>
   )
 }

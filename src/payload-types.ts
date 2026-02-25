@@ -800,6 +800,10 @@ export interface Project {
       }[]
     | null;
   volunteerSignupEnabled?: boolean | null;
+  /**
+   * Form shown on the project page when volunteer signup is enabled.
+   */
+  volunteerForm?: (number | null) | Form;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -1246,6 +1250,7 @@ export interface ProjectsSelect<T extends boolean = true> {
         id?: T;
       };
   volunteerSignupEnabled?: T;
+  volunteerForm?: T;
   meta?:
     | T
     | {

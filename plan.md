@@ -154,23 +154,25 @@
 
 ### Not yet extracted (logic inlined in page files):
 
-- [ ] `projects/ProjectCard` — Card with image/stats/badge
-- [ ] `projects/ProjectGallery` — Lightbox gallery for project photos
-- [ ] `projects/ImpactStats` — Stats display component
-- [ ] `members/MemberCard` — Directory card
-- [ ] `members/MemberDirectory` — Searchable/filterable grid
-- [ ] `documents/DocumentList` — Filterable by category
-- [ ] `documents/DocumentCard` — File icon + title + download
+- [x] `projects/ProjectCard` - Extracted and used by `/projects`
+- [x] `projects/ProjectGallery` - Extracted lightbox gallery component used by `/projects/[slug]`
+- [x] `projects/ImpactStats` - Extracted and used by `/projects/[slug]`
+- [x] `members/MemberCard` - Extracted and used by member directory
+- [x] `members/MemberDirectory` - Extracted with URL-driven SSR filters (`q`, `role`)
+- [x] `documents/DocumentList` - Extracted with URL-driven SSR filters (`category`, `q`)
+- [x] `documents/DocumentCard` - Extracted and used by document list
 
 ### Not yet implemented:
 
-- [ ] `forms/ContactForm` — Renders Form Builder forms (join/contact pages render forms, but no shared component)
-- [ ] `payload/Logo` — Custom admin panel logo
-- [ ] `payload/Icon` — Custom admin panel sidebar icon
+- [x] `forms/ContactForm` - Shared Form Builder wrapper used by `/contact`
+- [x] `forms/InterestForm` - Shared Form Builder wrapper used by `/join`
+- [x] `forms/VolunteerSignup` - Per-project volunteer form renderer (uses `projects.volunteerForm`)
+- [x] `payload/Logo` - Custom admin panel logo
+- [x] `payload/Icon` - Custom admin panel sidebar icon
 
 ### shadcn/ui Components:
 
-- [ ] Not installed. Plan called for: button, card, badge, dialog, input, select, calendar, dropdown-menu, navigation-menu, avatar, sheet, toast, tabs, separator
+- [x] Installed in `src/components/ui`: button, card, badge, dialog, input, select, calendar, dropdown-menu, navigation-menu, avatar, sheet, tabs, separator, plus `sonner` (toast replacement) and `ui/toast` compatibility export.
 
 **NOTE:** Many "missing" components have their logic inlined directly in page files. The site is fully functional — these are refactoring/UX improvements, not blockers.
 
@@ -226,10 +228,10 @@
 
 ### P2 — Polish / nice-to-have:
 
-5. **Install shadcn/ui** — Generate button, card, badge, etc. for better UI consistency.
-6. **Extract standalone components** — ProjectCard, MemberCard, MemberDirectory, DocumentList etc. currently inlined.
-7. **Admin panel branding** — Custom Logo and Icon components in /admin.
-8. **Notification system** — Email on new announcements via Payload hooks + Resend.
+5. **Install shadcn/ui** - Completed on February 25, 2026 with the planned component set (`toast` delivered via sonner replacement).
+6. **Extract standalone components** - Completed on February 25, 2026 for projects, members, and documents.
+7. **Admin panel branding** - Completed on February 25, 2026 with custom Logo and Icon components in /admin.
+8. **Notification system** - Completed on February 25, 2026. Announcement email notifications now send on first publish transition only.
 
 ### Deferred (post-launch):
 

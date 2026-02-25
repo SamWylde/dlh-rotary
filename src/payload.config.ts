@@ -31,6 +31,12 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      graphics: {
+        Icon: '/components/payload/Icon',
+        Logo: '/components/payload/Logo',
+      },
+    },
   },
   collections: [Users, Pages, Events, RSVPs, Announcements, Projects, Documents, Media],
   globals: [SiteSettings, Theme, Navigation],
