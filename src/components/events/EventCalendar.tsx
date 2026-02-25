@@ -19,6 +19,8 @@ export type EventCalendarProps = {
   events: EventCalendarEvent[]
 }
 
+const defaultEventColors = { background: '#f3f4f6', border: '#6b7280', bar: '#6b7280' }
+
 const eventTypeColors: Record<Event['eventType'], { background: string; border: string; bar: string }> = {
   meeting: { background: '#eaf2ff', border: '#17458f', bar: '#17458f' },
   speaker: { background: '#fff4dc', border: '#f7a81b', bar: '#f7a81b' },
@@ -56,7 +58,7 @@ export const EventCalendar = ({ events }: EventCalendarProps) => {
   const calendarEvents = useMemo(
     () =>
       events.map((event) => {
-        const colors = eventTypeColors[event.eventType]
+        const colors = eventTypeColors[event.eventType] ?? defaultEventColors
         return {
           id: event.id,
           text: event.text,

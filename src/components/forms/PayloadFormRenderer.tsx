@@ -146,7 +146,7 @@ export const PayloadFormRenderer = ({ form, className, heading }: PayloadFormRen
 
       if (form.confirmationType === 'redirect' && form.redirect?.url) {
         const redirectUrl = form.redirect.url
-        if (redirectUrl.startsWith('/') || redirectUrl.startsWith('https://')) {
+        if (redirectUrl.startsWith('/') || redirectUrl.startsWith('https://') || redirectUrl.startsWith('http://')) {
           window.location.assign(redirectUrl)
           return
         }

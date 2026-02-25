@@ -14,9 +14,11 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       href={`/projects/${project.slug}`}
     >
       <p className="font-medium">{project.title}</p>
-      <p className="text-sm text-muted-foreground">
-        {project.category} - {project.projectStatus}
-      </p>
+      {project.category || project.projectStatus ? (
+        <p className="text-sm text-muted-foreground">
+          {[project.category, project.projectStatus].filter(Boolean).join(' - ')}
+        </p>
+      ) : null}
       <p className="mt-2 text-sm">{lexicalToPlainText(project.description).slice(0, 160)}</p>
     </Link>
   )

@@ -24,10 +24,11 @@ export const getOutOfRangeRedirectHref = (
   result: PaginatedResult,
   query?: PaginationQuery,
 ): string | null => {
-  if (!result.totalPages || requestedPage <= result.totalPages) {
+  const totalPages = result.totalPages ?? 0
+  if (requestedPage <= 1 || (totalPages > 0 && requestedPage <= totalPages)) {
     return null
   }
 
-  return buildPageHref(basePath, result.totalPages, query)
+  return buildPageHref(basePath, Math.max(totalPages, 1), query)
 }
 

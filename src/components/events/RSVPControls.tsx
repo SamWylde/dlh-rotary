@@ -15,7 +15,7 @@ export const RSVPControls = ({
   eventID: string | number
   initialStatus?: 'yes' | 'no' | 'maybe' | null
 }) => {
-  const [status, setStatus] = useState<string | null>(initialStatus || null)
+  const [status, setStatus] = useState<'yes' | 'no' | 'maybe' | null>(initialStatus || null)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 

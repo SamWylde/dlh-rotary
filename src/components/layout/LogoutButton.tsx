@@ -6,7 +6,11 @@ export const LogoutButton = () => {
   const router = useRouter()
 
   const handleLogout = async () => {
-    await fetch('/api/users/logout', { method: 'POST', credentials: 'include' })
+    try {
+      await fetch('/api/users/logout', { method: 'POST', credentials: 'include' })
+    } catch {
+      // Network failure — continue to redirect; session cookie will expire
+    }
     router.push('/')
     router.refresh()
   }

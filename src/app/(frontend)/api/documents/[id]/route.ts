@@ -48,7 +48,7 @@ export const GET = async (
       overrideAccess: true,
     })
   } catch {
-    return NextResponse.json({ error: 'File access denied' }, { status: 403 })
+    return NextResponse.json({ error: 'File not found' }, { status: 404 })
   }
 
   const fileURL = (media as { url?: string }).url

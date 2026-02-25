@@ -47,6 +47,7 @@ export const NavDropdown = ({ trigger, items }: NavDropdownProps) => {
         requestAnimationFrame(() => focusItem(0))
         break
       case 'Escape':
+        e.preventDefault()
         close()
         break
     }
@@ -89,7 +90,8 @@ export const NavDropdown = ({ trigger, items }: NavDropdownProps) => {
         aria-expanded={open}
         aria-haspopup="menu"
         onKeyDown={handleTriggerKeyDown}
-        tabIndex={-1}
+        role="button"
+        tabIndex={0}
       >
         {trigger}
       </div>

@@ -15,22 +15,27 @@ export const LoginForm = () => {
     setIsLoading(true)
     setError(null)
 
-    const res = await fetch('/api/users/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    })
+    try {
+      const res = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      })
 
-    if (!res.ok) {
+      if (!res.ok) {
+        setError('Invalid credentials. Please try again.')
+        return
+      }
+
+      router.push('/account')
+      router.refresh()
+    } catch {
+      setError('Something went wrong. Please try again.')
+    } finally {
       setIsLoading(false)
-      setError('Invalid credentials. Please try again.')
-      return
     }
-
-    router.push('/account')
-    router.refresh()
   }
 
   return (

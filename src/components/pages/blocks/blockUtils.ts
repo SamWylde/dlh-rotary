@@ -39,6 +39,13 @@ export const resolvePageBlockLabel = (link: PageBlockLink, fallback: string): st
   const title = getReferenceTitle(link.reference)
   if (title) return title
 
+  if (link.type === 'internal') {
+    const slug = getReferenceSlug(link.reference)
+    if (slug) {
+      return slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' ')
+    }
+  }
+
   if (typeof link.url === 'string') {
     const normalized = link.url.trim()
     if (normalized.length > 0 && isSafeURL(normalized)) {

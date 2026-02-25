@@ -22,10 +22,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   return (
     <article className="grid gap-4 rounded-lg border border-border bg-card p-6">
       <h1 className="text-3xl font-semibold">{project.title}</h1>
-      <p className="text-sm text-muted-foreground">
-        {project.category} - {project.projectStatus}
-      </p>
-      <p>{lexicalToPlainText(project.description)}</p>
+      {project.category || project.projectStatus ? (
+        <p className="text-sm text-muted-foreground">
+          {[project.category, project.projectStatus].filter(Boolean).join(' - ')}
+        </p>
+      ) : null}
+      {lexicalToPlainText(project.description) ? (
+        <p>{lexicalToPlainText(project.description)}</p>
+      ) : null}
       <ImpactStats impactStats={project.impactStats} />
       <ProjectGallery gallery={project.gallery} />
       <VolunteerSignup project={project} user={user} />

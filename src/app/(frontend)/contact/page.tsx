@@ -16,9 +16,11 @@ export default async function ContactPage() {
     <section className="grid gap-4">
       <h1 className="text-3xl font-semibold">Contact</h1>
       <p>Email: {siteSettings.email || 'dlhrotary@gmail.com'}</p>
-      <p>
-        Meeting: {siteSettings.meetingInfo?.day} {siteSettings.meetingInfo?.time}
-      </p>
+      {siteSettings.meetingInfo?.day || siteSettings.meetingInfo?.time ? (
+        <p>
+          Meeting: {[siteSettings.meetingInfo.day, siteSettings.meetingInfo.time].filter(Boolean).join(' ')}
+        </p>
+      ) : null}
       <ContactForm user={user} />
     </section>
   )
