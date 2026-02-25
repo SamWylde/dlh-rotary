@@ -95,7 +95,7 @@ export default buildConfig({
       },
     }),
   ],
-  secret: process.env.PAYLOAD_SECRET || 'CHANGE-ME-IN-PRODUCTION',
+  secret: process.env.PAYLOAD_SECRET || (process.env.NODE_ENV === 'production' ? (() => { throw new Error('PAYLOAD_SECRET env var is required in production') })() : 'dev-only-not-for-production'),
   sharp,
   onInit: async (payload) => {
     if (process.env.RUN_SEED_ON_INIT !== 'true') return

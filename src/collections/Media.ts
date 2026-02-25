@@ -22,7 +22,6 @@ export const Media: CollectionConfig = {
       const role = (req.user as { role?: string } | undefined)?.role
 
       if (role === 'admin' || role === 'officer') return true
-      if (req.user) return true
 
       return { isPublic: { equals: true } }
     },

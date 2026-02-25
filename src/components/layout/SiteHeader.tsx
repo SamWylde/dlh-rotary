@@ -30,6 +30,7 @@ export const SiteHeader = ({
                 href={href}
                 key={entry.id || `${entry.label}-${href}`}
                 target={entry.link?.newTab ? '_blank' : undefined}
+                rel={entry.link?.newTab ? 'noopener noreferrer' : undefined}
               >
                 {entry.label || 'Untitled'}
               </Link>

@@ -50,6 +50,7 @@ export const MobileNav = ({ nav, user }: { nav: NavEntry[]; user: SessionUser | 
                     className="block rounded px-3 py-2 hover:bg-white/10"
                     href={href}
                     target={entry.link?.newTab ? '_blank' : undefined}
+                    rel={entry.link?.newTab ? 'noopener noreferrer' : undefined}
                   >
                     {entry.label || 'Untitled'}
                   </Link>

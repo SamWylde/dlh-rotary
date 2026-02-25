@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!project) return {}
   const description = lexicalToPlainText(project.description).slice(0, 160) || undefined
   return {
-    title: `${project.title} — Rotary Club of Downtown Lock Haven`,
+    title: `${project.title} - Rotary Club of Downtown Lock Haven`,
     description,
   }
 }

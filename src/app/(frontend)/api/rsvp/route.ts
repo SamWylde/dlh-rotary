@@ -25,6 +25,10 @@ export const POST = async (request: Request): Promise<NextResponse> => {
 
   const eventID = typeof body.eventID === 'string' ? Number(body.eventID) : body.eventID
 
+  if (!Number.isFinite(eventID)) {
+    return NextResponse.json({ error: 'Invalid event ID' }, { status: 400 })
+  }
+
   const payload = await getPayloadClient()
 
   const existing = await payload.find({
