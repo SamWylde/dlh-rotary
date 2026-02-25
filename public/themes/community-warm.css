@@ -13,6 +13,9 @@
   --color-border: #fcd34d;
   --color-header-bg: #7c4d2b;
   --color-header-text: #fff7ed;
+  --color-header-hover: rgba(255,255,255,0.12);
+  --color-header-border-muted: rgba(255,255,255,0.25);
+  --color-header-muted-text: rgba(255,247,237,0.8);
   --color-footer-bg: #3f2f1f;
   --color-footer-text: #fde68a;
   --radius: 0.5rem;

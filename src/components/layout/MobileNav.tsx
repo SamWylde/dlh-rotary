@@ -25,7 +25,7 @@ export const MobileNav = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUse
       <button
         aria-expanded={open}
         aria-label="Toggle navigation menu"
-        className="rounded p-2 hover:bg-white/10"
+        className="rounded p-2 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]"
         onClick={() => setOpen(!open)}
         type="button"
       >
@@ -40,7 +40,7 @@ export const MobileNav = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUse
 
       {open && (
         <nav
-          className="absolute left-0 right-0 top-full z-50 border-b border-white/20 bg-[var(--color-header-bg,#17458F)] px-4 py-3"
+          className="absolute left-0 right-0 top-full z-50 border-b border-[var(--color-header-border-muted,rgba(255,255,255,0.2))] bg-[var(--color-header-bg,#17458F)] px-4 py-3"
           aria-label="Mobile Navigation"
         >
           <ul className="grid gap-1">
@@ -57,7 +57,7 @@ export const MobileNav = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUse
                   <div className="flex items-center gap-2">
                     {isValidHref(href) ? (
                       <Link
-                        className="block flex-1 rounded px-3 py-2 hover:bg-white/10"
+                        className="block flex-1 rounded px-3 py-2 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]"
                         href={href}
                         target={entry.link?.newTab ? '_blank' : undefined}
                         rel={entry.link?.newTab ? 'noopener noreferrer' : undefined}
@@ -65,13 +65,13 @@ export const MobileNav = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUse
                         {label}
                       </Link>
                     ) : (
-                      <span className="block flex-1 rounded px-3 py-2 text-white/90">{label}</span>
+                      <span className="block flex-1 rounded px-3 py-2 text-[var(--color-header-muted-text,rgba(255,255,255,0.85))]">{label}</span>
                     )}
                     {hasChildren ? (
                       <button
                         aria-expanded={isExpanded}
                         aria-label={`${isExpanded ? 'Collapse' : 'Expand'} submenu for ${label}`}
-                        className="rounded p-2 hover:bg-white/10"
+                        className="rounded p-2 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]"
                         onClick={() =>
                           setExpandedGroups((previous) => ({
                             ...previous,
@@ -93,13 +93,13 @@ export const MobileNav = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUse
                     ) : null}
                   </div>
                   {hasChildren && isExpanded ? (
-                    <ul className="ml-4 mt-1 grid gap-1 border-l border-white/20 pl-2">
+                    <ul className="ml-4 mt-1 grid gap-1 border-l border-[var(--color-header-border-muted,rgba(255,255,255,0.2))] pl-2">
                       {children.map((child, childIndex) => {
                         const childHref = resolveHref(child.link)
                         return (
                           <li key={child.id || `${groupKey}-child-${childIndex}`}>
                             <Link
-                              className="block rounded px-3 py-2 text-sm hover:bg-white/10"
+                              className="block rounded px-3 py-2 text-sm hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]"
                               href={childHref}
                               target={child.link?.newTab ? '_blank' : undefined}
                               rel={child.link?.newTab ? 'noopener noreferrer' : undefined}
@@ -114,16 +114,16 @@ export const MobileNav = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUse
                 </li>
               )
             })}
-            <li className="mt-2 border-t border-white/20 pt-2">
+            <li className="mt-2 border-t border-[var(--color-header-border-muted,rgba(255,255,255,0.2))] pt-2">
               {user ? (
                 <div className="flex items-center gap-2">
-                  <Link className="block rounded px-3 py-2 hover:bg-white/10" href="/account">
+                  <Link className="block rounded px-3 py-2 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]" href="/account">
                     Account
                   </Link>
                   <LogoutButton />
                 </div>
               ) : (
-                <Link className="block rounded px-3 py-2 hover:bg-white/10" href="/login">
+                <Link className="block rounded px-3 py-2 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]" href="/login">
                   Member Login
                 </Link>
               )}

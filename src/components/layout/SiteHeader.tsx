@@ -31,7 +31,7 @@ export const SiteHeader = ({
 
             const parentLink = isValidHref(href) ? (
               <Link
-                className="rounded px-2 py-1 hover:bg-white/10"
+                className="rounded px-2 py-1 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]"
                 href={href}
                 target={entry.link?.newTab ? '_blank' : undefined}
                 rel={entry.link?.newTab ? 'noopener noreferrer' : undefined}
@@ -41,13 +41,13 @@ export const SiteHeader = ({
             ) : hasChildren ? (
               <button
                 aria-label={`Open submenu for ${label}`}
-                className="rounded px-2 py-1 hover:bg-white/10"
+                className="rounded px-2 py-1 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]"
                 type="button"
               >
                 {label}
               </button>
             ) : (
-              <span className="rounded px-2 py-1 text-white/90">{label}</span>
+              <span className="rounded px-2 py-1 text-[var(--color-header-muted-text,rgba(255,255,255,0.85))]">{label}</span>
             )
 
             if (!hasChildren) {
@@ -84,13 +84,13 @@ export const SiteHeader = ({
           })}
           {user ? (
             <>
-              <Link className="rounded border border-white/50 px-2 py-1 hover:bg-white/10" href="/account">
+              <Link className="rounded border border-[var(--color-header-border-muted,rgba(255,255,255,0.5))] px-2 py-1 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]" href="/account">
                 Account
               </Link>
               <LogoutButton />
             </>
           ) : (
-            <Link className="rounded border border-white/50 px-2 py-1 hover:bg-white/10" href="/login">
+            <Link className="rounded border border-[var(--color-header-border-muted,rgba(255,255,255,0.5))] px-2 py-1 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]" href="/login">
               Member Login
             </Link>
           )}

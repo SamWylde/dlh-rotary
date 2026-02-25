@@ -11,8 +11,11 @@
   --color-card-foreground: #0f172a;
   --color-accent: #38bdf8;
   --color-border: #cbd5e1;
-  --color-header-bg: #1e40af;
-  --color-header-text: #f8fafc;
+  --color-header-bg: #ffffff;
+  --color-header-text: #0f172a;
+  --color-header-hover: rgba(0,0,0,0.07);
+  --color-header-border-muted: rgba(0,0,0,0.2);
+  --color-header-muted-text: rgba(15,23,42,0.6);
   --color-footer-bg: #0f172a;
   --color-footer-text: #e2e8f0;
   --radius: 0.5rem;

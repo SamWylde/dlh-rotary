@@ -13,7 +13,7 @@ export const LogoutButton = () => {
 
   return (
     <button
-      className="rounded border border-white/50 px-2 py-1 hover:bg-white/10"
+      className="rounded border border-[var(--color-header-border-muted,rgba(255,255,255,0.5))] px-2 py-1 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]"
       onClick={handleLogout}
       type="button"
     >
