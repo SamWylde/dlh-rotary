@@ -34,29 +34,26 @@ export default function HomePage() {
   return (
     <div className="grid gap-8">
       {/* Hero */}
-      <section
-        className="rounded-xl p-8"
-        style={{ background: 'linear-gradient(135deg, #003DA5 0%, #17458F 55%, #2360a5 100%)' }}
-      >
-        <p className="text-sm uppercase tracking-wide text-white/70">Service Above Self</p>
-        <h1 className="mt-2 text-4xl font-semibold text-white">Rotary Club of Downtown Lock Haven</h1>
-        <p className="mt-3 max-w-2xl text-white/80">
+      <section className="rounded-xl border border-border bg-card p-8">
+        <p className="text-sm uppercase tracking-wide text-muted-foreground">Service Above Self</p>
+        <h1 className="mt-2 text-4xl font-semibold">Rotary Club of Downtown Lock Haven</h1>
+        <p className="mt-3 max-w-2xl text-muted-foreground">
           Community projects, scholarships, and weekly fellowship in Clinton County.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link className="rounded bg-white px-4 py-2 font-medium text-[#003DA5]" href="/join">
+          <Link className="rounded bg-primary px-4 py-2 text-primary-foreground" href="/join">
             Join Us
           </Link>
-          <Link className="rounded border border-white/60 px-4 py-2 text-white hover:bg-white/10" href="/projects">
+          <Link className="rounded border border-border px-4 py-2 hover:bg-muted" href="/projects">
             View Projects
           </Link>
         </div>
       </section>
 
       {/* Meeting Callout */}
-      <div className="rounded-xl bg-[#003DA5] px-6 py-4 text-white">
+      <div className="rounded-xl bg-primary px-6 py-4 text-primary-foreground">
         <p className="font-medium">📍 We meet every Tuesday at 5:30 PM (social time at 5:15)</p>
-        <p className="mt-0.5 text-sm text-white/80">Poorman Gallery, 352 E. Water Street, Lock Haven, PA</p>
+        <p className="mt-0.5 text-sm opacity-80">Poorman Gallery, 352 E. Water Street, Lock Haven, PA</p>
       </div>
 
       {/* About Blurb */}
