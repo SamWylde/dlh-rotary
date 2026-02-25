@@ -50,10 +50,14 @@ async function LatestAnnouncementsSection() {
 }
 
 async function ProjectsSection() {
-  const { user } = await getCurrentUser()
-  const projects = await getProjects(user)
-  const featured = projects.docs.slice(0, 6)
-  return <HomeProjectsGrid projects={featured} />
+  try {
+    const { user } = await getCurrentUser()
+    const projects = await getProjects(user)
+    const featured = projects.docs.slice(0, 6)
+    return <HomeProjectsGrid projects={featured} />
+  } catch {
+    return null
+  }
 }
 
 /* ── Projects grid ──────────────────────────────────────────────────────────── */
