@@ -6,7 +6,8 @@ import { EventCard } from '@/components/events/EventCard'
 import { PaginationControls } from '@/components/layout/PaginationControls'
 import { getCurrentUser } from '@/lib/auth'
 import { getEventsPage } from '@/lib/content'
-import { buildPageHref, parsePageParam } from '@/lib/pagination'
+import { parsePageParam } from '@/lib/pagination'
+import { getOutOfRangeRedirectHref, getPaginationState } from '@/lib/paginatedRoute'
 
 export const metadata: Metadata = {
   title: 'Events | Rotary Club of Downtown Lock Haven',
@@ -23,12 +24,13 @@ export default async function EventsPage({
   const { page: pageParam } = await searchParams
   const page = parsePageParam(pageParam)
   const events = await getEventsPage({ page, limit: PER_PAGE }, user)
-  const currentPage = events.page ?? page
-  const totalPages = events.totalPages ?? 1
+  const redirectHref = getOutOfRangeRedirectHref('/events', page, events)
 
-  if (events.totalPages && page > events.totalPages) {
-    redirect(buildPageHref('/events', events.totalPages))
+  if (redirectHref) {
+    redirect(redirectHref)
   }
+
+  const { currentPage, totalPages } = getPaginationState(page, events)
 
   return (
     <section className="grid gap-4">

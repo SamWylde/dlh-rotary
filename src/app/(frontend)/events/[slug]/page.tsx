@@ -3,9 +3,8 @@ import { notFound } from 'next/navigation'
 
 import { RSVPControls } from '@/components/events/RSVPControls'
 import { getCurrentUser } from '@/lib/auth'
-import { getEventBySlug } from '@/lib/content'
+import { getEventBySlug, getEventRSVPStatus } from '@/lib/content'
 import { makeSlugMetadata } from '@/lib/metadata'
-import { getPayloadClient } from '@/lib/payload'
 import { lexicalToPlainText } from '@/lib/richText'
 
 export const generateMetadata = makeSlugMetadata(getEventBySlug, (e) => e.description)
@@ -19,26 +18,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
     notFound()
   }
 
-  let existingStatus: 'yes' | 'no' | 'maybe' | null = null
-
-  if (user) {
-    const payload = await getPayloadClient()
-
-    const existing = await payload.find({
-      collection: 'rsvps',
-      where: {
-        and: [
-          { event: { equals: event.id } },
-          { user: { equals: user.id } },
-        ],
-      },
-      limit: 1,
-      overrideAccess: false,
-      user,
-    })
-
-    existingStatus = (existing.docs[0]?.status as 'yes' | 'no' | 'maybe' | undefined) || null
-  }
+  const existingStatus = await getEventRSVPStatus(event.id, user)
 
   return (
     <article className="grid gap-6 rounded-lg border border-border bg-card p-6">

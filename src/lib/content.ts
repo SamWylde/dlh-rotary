@@ -1,11 +1,14 @@
 import type { Where } from 'payload'
 
 import type { SessionUser } from '@/lib/auth'
+import { PRIVILEGED_ROLES } from '@/constants/roles'
 import { getPayloadClient } from '@/lib/payload'
-import type { Document, Form, Project, SiteSetting, User } from '@/payload-types'
+import type { Announcement, Document, Event, Form, Page, Project, SiteSetting, User } from '@/payload-types'
 import { getNumericRelationshipID } from '@/utilities/getRelationshipID'
 
 export type SiteSettingsFormKey = 'joinForm' | 'contactForm'
+export type RSVPStatus = 'yes' | 'no' | 'maybe'
+
 type PaginationArgs = {
   page: number
   limit: number
@@ -19,51 +22,26 @@ type DocumentsPageArgs = PaginationArgs & {
   q?: string
 }
 
+type QueryUser = SessionUser | null | undefined
+type QueryContext = {
+  payload: Awaited<ReturnType<typeof getPayloadClient>>
+  user?: SessionUser
+}
+
 /** Shared setup for content queries: get payload client + normalize optional user. */
-const initQuery = async (user?: SessionUser | null) => {
+const initQuery = async (user?: QueryUser): Promise<QueryContext> => {
   const payload = await getPayloadClient()
   return { payload, user: user || undefined } as const
 }
 
-export const getSiteSettings = async (user?: SessionUser | null): Promise<SiteSetting> => {
-  const q = await initQuery(user)
-
-  return q.payload.findGlobal({
-    slug: 'site-settings',
-    depth: 0,
-    overrideAccess: false,
-    user: q.user,
-  })
-}
-
-export const getConfiguredForm = async (
-  key: SiteSettingsFormKey,
-  user?: SessionUser | null,
-): Promise<Form | null> => {
-  const siteSettings = await getSiteSettings(user)
-  return getFormByID(siteSettings.forms?.[key], user)
-}
-
-export const getFormByID = async (formID: unknown, user?: SessionUser | null): Promise<Form | null> => {
-  const q = await initQuery(user)
-  const normalizedID = getNumericRelationshipID(formID)
-
-  if (!normalizedID) {
-    return null
-  }
-
-  try {
-    return await q.payload.findByID({
-      collection: 'forms',
-      id: normalizedID,
-      depth: 0,
-      overrideAccess: false,
-      user: q.user,
-    })
-  } catch {
-    return null
-  }
-}
+const withUserAccess = <T extends object>(
+  query: QueryContext,
+  args: T,
+): T & { overrideAccess: false; user?: SessionUser } => ({
+  ...args,
+  overrideAccess: false,
+  user: query.user,
+})
 
 const normalizePagination = ({ page, limit }: PaginationArgs): PaginationArgs => {
   const safePage = Number.isInteger(page) && page > 0 ? page : 1
@@ -81,57 +59,23 @@ const normalizeQuery = (value: string | undefined): string | undefined => {
   return normalized.length > 0 ? normalized : undefined
 }
 
-export const getAnnouncementsPage = async ({ page, limit }: PaginationArgs, user?: SessionUser | null) => {
-  const q = await initQuery(user)
-  const args = normalizePagination({ page, limit })
+const getSlugWhere = (slug: string): Where => ({
+  slug: {
+    equals: slug,
+  },
+})
 
-  return q.payload.find({
-    collection: 'announcements',
-    sort: '-publishedDate',
-    page: args.page,
-    limit: args.limit,
-    depth: 1,
-    overrideAccess: false,
-    user: q.user,
-  })
-}
+const getDirectoryOfficersWhere = (): Where => ({
+  and: [
+    { showInDirectory: { equals: true } },
+    { role: { in: [...PRIVILEGED_ROLES] } },
+  ],
+})
 
-export const getEventsPage = async ({ page, limit }: PaginationArgs, user?: SessionUser | null) => {
-  const q = await initQuery(user)
-  const args = normalizePagination({ page, limit })
-
-  return q.payload.find({
-    collection: 'events',
-    sort: 'date',
-    page: args.page,
-    limit: args.limit,
-    depth: 1,
-    overrideAccess: false,
-    user: q.user,
-  })
-}
-
-export const getProjectsPage = async ({ page, limit }: PaginationArgs, user?: SessionUser | null) => {
-  const q = await initQuery(user)
-  const args = normalizePagination({ page, limit })
-
-  return q.payload.find({
-    collection: 'projects',
-    sort: 'title',
-    page: args.page,
-    limit: args.limit,
-    depth: 1,
-    overrideAccess: false,
-    user: q.user,
-  })
-}
-
-export const getDocumentsPage = async (
-  { page, limit, category, q }: DocumentsPageArgs,
-  user?: SessionUser | null,
-) => {
-  const ctx = await initQuery(user)
-  const args = normalizePagination({ page, limit })
+const getDocumentsWhere = (
+  category?: Document['category'],
+  q?: string,
+): Where | undefined => {
   const query = normalizeQuery(q)
   const filters: Where[] = []
 
@@ -157,26 +101,13 @@ export const getDocumentsPage = async (
           },
         },
       ],
-    } as Where)
+    })
   }
 
-  const where = filters.length > 0 ? ({ and: filters } as Where) : undefined
-
-  return ctx.payload.find({
-    collection: 'documents',
-    where,
-    sort: '-updatedAt',
-    page: args.page,
-    limit: args.limit,
-    depth: 1,
-    overrideAccess: false,
-    user: ctx.user,
-  })
+  return filters.length > 0 ? { and: filters } : undefined
 }
 
-export const getMembersPage = async ({ page, limit, q, role }: MembersPageArgs, user: SessionUser) => {
-  const q2 = await initQuery(user)
-  const args = normalizePagination({ page, limit })
+const getMembersWhere = (role?: User['role'], q?: string): Where => {
   const query = normalizeQuery(q)
   const filters: Where[] = [
     {
@@ -208,157 +139,236 @@ export const getMembersPage = async ({ page, limit, q, role }: MembersPageArgs, 
           },
         },
       ],
-    } as Where)
+    })
   }
 
-  return q2.payload.find({
-    collection: 'users',
-    where: { and: filters } as Where,
-    sort: 'fullName',
-    page: args.page,
-    limit: args.limit,
-    depth: 1,
-    overrideAccess: false,
-    user: q2.user,
-  })
+  return { and: filters }
 }
 
-export const getOfficersPage = async ({ page, limit }: PaginationArgs, user?: SessionUser | null) => {
-  const q = await initQuery(user)
+const getBySlug = async <TDoc extends object>(
+  collection: 'pages' | 'projects' | 'events' | 'announcements',
+  slug: string,
+  user?: QueryUser,
+): Promise<TDoc | null> => {
+  const query = await initQuery(user)
+  const result = await query.payload.find(
+    withUserAccess(query, {
+      collection,
+      where: getSlugWhere(slug),
+      limit: 1,
+      depth: 2,
+    }),
+  )
+
+  return (result.docs[0] as TDoc | undefined) || null
+}
+
+export const getSiteSettings = async (user?: QueryUser): Promise<SiteSetting> => {
+  const query = await initQuery(user)
+
+  return query.payload.findGlobal(
+    withUserAccess(query, {
+      slug: 'site-settings',
+      depth: 0,
+    }),
+  )
+}
+
+export const getConfiguredForm = async (
+  key: SiteSettingsFormKey,
+  user?: QueryUser,
+): Promise<Form | null> => {
+  const siteSettings = await getSiteSettings(user)
+  return getFormByID(siteSettings.forms?.[key], user)
+}
+
+export const getFormByID = async (formID: unknown, user?: QueryUser): Promise<Form | null> => {
+  const query = await initQuery(user)
+  const normalizedID = getNumericRelationshipID(formID)
+
+  if (!normalizedID) {
+    return null
+  }
+
+  try {
+    return await query.payload.findByID(
+      withUserAccess(query, {
+        collection: 'forms',
+        id: normalizedID,
+        depth: 0,
+      }),
+    )
+  } catch {
+    return null
+  }
+}
+
+export const getAnnouncementsPage = async ({ page, limit }: PaginationArgs, user?: QueryUser) => {
+  const query = await initQuery(user)
   const args = normalizePagination({ page, limit })
 
-  return q.payload.find({
-    collection: 'users',
-    where: {
-      and: [
-        { showInDirectory: { equals: true } },
-        { role: { in: ['admin', 'officer'] } },
-      ],
-    } as Where,
-    sort: 'fullName',
-    page: args.page,
-    limit: args.limit,
-    depth: 1,
-    overrideAccess: false,
-    user: q.user,
-  })
+  return query.payload.find(
+    withUserAccess(query, {
+      collection: 'announcements',
+      sort: '-publishedDate',
+      page: args.page,
+      limit: args.limit,
+      depth: 1,
+    }),
+  )
 }
 
-export const getUpcomingEvents = async (limit = 5, user?: SessionUser | null) => {
-  const q = await initQuery(user)
+export const getEventsPage = async ({ page, limit }: PaginationArgs, user?: QueryUser) => {
+  const query = await initQuery(user)
+  const args = normalizePagination({ page, limit })
 
-  return q.payload.find({
-    collection: 'events',
-    where: {
-      date: {
-        greater_than_equal: new Date().toISOString(),
+  return query.payload.find(
+    withUserAccess(query, {
+      collection: 'events',
+      sort: 'date',
+      page: args.page,
+      limit: args.limit,
+      depth: 1,
+    }),
+  )
+}
+
+export const getProjectsPage = async ({ page, limit }: PaginationArgs, user?: QueryUser) => {
+  const query = await initQuery(user)
+  const args = normalizePagination({ page, limit })
+
+  return query.payload.find(
+    withUserAccess(query, {
+      collection: 'projects',
+      sort: 'title',
+      page: args.page,
+      limit: args.limit,
+      depth: 1,
+    }),
+  )
+}
+
+export const getDocumentsPage = async (
+  { page, limit, category, q }: DocumentsPageArgs,
+  user?: QueryUser,
+) => {
+  const query = await initQuery(user)
+  const args = normalizePagination({ page, limit })
+
+  return query.payload.find(
+    withUserAccess(query, {
+      collection: 'documents',
+      where: getDocumentsWhere(category, q),
+      sort: '-updatedAt',
+      page: args.page,
+      limit: args.limit,
+      depth: 1,
+    }),
+  )
+}
+
+export const getMembersPage = async (
+  { page, limit, q, role }: MembersPageArgs,
+  user: SessionUser,
+) => {
+  const query = await initQuery(user)
+  const args = normalizePagination({ page, limit })
+
+  return query.payload.find(
+    withUserAccess(query, {
+      collection: 'users',
+      where: getMembersWhere(role, q),
+      sort: 'fullName',
+      page: args.page,
+      limit: args.limit,
+      depth: 1,
+    }),
+  )
+}
+
+export const getOfficersPage = async ({ page, limit }: PaginationArgs, user?: QueryUser) => {
+  const query = await initQuery(user)
+  const args = normalizePagination({ page, limit })
+
+  return query.payload.find(
+    withUserAccess(query, {
+      collection: 'users',
+      where: getDirectoryOfficersWhere(),
+      sort: 'fullName',
+      page: args.page,
+      limit: args.limit,
+      depth: 1,
+    }),
+  )
+}
+
+export const getUpcomingEvents = async (limit = 5, user?: QueryUser) => {
+  const query = await initQuery(user)
+
+  return query.payload.find(
+    withUserAccess(query, {
+      collection: 'events',
+      where: {
+        date: {
+          greater_than_equal: new Date().toISOString(),
+        },
       },
-    },
-    sort: 'date',
-    limit,
-    depth: 1,
-    overrideAccess: false,
-    user: q.user,
-  })
+      sort: 'date',
+      limit,
+      depth: 1,
+    }),
+  )
 }
 
-export const getRecentAnnouncements = async (limit = 5, user?: SessionUser | null) => {
-  const q = await initQuery(user)
+export const getRecentAnnouncements = async (limit = 5, user?: QueryUser) => {
+  const query = await initQuery(user)
 
-  return q.payload.find({
-    collection: 'announcements',
-    sort: '-publishedDate',
-    limit,
-    depth: 1,
-    overrideAccess: false,
-    user: q.user,
-  })
+  return query.payload.find(
+    withUserAccess(query, {
+      collection: 'announcements',
+      sort: '-publishedDate',
+      limit,
+      depth: 1,
+    }),
+  )
 }
 
-export const getOfficers = async (user?: SessionUser | null, limit = 100) => {
-  const q = await initQuery(user)
+export const getOfficers = async (user?: QueryUser, limit = 100) => {
+  const query = await initQuery(user)
   const safeLimit = Number.isInteger(limit) && limit > 0 ? limit : 100
 
-  return q.payload.find({
-    collection: 'users',
-    where: {
-      and: [
-        { showInDirectory: { equals: true } },
-        { role: { in: ['admin', 'officer'] } },
-      ],
-    } as Where,
-    sort: 'fullName',
-    depth: 1,
-    limit: safeLimit,
-    overrideAccess: false,
-    user: q.user,
-  })
+  return query.payload.find(
+    withUserAccess(query, {
+      collection: 'users',
+      where: getDirectoryOfficersWhere(),
+      sort: 'fullName',
+      depth: 1,
+      limit: safeLimit,
+    }),
+  )
 }
 
-export const getMemberDirectory = async (user: SessionUser) => {
-  const q = await initQuery(user)
+export const getPageBySlug = (slug: string, user?: QueryUser) => getBySlug<Page>('pages', slug, user)
 
-  return q.payload.find({
-    collection: 'users',
-    where: {
-      showInDirectory: {
-        equals: true,
-      },
-    },
-    sort: 'fullName',
-    depth: 1,
-    limit: 300,
-    overrideAccess: false,
-    user: q.user,
-  })
+export const getProjects = async (user?: QueryUser) => {
+  const query = await initQuery(user)
+
+  return query.payload.find(
+    withUserAccess(query, {
+      collection: 'projects',
+      limit: 200,
+      sort: 'title',
+      depth: 1,
+    }),
+  )
 }
 
-export const getPageBySlug = async (slug: string, user?: SessionUser | null) => {
-  const q = await initQuery(user)
-
-  const result = await q.payload.find({
-    collection: 'pages',
-    where: { slug: { equals: slug } },
-    limit: 1,
-    depth: 2,
-    overrideAccess: false,
-    user: q.user,
-  })
-
-  return result.docs[0] || null
-}
-
-export const getProjects = async (user?: SessionUser | null) => {
-  const q = await initQuery(user)
-
-  return q.payload.find({
-    collection: 'projects',
-    limit: 200,
-    sort: 'title',
-    depth: 1,
-    overrideAccess: false,
-    user: q.user,
-  })
-}
-
-export const getProjectBySlug = async (slug: string, user?: SessionUser | null) => {
-  const q = await initQuery(user)
-
-  const result = await q.payload.find({
-    collection: 'projects',
-    where: { slug: { equals: slug } },
-    limit: 1,
-    depth: 2,
-    overrideAccess: false,
-    user: q.user,
-  })
-
-  return result.docs[0] || null
-}
+export const getProjectBySlug = (slug: string, user?: QueryUser) =>
+  getBySlug<Project>('projects', slug, user)
 
 export const getProjectVolunteerForm = async (
   project: Pick<Project, 'volunteerSignupEnabled' | 'volunteerForm'>,
-  user?: SessionUser | null,
+  user?: QueryUser,
 ): Promise<Form | null> => {
   if (!project.volunteerSignupEnabled) {
     return null
@@ -367,58 +377,49 @@ export const getProjectVolunteerForm = async (
   return getFormByID(project.volunteerForm, user)
 }
 
-export const getEvents = async (user?: SessionUser | null) => {
-  const q = await initQuery(user)
+export const getEvents = async (user?: QueryUser) => {
+  const query = await initQuery(user)
 
-  return q.payload.find({
-    collection: 'events',
-    limit: 200,
-    sort: 'date',
-    depth: 1,
-    overrideAccess: false,
-    user: q.user,
-  })
+  return query.payload.find(
+    withUserAccess(query, {
+      collection: 'events',
+      limit: 200,
+      sort: 'date',
+      depth: 1,
+    }),
+  )
 }
 
-export const getEventBySlug = async (slug: string, user?: SessionUser | null) => {
-  const q = await initQuery(user)
+export const getEventBySlug = (slug: string, user?: QueryUser) => getBySlug<Event>('events', slug, user)
 
-  const result = await q.payload.find({
-    collection: 'events',
-    where: { slug: { equals: slug } },
-    limit: 1,
-    depth: 2,
-    overrideAccess: false,
-    user: q.user,
-  })
+export const getAnnouncementBySlug = (slug: string, user?: QueryUser) =>
+  getBySlug<Announcement>('announcements', slug, user)
 
-  return result.docs[0] || null
-}
+export const getEventRSVPStatus = async (
+  eventID: string | number,
+  user?: QueryUser,
+): Promise<RSVPStatus | null> => {
+  if (!user) {
+    return null
+  }
 
-export const getAnnouncementBySlug = async (slug: string, user?: SessionUser | null) => {
-  const q = await initQuery(user)
+  const query = await initQuery(user)
+  const where: Where = {
+    and: [
+      { event: { equals: eventID } },
+      { user: { equals: user.id } },
+    ],
+  }
 
-  const result = await q.payload.find({
-    collection: 'announcements',
-    where: { slug: { equals: slug } },
-    limit: 1,
-    depth: 2,
-    overrideAccess: false,
-    user: q.user,
-  })
+  const existing = await query.payload.find(
+    withUserAccess(query, {
+      collection: 'rsvps',
+      where,
+      limit: 1,
+      depth: 0,
+    }),
+  )
 
-  return result.docs[0] || null
-}
-
-export const getDocuments = async (user?: SessionUser | null) => {
-  const q = await initQuery(user)
-
-  return q.payload.find({
-    collection: 'documents',
-    limit: 200,
-    sort: '-updatedAt',
-    depth: 1,
-    overrideAccess: false,
-    user: q.user,
-  })
+  const status = existing.docs[0]?.status
+  return status === 'yes' || status === 'no' || status === 'maybe' ? status : null
 }

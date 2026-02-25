@@ -1,4 +1,4 @@
-import type { CollectionAfterChangeHook } from 'payload'
+﻿import type { CollectionAfterChangeHook } from 'payload'
 
 import { lexicalToPlainText } from '@/lib/richText'
 import { getServerURL } from '@/lib/url'
@@ -26,7 +26,7 @@ const getRecipientEmails = async (hook: Parameters<CollectionAfterChangeHook>[0]
   let hasNextPage = true
 
   while (hasNextPage) {
-    // Always override access — this is a system-level query to notify all members.
+    // Always override access - this is a system-level query to notify all members.
     const users = await hook.req.payload.find({
       collection: 'users',
       where: {
@@ -120,3 +120,4 @@ export const sendAnnouncementNotification: CollectionAfterChangeHook = async (ho
 
   return doc
 }
+

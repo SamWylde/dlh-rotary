@@ -1,4 +1,6 @@
-import type { HeroBlock, Media } from '@/payload-types'
+import { getMediaFromRelation } from '@/lib/media'
+import type { HeroBlock } from '@/payload-types'
+import { isSafeURL } from '@/utilities/urlSafety'
 
 export type PageBlockLink = HeroBlock['primaryLink']
 
@@ -14,17 +16,6 @@ const getReferenceTitle = (reference: LinkReference): string | null => {
   return typeof reference.title === 'string' && reference.title.trim().length > 0 ? reference.title : null
 }
 
-const SAFE_PROTOCOLS = new Set(['http:', 'https:', 'mailto:', 'tel:'])
-
-const isSafeExternalURL = (value: string): boolean => {
-  try {
-    const parsed = new URL(value)
-    return SAFE_PROTOCOLS.has(parsed.protocol)
-  } catch {
-    return false
-  }
-}
-
 export const resolvePageBlockHref = (link: PageBlockLink): string | null => {
   if (!link) return null
 
@@ -35,7 +26,7 @@ export const resolvePageBlockHref = (link: PageBlockLink): string | null => {
 
   if (link.type === 'external' && typeof link.url === 'string') {
     const normalized = link.url.trim()
-    if (normalized.length === 0 || !isSafeExternalURL(normalized)) return null
+    if (normalized.length === 0 || !isSafeURL(normalized)) return null
     return normalized
   }
 
@@ -50,7 +41,7 @@ export const resolvePageBlockLabel = (link: PageBlockLink, fallback: string): st
 
   if (typeof link.url === 'string') {
     const normalized = link.url.trim()
-    if (normalized.length > 0 && isSafeExternalURL(normalized)) {
+    if (normalized.length > 0 && isSafeURL(normalized)) {
       try {
         const parsed = new URL(normalized)
         if (parsed.protocol === 'mailto:') return 'Email'
@@ -65,10 +56,4 @@ export const resolvePageBlockLabel = (link: PageBlockLink, fallback: string): st
   return fallback
 }
 
-export const getMediaFromRelation = (value: number | Media | null | undefined): Media | null => {
-  if (!value || typeof value !== 'object') {
-    return null
-  }
-
-  return value
-}
+export { getMediaFromRelation }

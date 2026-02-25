@@ -5,7 +5,8 @@ import { ProjectCard } from '@/components/projects/ProjectCard'
 import { PaginationControls } from '@/components/layout/PaginationControls'
 import { getCurrentUser } from '@/lib/auth'
 import { getProjectsPage } from '@/lib/content'
-import { buildPageHref, parsePageParam } from '@/lib/pagination'
+import { parsePageParam } from '@/lib/pagination'
+import { getOutOfRangeRedirectHref, getPaginationState } from '@/lib/paginatedRoute'
 
 export const metadata: Metadata = {
   title: 'Projects | Rotary Club of Downtown Lock Haven',
@@ -22,12 +23,13 @@ export default async function ProjectsPage({
   const { page: pageParam } = await searchParams
   const page = parsePageParam(pageParam)
   const projects = await getProjectsPage({ page, limit: PER_PAGE }, user)
-  const currentPage = projects.page ?? page
-  const totalPages = projects.totalPages ?? 1
+  const redirectHref = getOutOfRangeRedirectHref('/projects', page, projects)
 
-  if (projects.totalPages && page > projects.totalPages) {
-    redirect(buildPageHref('/projects', projects.totalPages))
+  if (redirectHref) {
+    redirect(redirectHref)
   }
+
+  const { currentPage, totalPages } = getPaginationState(page, projects)
 
   return (
     <section className="grid gap-4">

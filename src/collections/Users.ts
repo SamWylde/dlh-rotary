@@ -1,6 +1,7 @@
 import type { CollectionConfig, Where } from 'payload'
 
 import { type AuthUser, isAdmin, isAdminFieldAccess, isAdminOrOfficer, isAdminOrSelf } from '@/access'
+import { isPrivilegedRole } from '@/constants/roles'
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -22,7 +23,7 @@ export const Users: CollectionConfig = {
         } as Where
       }
 
-      if (user.role === 'admin' || user.role === 'officer') {
+      if (isPrivilegedRole(user.role)) {
         return true
       }
 
@@ -38,8 +39,7 @@ export const Users: CollectionConfig = {
         if (!doc) return doc
 
         const viewer = req.user as unknown as AuthUser | undefined
-        const privileged =
-          viewer?.role === 'admin' || viewer?.role === 'officer' || viewer?.id === doc.id
+        const privileged = isPrivilegedRole(viewer?.role) || viewer?.id === doc.id
 
         if (!privileged) {
           if (!doc.showEmail) {

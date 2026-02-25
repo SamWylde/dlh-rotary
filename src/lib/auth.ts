@@ -2,7 +2,7 @@ import { cache } from 'react'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import type { Role } from '@/access'
+import type { Role } from '@/constants/roles'
 import { getServerURL } from '@/lib/url'
 
 export type SessionUser = {

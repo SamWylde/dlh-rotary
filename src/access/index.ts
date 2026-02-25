@@ -1,6 +1,7 @@
 import type { Access, FieldAccess, Where } from 'payload'
 
-export type Role = 'admin' | 'officer' | 'member'
+import { type Role, isPrivilegedRole } from '@/constants/roles'
+export type { Role } from '@/constants/roles'
 
 export type AuthUser = {
   id: string | number
@@ -13,7 +14,7 @@ export const isAdmin: Access = ({ req }) => getUser(req)?.role === 'admin'
 
 export const isAdminOrOfficer: Access = ({ req }) => {
   const role = getUser(req)?.role
-  return role === 'admin' || role === 'officer'
+  return isPrivilegedRole(role)
 }
 
 export const isAuthenticated: Access = ({ req }) => Boolean(getUser(req))
@@ -31,7 +32,7 @@ export const isAdminOrOfficerOrSelf: Access = ({ req }) => {
   const user = getUser(req)
 
   if (!user) return false
-  if (user.role === 'admin' || user.role === 'officer') return true
+  if (isPrivilegedRole(user.role)) return true
 
   return { user: { equals: user.id } }
 }
@@ -41,7 +42,7 @@ export const isAdminFieldAccess: FieldAccess = ({ req }) => getUser(req)?.role =
 /** Admin/officer sees everything; others see only published. */
 export const publishedOrPrivileged: Access = ({ req }) => {
   const role = getUser(req)?.role
-  if (role === 'admin' || role === 'officer') return true
+  if (isPrivilegedRole(role)) return true
   return { _status: { equals: 'published' } }
 }
 
@@ -58,7 +59,7 @@ export const publishedAndPublicOrPrivileged: Access = ({ req }) => {
     } as Where
   }
 
-  if (user.role === 'admin' || user.role === 'officer') return true
+  if (isPrivilegedRole(user.role)) return true
 
   return { _status: { equals: 'published' } }
 }
@@ -72,6 +73,6 @@ export const publicOrAuthenticated: Access = ({ req }) => {
 /** Privileged: all. Others: public media only. */
 export const publicOrPrivileged: Access = ({ req }) => {
   const role = getUser(req)?.role
-  if (role === 'admin' || role === 'officer') return true
+  if (isPrivilegedRole(role)) return true
   return { isPublic: { equals: true } }
 }

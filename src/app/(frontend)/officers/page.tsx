@@ -4,7 +4,8 @@ import { redirect } from 'next/navigation'
 import { PaginationControls } from '@/components/layout/PaginationControls'
 import { getCurrentUser } from '@/lib/auth'
 import { getOfficersPage } from '@/lib/content'
-import { buildPageHref, parsePageParam } from '@/lib/pagination'
+import { parsePageParam } from '@/lib/pagination'
+import { getOutOfRangeRedirectHref, getPaginationState } from '@/lib/paginatedRoute'
 
 export const metadata: Metadata = {
   title: 'Officers | Rotary Club of Downtown Lock Haven',
@@ -21,12 +22,13 @@ export default async function OfficersPage({
   const { page: pageParam } = await searchParams
   const page = parsePageParam(pageParam)
   const officers = await getOfficersPage({ page, limit: PER_PAGE }, user)
-  const currentPage = officers.page ?? page
-  const totalPages = officers.totalPages ?? 1
+  const redirectHref = getOutOfRangeRedirectHref('/officers', page, officers)
 
-  if (officers.totalPages && page > officers.totalPages) {
-    redirect(buildPageHref('/officers', officers.totalPages))
+  if (redirectHref) {
+    redirect(redirectHref)
   }
+
+  const { currentPage, totalPages } = getPaginationState(page, officers)
 
   return (
     <section className="grid gap-4">

@@ -1,24 +1,8 @@
-import { getPayloadClient } from '@/lib/payload'
-import { getMediaURL } from '@/lib/media'
-import type { SiteSetting } from '@/payload-types'
-
-// Note: Icon and Logo each fetch site-settings independently. Payload dedupes
-// concurrent requests within a single render, so this is acceptable.
-const getIconURL = async (): Promise<string | null> => {
-  const payload = await getPayloadClient()
-  // Uses anonymous access (no user passed). Site-settings are publicly readable.
-  const siteSettings = (await payload.findGlobal({
-    slug: 'site-settings',
-    depth: 1,
-    overrideAccess: false,
-  })) as SiteSetting
-
-  return getMediaURL(siteSettings.logoSimplified) || getMediaURL(siteSettings.logo)
-}
+import { getBrandingAssets } from '@/lib/branding'
 
 const Icon = async () => {
   try {
-    const iconURL = await getIconURL()
+    const { iconURL } = await getBrandingAssets()
 
     if (iconURL) {
       return (

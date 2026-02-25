@@ -6,8 +6,8 @@ import { PaginationControls } from '@/components/layout/PaginationControls'
 import { requireUser } from '@/lib/auth'
 import { getDocumentsPage } from '@/lib/content'
 import { DOCUMENT_CATEGORY_VALUES } from '@/constants/documentCategories'
-import { buildPageHref, parseEnumParam, parsePageParam, parseStringParam } from '@/lib/pagination'
-import type { Document } from '@/payload-types'
+import { parseEnumParam, parsePageParam, parseStringParam } from '@/lib/pagination'
+import { getOutOfRangeRedirectHref, getPaginationState } from '@/lib/paginatedRoute'
 
 export const metadata: Metadata = {
   title: 'Documents | Rotary Club of Downtown Lock Haven',
@@ -23,7 +23,7 @@ export default async function DocumentsPage({
   const user = await requireUser()
   const { page: pageParam, category: categoryParam, q: qParam } = await searchParams
   const page = parsePageParam(pageParam)
-  const category = parseEnumParam(categoryParam, DOCUMENT_CATEGORY_VALUES) as Document['category'] | undefined
+  const category = parseEnumParam(categoryParam, DOCUMENT_CATEGORY_VALUES)
   const q = parseStringParam(qParam)
   const query = {
     category,
@@ -31,12 +31,13 @@ export default async function DocumentsPage({
   }
 
   const documents = await getDocumentsPage({ page, limit: PER_PAGE, category, q }, user)
-  const currentPage = documents.page ?? page
-  const totalPages = documents.totalPages ?? 1
+  const redirectHref = getOutOfRangeRedirectHref('/documents', page, documents, query)
 
-  if (documents.totalPages && page > documents.totalPages) {
-    redirect(buildPageHref('/documents', documents.totalPages, query))
+  if (redirectHref) {
+    redirect(redirectHref)
   }
+
+  const { currentPage, totalPages } = getPaginationState(page, documents)
 
   return (
     <section className="grid gap-4">

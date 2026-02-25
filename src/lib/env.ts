@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Environment variable validation.
  * Import this module early (e.g. in payload.config.ts) so missing vars
  * cause a clear startup error instead of a confusing runtime failure.
@@ -17,7 +17,7 @@ function requireEnv(name: string): string {
 function warnEnv(name: string, fallback: string): string {
   const value = process.env[name]
   if (!value && isProd) {
-    console.warn(`[env] ${name} is not set — falling back to "${fallback}"`)
+    console.warn(`[env] ${name} is not set - falling back to "${fallback}"`)
   }
   return value || fallback
 }
@@ -31,10 +31,11 @@ export const PAYLOAD_SECRET = isProd
   ? requireEnv('PAYLOAD_SECRET')
   : process.env.PAYLOAD_SECRET || 'dev-only-not-for-production'
 
-/** Optional — blob storage is disabled gracefully if token is missing. */
+/** Optional - blob storage is disabled gracefully if token is missing. */
 export const BLOB_READ_WRITE_TOKEN = process.env.BLOB_READ_WRITE_TOKEN || ''
 
 export const RESEND_API_KEY = warnEnv('RESEND_API_KEY', '')
 
 export const NEXT_PUBLIC_SERVER_URL =
   process.env.NEXT_PUBLIC_SERVER_URL || (isProd ? requireEnv('NEXT_PUBLIC_SERVER_URL') : 'http://localhost:3000')
+

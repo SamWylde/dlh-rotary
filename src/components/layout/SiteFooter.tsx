@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 
 import { isValidHref, resolveHref, type FooterNavEntry } from '@/lib/nav'
 
@@ -78,9 +78,10 @@ export const SiteFooter = ({
           Rotary International
         </a>
         <p className="mt-2 text-xs opacity-50">
-          © {new Date().getFullYear()} Rotary Club of Downtown Lock Haven
+          (c) {new Date().getFullYear()} Rotary Club of Downtown Lock Haven
         </p>
       </div>
     </div>
   </footer>
 )
+

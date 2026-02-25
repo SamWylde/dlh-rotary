@@ -1,13 +1,12 @@
-import Link from 'next/link'
-
+import { FilterForm } from '@/components/filters/FilterForm'
+import { ROLE_LABELS, USER_ROLES } from '@/constants/roles'
 import { MemberCard } from '@/components/members/MemberCard'
 import type { User } from '@/payload-types'
 
-const roleOptions: Array<{ label: string; value: User['role'] }> = [
-  { label: 'Admin', value: 'admin' },
-  { label: 'Officer', value: 'officer' },
-  { label: 'Member', value: 'member' },
-]
+const roleOptions: Array<{ label: string; value: User['role'] }> = USER_ROLES.map((role) => ({
+  label: ROLE_LABELS[role],
+  value: role,
+}))
 
 export type MemberDirectoryProps = {
   members: Array<Pick<User, 'id' | 'fullName' | 'title' | 'email' | 'phone'>>
@@ -18,7 +17,7 @@ export type MemberDirectoryProps = {
 export const MemberDirectory = ({ members, query, role }: MemberDirectoryProps) => {
   return (
     <div className="grid gap-4">
-      <form className="grid gap-3 rounded-lg border border-border bg-card p-4 md:grid-cols-[2fr_1fr_auto]" method="get">
+      <FilterForm clearHref="/members">
         <label className="grid gap-1 text-sm">
           <span>Name or title</span>
           <input
@@ -44,15 +43,7 @@ export const MemberDirectory = ({ members, query, role }: MemberDirectoryProps) 
             ))}
           </select>
         </label>
-        <div className="flex items-end gap-2">
-          <button className="rounded bg-primary px-4 py-2 text-sm font-medium text-primary-foreground" type="submit">
-            Apply
-          </button>
-          <Link className="rounded border border-border px-4 py-2 text-sm" href="/members">
-            Clear
-          </Link>
-        </div>
-      </form>
+      </FilterForm>
 
       {members.length === 0 ? (
         <p className="text-muted-foreground">No members in the directory yet.</p>
