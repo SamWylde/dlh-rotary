@@ -215,7 +215,6 @@ export const seed = async (
         facebook: 'https://www.facebook.com/profile.php?id=100064347773545',
         myRotaryLink: 'https://my.rotary.org',
       },
-      seedCompletedAt: new Date().toISOString(),
     },
     overrideAccess: true,
   })
@@ -347,6 +346,14 @@ export const seed = async (
       ),
       _status: 'published',
     },
+  })
+
+  await payload.updateGlobal({
+    slug: 'site-settings',
+    data: {
+      seedCompletedAt: new Date().toISOString(),
+    },
+    overrideAccess: true,
   })
 
   return {
