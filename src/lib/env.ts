@@ -31,9 +31,8 @@ export const PAYLOAD_SECRET = isProd
   ? requireEnv('PAYLOAD_SECRET')
   : process.env.PAYLOAD_SECRET || 'dev-only-not-for-production'
 
-export const BLOB_READ_WRITE_TOKEN = isProd
-  ? requireEnv('BLOB_READ_WRITE_TOKEN')
-  : process.env.BLOB_READ_WRITE_TOKEN || ''
+/** Optional — blob storage is disabled gracefully if token is missing. */
+export const BLOB_READ_WRITE_TOKEN = process.env.BLOB_READ_WRITE_TOKEN || ''
 
 export const RESEND_API_KEY = warnEnv('RESEND_API_KEY', '')
 
