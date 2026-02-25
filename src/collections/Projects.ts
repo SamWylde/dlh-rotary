@@ -8,7 +8,7 @@ export const Projects: CollectionConfig = {
   slug: 'projects',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'status', 'category', '_status'],
+    defaultColumns: ['title', 'projectStatus', 'category', '_status'],
   },
   access: {
     read: ({ req }) => {
@@ -47,9 +47,10 @@ export const Projects: CollectionConfig = {
       ],
     },
     {
-      name: 'status',
+      name: 'projectStatus',
       type: 'select',
       defaultValue: 'active',
+      label: 'Status',
       options: [
         { label: 'Active', value: 'active' },
         { label: 'Completed', value: 'completed' },

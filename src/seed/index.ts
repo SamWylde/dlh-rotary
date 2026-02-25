@@ -305,7 +305,7 @@ export const seed = async (
         title: project.title,
         slug: project.slug,
         category: project.category,
-        status: project.status,
+        projectStatus: project.status,
         description: lexicalParagraph(project.description),
         _status: 'published',
       },

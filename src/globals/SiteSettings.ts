@@ -98,6 +98,28 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
     {
+      name: 'forms',
+      type: 'group',
+      fields: [
+        {
+          name: 'joinForm',
+          type: 'relationship',
+          relationTo: 'forms',
+          admin: {
+            description: 'Form displayed on the /join page.',
+          },
+        },
+        {
+          name: 'contactForm',
+          type: 'relationship',
+          relationTo: 'forms',
+          admin: {
+            description: 'Form displayed on the /contact page.',
+          },
+        },
+      ],
+    },
+    {
       name: 'seedCompletedAt',
       type: 'date',
       admin: {

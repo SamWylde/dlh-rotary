@@ -2,6 +2,66 @@ import type { Where } from 'payload'
 
 import type { SessionUser } from '@/lib/auth'
 import { getPayloadClient } from '@/lib/payload'
+import type { Form, SiteSetting } from '@/payload-types'
+
+export type SiteSettingsFormKey = 'joinForm' | 'contactForm'
+
+const getRelationshipID = (value: unknown): number | null => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+
+  if (typeof value === 'string' && value.trim().length > 0) {
+    const parsed = Number(value)
+    return Number.isFinite(parsed) ? parsed : null
+  }
+
+  if (value && typeof value === 'object' && 'id' in value) {
+    const id = (value as { id?: unknown }).id
+    return getRelationshipID(id)
+  }
+
+  return null
+}
+
+export const getSiteSettings = async (user?: SessionUser | null): Promise<SiteSetting> => {
+  const payload = await getPayloadClient()
+
+  return payload.findGlobal({
+    slug: 'site-settings',
+    depth: 0,
+    overrideAccess: false,
+    user: user || undefined,
+  })
+}
+
+export const getConfiguredForm = async (
+  key: SiteSettingsFormKey,
+  user?: SessionUser | null,
+): Promise<Form | null> => {
+  const payload = await getPayloadClient()
+  const siteSettings = await payload.findGlobal({
+    slug: 'site-settings',
+    depth: 0,
+    overrideAccess: false,
+    user: user || undefined,
+  })
+  const formID = getRelationshipID(siteSettings.forms?.[key])
+
+  if (!formID) {
+    return null
+  }
+
+  try {
+    return await payload.findByID({
+      collection: 'forms',
+      id: formID,
+      depth: 0,
+      overrideAccess: false,
+      user: user || undefined,
+    })
+  } catch {
+    return null
+  }
+}
 
 export const getUpcomingEvents = async (limit = 5, user?: SessionUser | null) => {
   const payload = await getPayloadClient()

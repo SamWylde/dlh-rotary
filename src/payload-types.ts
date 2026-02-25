@@ -417,7 +417,7 @@ export interface Project {
     [k: string]: unknown;
   } | null;
   category?: ('community-service' | 'fundraiser' | 'youth' | 'international') | null;
-  status?: ('active' | 'completed' | 'upcoming') | null;
+  projectStatus?: ('active' | 'completed' | 'upcoming') | null;
   featuredImage?: (number | null) | Media;
   gallery?:
     | {
@@ -895,7 +895,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   slug?: T;
   description?: T;
   category?: T;
-  status?: T;
+  projectStatus?: T;
   featuredImage?: T;
   gallery?:
     | T
@@ -1233,6 +1233,16 @@ export interface SiteSetting {
     venmo?: string | null;
     zelle?: string | null;
   };
+  forms?: {
+    /**
+     * Form displayed on the /join page.
+     */
+    joinForm?: (number | null) | Form;
+    /**
+     * Form displayed on the /contact page.
+     */
+    contactForm?: (number | null) | Form;
+  };
   /**
    * Set automatically after successful seed.
    */
@@ -1363,6 +1373,12 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         paypal?: T;
         venmo?: T;
         zelle?: T;
+      };
+  forms?:
+    | T
+    | {
+        joinForm?: T;
+        contactForm?: T;
       };
   seedCompletedAt?: T;
   updatedAt?: T;
