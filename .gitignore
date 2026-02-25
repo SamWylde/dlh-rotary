@@ -10,6 +10,8 @@ node_modules
 .cursor/
 .vscode/
 .claude/
+mockups/
+src/app/(frontend)/mockup/
 
 # Payload default media upload directory
 public/media/
