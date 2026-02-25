@@ -35,6 +35,7 @@ export default buildConfig({
   collections: [Users, Pages, Events, RSVPs, Announcements, Projects, Documents, Media],
   globals: [SiteSettings, Theme, Navigation],
   db: postgresAdapter({
+    push: true,
     pool: {
       connectionString: process.env.DATABASE_URI || process.env.DATABASE_URL || '',
     },
