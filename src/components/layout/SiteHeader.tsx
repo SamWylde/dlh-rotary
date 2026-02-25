@@ -17,8 +17,10 @@ export const SiteHeader = ({
   return (
     <header className="relative border-b border-border bg-[var(--color-header-bg,#17458F)] text-[var(--color-header-text,#fff)]">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
-        <Link className="text-lg font-semibold tracking-wide" href="/">
-          Rotary Club of Downtown Lock Haven
+        <Link className="flex items-center gap-2.5 font-semibold tracking-wide" href="/">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/rotary-logo.svg" alt="" className="h-10 w-10 shrink-0" aria-hidden="true" />
+          <span className="text-lg">Rotary Club of Downtown Lock Haven</span>
         </Link>
 
         {/* Desktop nav */}
