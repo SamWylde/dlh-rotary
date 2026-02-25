@@ -3,6 +3,8 @@ import { seed } from '@/seed'
 import { getPayload } from 'payload'
 import { NextResponse } from 'next/server'
 
+export const maxDuration = 60
+
 export const POST = async (request: Request): Promise<NextResponse> => {
   const expectedSecret = process.env.SEED_SECRET
 
