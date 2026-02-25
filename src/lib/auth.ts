@@ -2,11 +2,12 @@ import { cache } from 'react'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
+import type { Role } from '@/access'
 import { getServerURL } from '@/lib/url'
 
 export type SessionUser = {
   id: string | number
-  role?: 'admin' | 'officer' | 'member'
+  role?: Role
   email?: string
   fullName?: string
 }

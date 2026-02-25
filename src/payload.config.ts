@@ -9,6 +9,7 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
+import { isAdminOrOfficer } from '@/access'
 import { Announcements } from '@/collections/Announcements'
 import { Documents } from '@/collections/Documents'
 import { Events } from '@/collections/Events'
@@ -77,13 +78,13 @@ export default buildConfig({
       formOverrides: {
         access: {
           read: () => true,
-          create: ({ req }) => ['admin', 'officer'].includes((req.user as { role?: string } | undefined)?.role || ''),
-          update: ({ req }) => ['admin', 'officer'].includes((req.user as { role?: string } | undefined)?.role || ''),
+          create: isAdminOrOfficer,
+          update: isAdminOrOfficer,
         },
       },
       formSubmissionOverrides: {
         access: {
-          read: ({ req }) => ['admin', 'officer'].includes((req.user as { role?: string } | undefined)?.role || ''),
+          read: isAdminOrOfficer,
           create: () => true,
         },
       },

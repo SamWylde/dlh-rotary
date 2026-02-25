@@ -19,4 +19,19 @@
   --color-footer-bg: #0f172a;
   --color-footer-text: #e2e8f0;
   --radius: 0.5rem;
+
+  /* Hero gradient stops */
+  --color-primary-dark: #1338a8;
+  --color-primary-deep: #0a206e;
+
+  /* Decorative overlays */
+  --color-decorative-light: rgba(255, 255, 255, 0.09);
+  --color-decorative-lighter: rgba(255, 255, 255, 0.04);
+
+  /* Body background gradient */
+  --color-page-gradient-start: #e8f0fe;
+
+  /* Typography */
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

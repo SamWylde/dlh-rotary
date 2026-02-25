@@ -1,6 +1,6 @@
-import type { Block, CollectionConfig, Field, Where } from 'payload'
+import type { Block, CollectionConfig, Field } from 'payload'
 
-import { isAdmin, isAdminOrOfficer } from '@/access'
+import { isAdmin, isAdminOrOfficer, publishedAndPublicOrPrivileged } from '@/access'
 import { linkField } from '@/fields/linkField'
 import { formatSlug } from '@/hooks/formatSlug'
 import { revalidatePageAfterChange, revalidatePageAfterDelete } from '@/hooks/revalidatePage'
@@ -128,22 +128,7 @@ export const Pages: CollectionConfig = {
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
   },
   access: {
-    read: ({ req }) => {
-      if (!req.user) {
-        return {
-          and: [
-            { _status: { equals: 'published' } },
-            { membersOnly: { equals: false } },
-          ],
-        } as Where
-      }
-
-      if (['admin', 'officer'].includes((req.user as { role?: string }).role || '')) {
-        return true
-      }
-
-      return { _status: { equals: 'published' } }
-    },
+    read: publishedAndPublicOrPrivileged,
     create: isAdminOrOfficer,
     update: isAdminOrOfficer,
     delete: isAdmin,

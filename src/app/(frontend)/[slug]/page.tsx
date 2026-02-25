@@ -4,26 +4,11 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { PageLayoutRenderer } from '@/components/pages/PageLayoutRenderer'
+import { RESERVED_SLUGS } from '@/constants/reservedSlugs'
 import { getCurrentUser } from '@/lib/auth'
 import { getPageBySlug } from '@/lib/content'
 import { lexicalToPlainText } from '@/lib/richText'
 import type { Page } from '@/payload-types'
-
-const reserved = new Set([
-  'about',
-  'officers',
-  'projects',
-  'events',
-  'announcements',
-  'documents',
-  'scholarships',
-  'members',
-  'account',
-  'join',
-  'contact',
-  'login',
-  'donate',
-])
 
 const toDescription = (value: string): string | undefined => {
   const normalized = value.replace(/\s+/g, ' ').trim()
@@ -81,7 +66,7 @@ const getLayoutDescription = (page: Page): string => {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
-  if (reserved.has(slug)) return {}
+  if (RESERVED_SLUGS.has(slug)) return {}
   const page = await getPageBySlug(slug)
   if (!page) return {}
   const description = toDescription(lexicalToPlainText(page.content)) || toDescription(getLayoutDescription(page))
@@ -95,7 +80,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function SlugPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
-  if (reserved.has(slug)) {
+  if (RESERVED_SLUGS.has(slug)) {
     notFound()
   }
 

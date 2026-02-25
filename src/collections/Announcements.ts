@@ -1,6 +1,6 @@
-import type { CollectionConfig, Where } from 'payload'
+import type { CollectionConfig } from 'payload'
 
-import { isAdmin, isAdminOrOfficer } from '@/access'
+import { isAdmin, isAdminOrOfficer, publishedAndPublicOrPrivileged } from '@/access'
 import { formatSlug } from '@/hooks/formatSlug'
 import { revalidateAfterChange, revalidateAfterDelete } from '@/hooks/revalidate'
 import { sendAnnouncementNotification } from '@/hooks/sendAnnouncementNotification'
@@ -12,24 +12,7 @@ export const Announcements: CollectionConfig = {
     defaultColumns: ['title', 'priority', 'author', 'publishedDate'],
   },
   access: {
-    read: ({ req }) => {
-      const role = (req.user as { role?: string } | undefined)?.role
-
-      if (!req.user) {
-        return {
-          and: [
-            { _status: { equals: 'published' } },
-            { membersOnly: { equals: false } },
-          ],
-        } as Where
-      }
-
-      if (role === 'admin' || role === 'officer') {
-        return true
-      }
-
-      return { _status: { equals: 'published' } }
-    },
+    read: publishedAndPublicOrPrivileged,
     create: isAdminOrOfficer,
     update: isAdminOrOfficer,
     delete: isAdmin,

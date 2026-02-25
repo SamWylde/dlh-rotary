@@ -13,3 +13,17 @@ export const getRelationshipID = (value: unknown): string | number | null => {
   }
   return null
 }
+
+/**
+ * Like getRelationshipID but always coerces to a finite number.
+ * Use when the downstream API (e.g. payload.findByID) requires a numeric ID.
+ */
+export const getNumericRelationshipID = (value: unknown): number | null => {
+  const id = getRelationshipID(value)
+  if (typeof id === 'number' && Number.isFinite(id)) return id
+  if (typeof id === 'string' && id.trim().length > 0) {
+    const parsed = Number(id)
+    return Number.isFinite(parsed) ? parsed : null
+  }
+  return null
+}

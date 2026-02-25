@@ -1,23 +1,14 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { RSVPControls } from '@/components/events/RSVPControls'
 import { getCurrentUser } from '@/lib/auth'
 import { getEventBySlug } from '@/lib/content'
+import { makeSlugMetadata } from '@/lib/metadata'
 import { getPayloadClient } from '@/lib/payload'
 import { lexicalToPlainText } from '@/lib/richText'
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params
-  const event = await getEventBySlug(slug)
-  if (!event) return {}
-  const description = lexicalToPlainText(event.description).slice(0, 160) || undefined
-  return {
-    title: `${event.title} - Rotary Club of Downtown Lock Haven`,
-    description,
-  }
-}
+export const generateMetadata = makeSlugMetadata(getEventBySlug, (e) => e.description)
 
 export default async function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params

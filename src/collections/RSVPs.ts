@@ -1,15 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { isAdmin, isAdminOrOfficerOrSelf, isAuthenticated } from '@/access'
-
-const getRelationshipID = (value: unknown): string | number | null => {
-  if (typeof value === 'string' || typeof value === 'number') return value
-  if (value && typeof value === 'object' && 'id' in value) {
-    const id = (value as { id?: unknown }).id
-    return typeof id === 'string' || typeof id === 'number' ? id : null
-  }
-  return null
-}
+import { getRelationshipID } from '@/utilities/getRelationshipID'
 
 export const RSVPs: CollectionConfig = {
   slug: 'rsvps',

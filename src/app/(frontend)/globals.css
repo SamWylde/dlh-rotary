@@ -17,6 +17,8 @@
   --color-card-foreground: var(--color-card-foreground);
   --color-border: var(--color-border);
   --radius: var(--radius);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-primary-deep: var(--color-primary-deep);
 }
 
 :root {
@@ -37,10 +39,21 @@
   --color-footer-bg: #0f2d5e;
   --color-footer-text: #cbd5e1;
   --radius: 0.5rem;
+  --color-primary-dark: #0f2d5e;
+  --color-primary-deep: #071a38;
+  --color-decorative-light: rgba(255, 255, 255, 0.08);
+  --color-decorative-lighter: rgba(255, 255, 255, 0.04);
+  --color-page-gradient-start: #ddeaff;
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
 }
 
 html,
@@ -51,9 +64,26 @@ body {
 
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at top right, #e0ebff 0, var(--color-background) 38%);
+  background: radial-gradient(
+    circle at top right,
+    var(--color-page-gradient-start, #ddeaff) 0,
+    var(--color-background) 38%
+  );
   color: var(--color-foreground);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-body, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading, Georgia, 'Times New Roman', serif);
+}
+
+.full-bleed {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
 }
 
 main {

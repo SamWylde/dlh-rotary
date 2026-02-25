@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { isAdmin, isAdminOrOfficer } from '@/access'
+import { isAdmin, isAdminOrOfficer, publishedOrPrivileged } from '@/access'
 import { formatSlug } from '@/hooks/formatSlug'
 import { revalidateAfterChange, revalidateAfterDelete } from '@/hooks/revalidate'
 import { validateURL } from '@/utilities/validateURL'
@@ -12,11 +12,7 @@ export const Events: CollectionConfig = {
     defaultColumns: ['title', 'date', 'eventType', '_status'],
   },
   access: {
-    read: ({ req }) => {
-      const role = (req.user as { role?: string } | undefined)?.role
-      if (role === 'admin' || role === 'officer') return true
-      return { _status: { equals: 'published' } }
-    },
+    read: publishedOrPrivileged,
     create: isAdminOrOfficer,
     update: isAdminOrOfficer,
     delete: isAdmin,

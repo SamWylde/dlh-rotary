@@ -1,13 +1,6 @@
 import type { CollectionConfig, Where } from 'payload'
 
-import { isAdmin, isAdminFieldAccess, isAdminOrOfficer, isAdminOrSelf } from '@/access'
-
-type Role = 'admin' | 'officer' | 'member'
-
-type AuthUser = {
-  id: string | number
-  role?: Role
-}
+import { type AuthUser, isAdmin, isAdminFieldAccess, isAdminOrOfficer, isAdminOrSelf } from '@/access'
 
 export const Users: CollectionConfig = {
   slug: 'users',

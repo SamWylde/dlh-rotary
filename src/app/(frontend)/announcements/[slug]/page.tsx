@@ -1,20 +1,11 @@
-import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { getCurrentUser } from '@/lib/auth'
 import { getAnnouncementBySlug } from '@/lib/content'
+import { makeSlugMetadata } from '@/lib/metadata'
 import { lexicalToPlainText } from '@/lib/richText'
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params
-  const announcement = await getAnnouncementBySlug(slug)
-  if (!announcement) return {}
-  const description = lexicalToPlainText(announcement.content).slice(0, 160) || undefined
-  return {
-    title: `${announcement.title} - Rotary Club of Downtown Lock Haven`,
-    description,
-  }
-}
+export const generateMetadata = makeSlugMetadata(getAnnouncementBySlug, (a) => a.content)
 
 export default async function AnnouncementDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params

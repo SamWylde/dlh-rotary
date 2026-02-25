@@ -5,6 +5,7 @@ import { DocumentList } from '@/components/documents/DocumentList'
 import { PaginationControls } from '@/components/layout/PaginationControls'
 import { requireUser } from '@/lib/auth'
 import { getDocumentsPage } from '@/lib/content'
+import { DOCUMENT_CATEGORY_VALUES } from '@/constants/documentCategories'
 import { buildPageHref, parseEnumParam, parsePageParam, parseStringParam } from '@/lib/pagination'
 import type { Document } from '@/payload-types'
 
@@ -13,7 +14,6 @@ export const metadata: Metadata = {
 }
 
 const PER_PAGE = 20
-const DOCUMENT_CATEGORIES = ['minutes', 'bylaws', 'financial', 'ri-resources', 'forms', 'other'] as const
 
 export default async function DocumentsPage({
   searchParams,
@@ -23,7 +23,7 @@ export default async function DocumentsPage({
   const user = await requireUser()
   const { page: pageParam, category: categoryParam, q: qParam } = await searchParams
   const page = parsePageParam(pageParam)
-  const category = parseEnumParam(categoryParam, DOCUMENT_CATEGORIES) as Document['category'] | undefined
+  const category = parseEnumParam(categoryParam, DOCUMENT_CATEGORY_VALUES) as Document['category'] | undefined
   const q = parseStringParam(qParam)
   const query = {
     category,

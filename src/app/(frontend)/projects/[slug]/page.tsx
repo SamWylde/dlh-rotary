@@ -1,4 +1,3 @@
-import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { VolunteerSignup } from '@/components/forms/VolunteerSignup'
@@ -6,18 +5,10 @@ import { ImpactStats } from '@/components/projects/ImpactStats'
 import { ProjectGallery } from '@/components/projects/ProjectGallery'
 import { getCurrentUser } from '@/lib/auth'
 import { getProjectBySlug } from '@/lib/content'
+import { makeSlugMetadata } from '@/lib/metadata'
 import { lexicalToPlainText } from '@/lib/richText'
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params
-  const project = await getProjectBySlug(slug)
-  if (!project) return {}
-  const description = lexicalToPlainText(project.description).slice(0, 160) || undefined
-  return {
-    title: `${project.title} - Rotary Club of Downtown Lock Haven`,
-    description,
-  }
-}
+export const generateMetadata = makeSlugMetadata(getProjectBySlug, (p) => p.description)
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params

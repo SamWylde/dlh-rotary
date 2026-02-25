@@ -1,14 +1,10 @@
 import type { Document } from '@/payload-types'
+import { DOCUMENT_CATEGORIES } from '@/constants/documentCategories'
 
-export const categoryLabels: Record<Document['category'], string> = {
-  minutes: 'Meeting Minutes',
-  bylaws: 'Bylaws & Governance',
-  financial: 'Financial Reports',
-  'ri-resources': 'Rotary International Resources',
-  forms: 'Forms & Templates',
-  other: 'Other',
-}
+export const categoryLabels: Record<Document['category'], string> = Object.fromEntries(
+  DOCUMENT_CATEGORIES.map((c) => [c.value, c.label]),
+) as Record<Document['category'], string>
 
-export const categoryOptions: Array<{ label: string; value: Document['category'] }> = Object.entries(categoryLabels).map(
-  ([value, label]) => ({ label, value: value as Document['category'] }),
+export const categoryOptions: Array<{ label: string; value: Document['category'] }> = DOCUMENT_CATEGORIES.map(
+  (c) => ({ label: c.label, value: c.value }),
 )

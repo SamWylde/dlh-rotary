@@ -1,7 +1,8 @@
 import type { CollectionConfig } from 'payload'
 import { revalidatePath } from 'next/cache'
 
-import { isAdmin, isAdminOrOfficer } from '@/access'
+import { isAdmin, isAdminOrOfficer, publicOrAuthenticated } from '@/access'
+import { DOCUMENT_CATEGORIES } from '@/constants/documentCategories'
 import { getRelationshipID } from '@/utilities/getRelationshipID'
 
 export const Documents: CollectionConfig = {
@@ -11,17 +12,7 @@ export const Documents: CollectionConfig = {
     defaultColumns: ['title', 'category', 'membersOnly', 'updatedAt'],
   },
   access: {
-    read: ({ req }) => {
-      const role = (req.user as { role?: string } | undefined)?.role
-
-      if (!req.user) {
-        return { membersOnly: { equals: false } }
-      }
-
-      if (role === 'admin' || role === 'officer') return true
-
-      return true
-    },
+    read: publicOrAuthenticated,
     create: isAdminOrOfficer,
     update: isAdminOrOfficer,
     delete: isAdmin,
@@ -66,14 +57,7 @@ export const Documents: CollectionConfig = {
       name: 'category',
       type: 'select',
       required: true,
-      options: [
-        { label: 'Meeting Minutes', value: 'minutes' },
-        { label: 'Bylaws & Governance', value: 'bylaws' },
-        { label: 'Financial Reports', value: 'financial' },
-        { label: 'Rotary International Resources', value: 'ri-resources' },
-        { label: 'Forms & Templates', value: 'forms' },
-        { label: 'Other', value: 'other' },
-      ],
+      options: [...DOCUMENT_CATEGORIES],
     },
     { name: 'file', type: 'upload', relationTo: 'media', required: true },
     { name: 'description', type: 'textarea' },

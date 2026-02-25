@@ -1,8 +1,8 @@
-import type { Access, FieldAccess } from 'payload'
+import type { Access, FieldAccess, Where } from 'payload'
 
-type Role = 'admin' | 'officer' | 'member'
+export type Role = 'admin' | 'officer' | 'member'
 
-type AuthUser = {
+export type AuthUser = {
   id: string | number
   role?: Role
 }
@@ -37,3 +37,41 @@ export const isAdminOrOfficerOrSelf: Access = ({ req }) => {
 }
 
 export const isAdminFieldAccess: FieldAccess = ({ req }) => getUser(req)?.role === 'admin'
+
+/** Admin/officer sees everything; others see only published. */
+export const publishedOrPrivileged: Access = ({ req }) => {
+  const role = getUser(req)?.role
+  if (role === 'admin' || role === 'officer') return true
+  return { _status: { equals: 'published' } }
+}
+
+/** Unauthenticated: published + public only. Privileged: all. Members: published only. */
+export const publishedAndPublicOrPrivileged: Access = ({ req }) => {
+  const user = getUser(req)
+
+  if (!user) {
+    return {
+      and: [
+        { _status: { equals: 'published' } },
+        { membersOnly: { equals: false } },
+      ],
+    } as Where
+  }
+
+  if (user.role === 'admin' || user.role === 'officer') return true
+
+  return { _status: { equals: 'published' } }
+}
+
+/** Unauthenticated: public only. Any authenticated user: all. */
+export const publicOrAuthenticated: Access = ({ req }) => {
+  if (!getUser(req)) return { membersOnly: { equals: false } }
+  return true
+}
+
+/** Privileged: all. Others: public media only. */
+export const publicOrPrivileged: Access = ({ req }) => {
+  const role = getUser(req)?.role
+  if (role === 'admin' || role === 'officer') return true
+  return { isPublic: { equals: true } }
+}

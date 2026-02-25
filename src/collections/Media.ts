@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { isAdmin, isAdminOrOfficer, isAuthenticated } from '@/access'
+import { isAdmin, isAdminOrOfficer, isAuthenticated, publicOrPrivileged } from '@/access'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -18,13 +18,7 @@ export const Media: CollectionConfig = {
     ],
   },
   access: {
-    read: ({ req }) => {
-      const role = (req.user as { role?: string } | undefined)?.role
-
-      if (role === 'admin' || role === 'officer') return true
-
-      return { isPublic: { equals: true } }
-    },
+    read: publicOrPrivileged,
     create: isAuthenticated,
     update: isAdminOrOfficer,
     delete: isAdmin,
