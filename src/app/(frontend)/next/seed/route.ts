@@ -19,8 +19,12 @@ export const POST = async (request: Request): Promise<NextResponse> => {
   const url = new URL(request.url)
   const force = url.searchParams.get('force') === 'true'
 
-  const payload = await getPayload({ config })
-  const result = await seed(payload, { force })
-
-  return NextResponse.json(result)
+  try {
+    const payload = await getPayload({ config })
+    const result = await seed(payload, { force })
+    return NextResponse.json(result)
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error'
+    return NextResponse.json({ error: message }, { status: 500 })
+  }
 }
