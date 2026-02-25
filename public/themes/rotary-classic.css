@@ -25,8 +25,8 @@
   --color-primary-deep: #071a38;
 
   /* Decorative overlays */
-  --color-decorative-light: rgba(255, 255, 255, 0.08);
-  --color-decorative-lighter: rgba(255, 255, 255, 0.04);
+  --color-decorative-light: rgba(247, 168, 27, 0.08);
+  --color-decorative-lighter: rgba(247, 168, 27, 0.05);
 
   /* Body background gradient */
   --color-page-gradient-start: #ddeaff;

@@ -3,7 +3,6 @@ import { Suspense } from 'react'
 
 import { LatestAnnouncements } from '@/components/announcements/LatestAnnouncements'
 import { UpcomingEvents } from '@/components/events/UpcomingEvents'
-import { FacebookFeed } from '@/components/layout/FacebookFeed'
 import { getCurrentUser } from '@/lib/auth'
 import { getRecentAnnouncements, getUpcomingEvents, getProjects } from '@/lib/content'
 import { lexicalToPlainText } from '@/lib/richText'
@@ -66,59 +65,40 @@ type HomeProject = Pick<Project, 'id' | 'slug' | 'title' | 'category' | 'descrip
 
 function HomeProjectsGrid({ projects }: { projects: HomeProject[] }) {
   return (
-    <div className="full-bleed" style={{ background: 'var(--color-background)' }}>
-      <div className="mx-auto max-w-6xl px-4 py-16">
-        <div className="mb-8 flex items-end justify-between">
-          <div>
-            <p
-              className="text-sm font-semibold uppercase tracking-widest"
-              style={{ color: 'var(--color-secondary)' }}
-            >
-              Our Work
-            </p>
-            <h2 className="mt-1 text-3xl font-semibold">What We Do</h2>
-          </div>
-          <Link
-            className="text-sm font-medium underline-offset-4 hover:underline"
-            style={{ color: 'var(--color-primary)' }}
-            href="/projects"
-          >
-            All Projects →
-          </Link>
-        </div>
+    <div className="full-bleed" style={{ background: '#fff' }}>
+      <div className="mx-auto max-w-5xl px-4 py-14">
+        <h2
+          className="mb-8 text-center text-3xl font-semibold"
+          style={{ color: 'var(--color-primary)' }}
+        >
+          What We Do
+        </h2>
 
         {projects.length === 0 ? (
-          <p className="text-muted-foreground">No projects yet.</p>
+          <p className="text-center text-muted-foreground">No projects yet.</p>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => (
               <Link
                 key={project.id}
                 href={`/projects/${project.slug}`}
-                className="group grid gap-3 rounded-xl border border-border bg-card p-5 transition-shadow hover:border-primary hover:shadow-md"
+                className="group rounded-lg border p-6 text-center transition-shadow hover:shadow-md"
+                style={{
+                  background: 'var(--color-background)',
+                  borderColor: 'var(--color-border)',
+                }}
               >
-                <div
-                  className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold"
-                  style={{
-                    background: 'var(--color-secondary)',
-                    color: 'var(--color-secondary-foreground)',
-                  }}
-                >
+                <p className="mb-3 text-2xl">
                   {project.title.charAt(0).toUpperCase()}
-                </div>
-                <p className="font-semibold leading-snug group-hover:text-primary">
+                </p>
+                <p
+                  className="mb-1 text-sm font-bold"
+                  style={{ color: 'var(--color-foreground)' }}
+                >
                   {project.title}
                 </p>
-                {project.category ? (
-                  <p
-                    className="text-xs font-medium uppercase tracking-wide"
-                    style={{ color: 'var(--color-secondary)' }}
-                  >
-                    {project.category.replace(/-/g, ' ')}
-                  </p>
-                ) : null}
-                <p className="line-clamp-3 text-sm text-muted-foreground">
-                  {lexicalToPlainText(project.description).slice(0, 160)}
+                <p className="text-xs leading-relaxed" style={{ color: '#777' }}>
+                  {lexicalToPlainText(project.description).slice(0, 120)}
                 </p>
               </Link>
             ))}
@@ -154,29 +134,30 @@ export default function HomePage() {
           style={{ background: 'var(--color-decorative-lighter)' }}
         />
 
-        <div className="relative mx-auto max-w-6xl px-4 py-20 md:py-28">
+        <div className="relative mx-auto max-w-6xl px-4 py-20 text-center md:py-28">
           <p
-            className="text-sm font-semibold uppercase tracking-widest"
-            style={{ color: 'var(--color-secondary)' }}
+            className="text-xs font-semibold uppercase tracking-[0.25em]"
+            style={{ color: 'var(--color-secondary)', marginBottom: 16 }}
           >
             Service Above Self
           </p>
           <h1
-            className="mt-3 max-w-2xl text-4xl font-bold leading-tight md:text-5xl"
+            className="mx-auto text-4xl font-bold leading-tight md:text-5xl"
             style={{ color: 'var(--color-primary-foreground)' }}
           >
-            Rotary Club of Downtown Lock Haven
+            Rotary Club of<br />Downtown Lock Haven
           </h1>
           <p
-            className="mt-4 max-w-xl text-lg leading-relaxed"
-            style={{ color: 'rgba(255,255,255,0.85)' }}
+            className="mx-auto mt-4 max-w-xl text-lg leading-relaxed"
+            style={{ color: 'rgba(255,255,255,0.75)' }}
           >
-            Community projects, scholarships, and weekly fellowship in Clinton County since 2002.
+            Together, we inspire. Community projects, scholarships, and weekly fellowship serving
+            Clinton County for over 22 years.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               href="/join"
-              className="rounded-lg px-6 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+              className="rounded px-7 py-3 text-sm font-bold transition-opacity hover:opacity-90"
               style={{
                 background: 'var(--color-secondary)',
                 color: 'var(--color-secondary-foreground)',
@@ -186,7 +167,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/projects"
-              className="rounded-lg border px-6 py-3 text-sm font-semibold transition-colors hover:bg-white/10"
+              className="rounded border-2 px-7 py-3 text-sm font-semibold transition-colors hover:bg-white/10"
               style={{
                 borderColor: 'rgba(255,255,255,0.4)',
                 color: 'var(--color-primary-foreground)',
@@ -201,52 +182,31 @@ export default function HomePage() {
       {/* ── Meeting callout bar ── */}
       <div className="full-bleed" style={{ background: 'var(--color-secondary)' }}>
         <div
-          className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-4"
+          className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-6 gap-y-1 px-4 py-3.5 text-sm font-semibold"
           style={{ color: 'var(--color-secondary-foreground)' }}
         >
-          <div>
-            <p className="font-semibold">
-              We meet every Tuesday at 5:30 PM{' '}
-              <span className="font-normal opacity-75">(social time at 5:15)</span>
-            </p>
-            <p className="text-sm opacity-75">
-              Poorman Gallery, 352 E. Water Street, Lock Haven, PA
-            </p>
-          </div>
-          <Link
-            href="/events"
-            className="shrink-0 rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:bg-black/10"
-            style={{
-              borderColor: 'var(--color-secondary-foreground)',
-              color: 'var(--color-secondary-foreground)',
-            }}
-          >
-            See All Events
-          </Link>
+          <span>📍 Every Tuesday at 5:30 PM</span>
+          <span className="opacity-40">|</span>
+          <span>Poorman Gallery, 352 E. Water St., Lock Haven, PA</span>
+          <span className="opacity-40">|</span>
+          <span>Social time starts at 5:15</span>
         </div>
       </div>
 
       {/* ── Who We Are ── */}
-      <section className="py-12 text-center">
+      <section className="py-14 text-center" style={{ maxWidth: 800, margin: '0 auto' }}>
+        <h2 className="text-3xl font-semibold" style={{ color: 'var(--color-primary)' }}>
+          Who We Are
+        </h2>
         <p
-          className="text-sm font-semibold uppercase tracking-widest"
-          style={{ color: 'var(--color-secondary)' }}
+          className="mt-4 text-base leading-relaxed"
+          style={{ color: '#555', lineHeight: 1.8 }}
         >
-          About Us
-        </p>
-        <h2 className="mx-auto mt-2 max-w-2xl text-3xl font-semibold">Who We Are</h2>
-        <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          The Rotary Club of Downtown Lock Haven has been serving Clinton County for over 22 years.
           We&apos;re neighbors, friends, and community leaders who come together each week to create
-          positive, lasting change — locally and around the world. All are welcome.
+          positive, lasting change — locally and around the world. For over 22 years, the Rotary
+          Club of Downtown Lock Haven has served Clinton County through community projects,
+          scholarships, and fellowship. All are welcome.
         </p>
-        <Link
-          href="/about"
-          className="mt-6 inline-block rounded-lg px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
-          style={{ background: 'var(--color-primary)' }}
-        >
-          Learn More About Us
-        </Link>
       </section>
 
       {/* ── Events + Announcements ── */}
@@ -268,59 +228,45 @@ export default function HomePage() {
 
       {/* ── Stay Connected ── */}
       <section
-        className="full-bleed"
-        style={{
-          background:
-            'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%)',
-        }}
+        className="full-bleed text-center"
+        style={{ background: 'var(--color-primary)' }}
       >
-        <div className="mx-auto max-w-6xl px-4 py-16">
-          <div className="grid gap-10 md:grid-cols-2 md:items-start">
-            <div>
-              <p
-                className="text-sm font-semibold uppercase tracking-widest"
-                style={{ color: 'var(--color-secondary)' }}
-              >
-                Stay Connected
-              </p>
-              <h2
-                className="mt-2 text-3xl font-semibold"
-                style={{ color: 'var(--color-primary-foreground)' }}
-              >
-                Follow Our Journey
-              </h2>
-              <p className="mt-3 leading-relaxed" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                Stay up to date with our latest projects, events, and community impact on Facebook.
-              </p>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="https://www.facebook.com/profile.php?id=100064347773545"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex w-fit items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
-                  style={{
-                    background: 'var(--color-secondary)',
-                    color: 'var(--color-secondary-foreground)',
-                  }}
-                >
-                  Follow on Facebook
-                </a>
-                <Link
-                  href="/join"
-                  className="inline-flex w-fit items-center gap-2 rounded-lg border px-5 py-3 text-sm font-semibold transition-colors hover:bg-white/10"
-                  style={{
-                    borderColor: 'rgba(255,255,255,0.4)',
-                    color: 'var(--color-primary-foreground)',
-                  }}
-                >
-                  Become a Member
-                </Link>
-              </div>
-            </div>
-
-            <div className="overflow-hidden rounded-xl bg-white shadow-lg">
-              <FacebookFeed />
-            </div>
+        <div className="mx-auto max-w-6xl px-4 py-12">
+          <h2
+            className="text-2xl font-semibold"
+            style={{ color: 'var(--color-primary-foreground)' }}
+          >
+            Stay Connected
+          </h2>
+          <p
+            className="mx-auto mt-3 max-w-lg text-sm leading-relaxed"
+            style={{ color: 'rgba(255,255,255,0.7)' }}
+          >
+            Follow us on Facebook for photos, event updates, and community news.
+          </p>
+          <div className="mt-6 inline-flex gap-4">
+            <a
+              href="https://www.facebook.com/profile.php?id=100064347773545"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded px-7 py-3 text-sm font-bold transition-opacity hover:opacity-90"
+              style={{
+                background: 'var(--color-secondary)',
+                color: 'var(--color-secondary-foreground)',
+              }}
+            >
+              📘 Follow on Facebook
+            </a>
+            <Link
+              href="/contact"
+              className="rounded border-2 px-7 py-3 text-sm font-semibold transition-colors hover:bg-white/10"
+              style={{
+                borderColor: 'rgba(255,255,255,0.3)',
+                color: 'var(--color-primary-foreground)',
+              }}
+            >
+              ✉️ Contact Us
+            </Link>
           </div>
         </div>
       </section>
