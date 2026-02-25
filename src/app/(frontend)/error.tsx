@@ -1,11 +1,18 @@
 'use client'
 
+import { useEffect } from 'react'
+
 export default function FrontendError({
+  error,
   reset,
 }: {
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  useEffect(() => {
+    // Log to console; replace with Sentry/monitoring when available
+    console.error('[FrontendError]', error)
+  }, [error])
   return (
     <section className="grid place-items-center gap-4 py-20 text-center">
       <h1 className="text-2xl font-semibold">Something went wrong</h1>

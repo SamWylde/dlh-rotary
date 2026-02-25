@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { getMediaFromRelation, getMediaURL } from '@/lib/media'
@@ -76,7 +77,7 @@ export const ProjectGallery = ({ gallery }: ProjectGalleryProps) => {
             onClick={() => setSelectedIndex(index)}
             type="button"
           >
-            <img alt={image.alt} className="aspect-[4/3] w-full object-cover" src={image.url} />
+            <Image alt={image.alt} className="aspect-[4/3] w-full object-cover" height={400} src={image.url} width={600} />
             {image.caption ? <p className="px-3 py-2 text-sm text-muted-foreground">{image.caption}</p> : null}
           </button>
         ))}
@@ -99,7 +100,7 @@ export const ProjectGallery = ({ gallery }: ProjectGalleryProps) => {
             Close
           </button>
           <div className="grid max-h-full w-full max-w-4xl gap-3">
-            <img alt={selectedImage.alt} className="max-h-[80vh] w-full rounded object-contain" src={selectedImage.url} />
+            <Image alt={selectedImage.alt} className="max-h-[80vh] w-full rounded object-contain" height={800} src={selectedImage.url} width={1200} />
             {selectedImage.caption ? <p className="text-center text-sm text-white/85">{selectedImage.caption}</p> : null}
           </div>
         </div>

@@ -1,5 +1,7 @@
 import type { Field } from 'payload'
 
+import { validateURL } from '@/utilities/validateURL'
+
 export const linkField = (): Field => ({
   name: 'link',
   type: 'group',
@@ -23,6 +25,7 @@ export const linkField = (): Field => ({
     {
       name: 'url',
       type: 'text',
+      validate: validateURL,
       admin: { condition: (_, siblingData) => siblingData?.type === 'external' },
     },
     {

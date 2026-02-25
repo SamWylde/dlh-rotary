@@ -4,7 +4,7 @@ export default defineConfig({
   dialect: 'postgresql',
   schema: './src/payload-generated-schema.ts',
   dbCredentials: {
-    url: process.env.DATABASE_URI || process.env.DATABASE_URL || '',
+    url: process.env.DATABASE_URL || process.env.DATABASE_URI || '',
   },
   verbose: true,
   strict: false,

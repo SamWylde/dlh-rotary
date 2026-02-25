@@ -194,6 +194,8 @@ export const PayloadFormRenderer = ({ form, className, heading }: PayloadFormRen
                 key={field.id || field.name}
               >
                 <input
+                  aria-describedby={error ? `${field.name}-error` : undefined}
+                  aria-invalid={Boolean(error)}
                   checked={Boolean(values[field.name])}
                   id={field.name}
                   onChange={(event) =>
@@ -208,7 +210,7 @@ export const PayloadFormRenderer = ({ form, className, heading }: PayloadFormRen
                   {fieldLabel(field)}
                   {field.required ? ' *' : ''}
                 </span>
-                {error ? <span className="text-red-600">{error}</span> : null}
+                {error ? <span className="text-red-600" id={`${field.name}-error`}>{error}</span> : null}
               </label>
             )
           }
@@ -221,6 +223,8 @@ export const PayloadFormRenderer = ({ form, className, heading }: PayloadFormRen
                   {field.required ? ' *' : ''}
                 </span>
                 <textarea
+                  aria-describedby={error ? `${field.name}-error` : undefined}
+                  aria-invalid={Boolean(error)}
                   className="min-h-28 rounded border border-border bg-background px-3 py-2"
                   id={field.name}
                   onChange={(event) =>
@@ -232,7 +236,7 @@ export const PayloadFormRenderer = ({ form, className, heading }: PayloadFormRen
                   required={Boolean(field.required)}
                   value={String(values[field.name] ?? '')}
                 />
-                {error ? <span className="text-red-600">{error}</span> : null}
+                {error ? <span className="text-red-600" id={`${field.name}-error`}>{error}</span> : null}
               </label>
             )
           }
@@ -245,6 +249,8 @@ export const PayloadFormRenderer = ({ form, className, heading }: PayloadFormRen
                   {field.required ? ' *' : ''}
                 </span>
                 <select
+                  aria-describedby={error ? `${field.name}-error` : undefined}
+                  aria-invalid={Boolean(error)}
                   className="rounded border border-border bg-background px-3 py-2"
                   id={field.name}
                   onChange={(event) =>
@@ -263,7 +269,7 @@ export const PayloadFormRenderer = ({ form, className, heading }: PayloadFormRen
                     </option>
                   ))}
                 </select>
-                {error ? <span className="text-red-600">{error}</span> : null}
+                {error ? <span className="text-red-600" id={`${field.name}-error`}>{error}</span> : null}
               </label>
             )
           }
@@ -277,6 +283,8 @@ export const PayloadFormRenderer = ({ form, className, heading }: PayloadFormRen
                 {field.required ? ' *' : ''}
               </span>
               <input
+                aria-describedby={error ? `${field.name}-error` : undefined}
+                aria-invalid={Boolean(error)}
                 className="rounded border border-border bg-background px-3 py-2"
                 id={field.name}
                 onChange={(event) =>
@@ -290,12 +298,17 @@ export const PayloadFormRenderer = ({ form, className, heading }: PayloadFormRen
                 type={inputType}
                 value={String(values[field.name] ?? '')}
               />
-              {error ? <span className="text-red-600">{error}</span> : null}
+              {error ? <span className="text-red-600" id={`${field.name}-error`}>{error}</span> : null}
             </label>
           )
         })}
 
-        {submitError ? <p className="text-sm text-red-600">{submitError}</p> : null}
+        <div aria-live="polite" aria-atomic="true">
+          {submitError ? <p className="text-sm text-red-600">{submitError}</p> : null}
+          {Object.keys(errors).length > 0 ? (
+            <p className="text-sm text-red-600">Please fix the errors above to continue.</p>
+          ) : null}
+        </div>
 
         <button
           className="rounded bg-primary px-4 py-2 font-medium text-primary-foreground disabled:opacity-60"

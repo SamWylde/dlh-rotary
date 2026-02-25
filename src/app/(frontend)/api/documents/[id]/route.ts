@@ -54,8 +54,7 @@ export const GET = async (
       collection: 'media',
       id: mediaID,
       depth: 0,
-      overrideAccess: false,
-      user,
+      overrideAccess: true,
     })
   } catch {
     return NextResponse.json({ error: 'File access denied' }, { status: 403 })

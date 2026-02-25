@@ -5,7 +5,7 @@ import { DocumentCard } from '@/components/documents/DocumentCard'
 import type { Document } from '@/payload-types'
 
 export type DocumentListProps = {
-  documents: Array<Pick<Document, 'id' | 'title' | 'category' | 'description' | 'file'>>
+  documents: Array<Pick<Document, 'id' | 'title' | 'category' | 'description'>>
   category?: Document['category']
   query?: string
 }

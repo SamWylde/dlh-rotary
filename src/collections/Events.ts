@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { isAdmin, isAdminOrOfficer } from '@/access'
 import { formatSlug } from '@/hooks/formatSlug'
 import { revalidateAfterChange, revalidateAfterDelete } from '@/hooks/revalidate'
+import { validateURL } from '@/utilities/validateURL'
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -95,6 +96,7 @@ export const Events: CollectionConfig = {
     {
       name: 'ticketLink',
       type: 'text',
+      validate: validateURL,
       admin: { description: 'External link (PayPal, Venmo, etc.) for ticket purchases' },
     },
     { name: 'isRecurring', type: 'checkbox', defaultValue: false },

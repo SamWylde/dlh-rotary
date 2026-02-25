@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import type { SessionUser } from '@/lib/auth'
 import { getVisibleChildren, isValidHref, resolveHref, type MainNavEntry } from '@/lib/nav'
@@ -13,12 +13,54 @@ export const MobileNav = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUse
   const [open, setOpen] = useState(false)
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
   const pathname = usePathname()
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const navRef = useRef<HTMLElement>(null)
+
+  const close = useCallback(() => {
+    setOpen(false)
+    setExpandedGroups({})
+  }, [])
 
   // Close on navigation
   useEffect(() => {
-    setOpen(false)
-    setExpandedGroups({})
-  }, [pathname])
+    close()
+  }, [pathname, close])
+
+  // Focus trap: keep Tab within the nav panel while open
+  useEffect(() => {
+    if (!open || !navRef.current) return
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        close()
+        triggerRef.current?.focus()
+        return
+      }
+      if (e.key !== 'Tab') return
+
+      const nav = navRef.current
+      if (!nav) return
+      const focusable = nav.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      )
+      if (focusable.length === 0) return
+
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [open, close])
 
   return (
     <div className="md:hidden">
@@ -27,6 +69,7 @@ export const MobileNav = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUse
         aria-label="Toggle navigation menu"
         className="rounded p-2 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]"
         onClick={() => setOpen(!open)}
+        ref={triggerRef}
         type="button"
       >
         <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -42,6 +85,7 @@ export const MobileNav = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUse
         <nav
           className="absolute left-0 right-0 top-full z-50 border-b border-[var(--color-header-border-muted,rgba(255,255,255,0.2))] bg-[var(--color-header-bg,#17458F)] px-4 py-3"
           aria-label="Mobile Navigation"
+          ref={navRef}
         >
           <ul className="grid gap-1">
             {nav.map((entry, index) => {

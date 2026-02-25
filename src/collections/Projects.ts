@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { isAdmin, isAdminOrOfficer } from '@/access'
 import { formatSlug } from '@/hooks/formatSlug'
 import { revalidateAfterChange, revalidateAfterDelete } from '@/hooks/revalidate'
+import { validateURL } from '@/utilities/validateURL'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
@@ -83,7 +84,7 @@ export const Projects: CollectionConfig = {
       fields: [
         { name: 'name', type: 'text' },
         { name: 'logo', type: 'upload', relationTo: 'media' },
-        { name: 'url', type: 'text' },
+        { name: 'url', type: 'text', validate: validateURL },
       ],
     },
     { name: 'volunteerSignupEnabled', type: 'checkbox', defaultValue: false },

@@ -5,6 +5,7 @@ import { getVisibleChildren, isValidHref, resolveHref, type MainNavEntry } from 
 
 import { LogoutButton } from './LogoutButton'
 import { MobileNav } from './MobileNav'
+import { NavDropdown } from './NavDropdown'
 
 export const SiteHeader = ({
   nav,
@@ -55,31 +56,16 @@ export const SiteHeader = ({
             }
 
             return (
-              <div className="group relative" key={key}>
-                <div aria-haspopup="menu">{parentLink}</div>
-                <ul
-                  className="invisible absolute right-0 top-full z-50 mt-2 min-w-56 rounded-md border border-border bg-card p-1 text-card-foreground opacity-0 shadow-lg transition-opacity group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"
-                  role="menu"
-                >
-                  {children.map((child, childIndex) => {
-                    const childHref = resolveHref(child.link)
-                    const childLabel = child.label || 'Untitled'
-                    return (
-                      <li key={child.id || `${key}-child-${childIndex}`} role="none">
-                        <Link
-                          className="block rounded px-3 py-2 text-sm hover:bg-muted"
-                          href={childHref}
-                          role="menuitem"
-                          target={child.link?.newTab ? '_blank' : undefined}
-                          rel={child.link?.newTab ? 'noopener noreferrer' : undefined}
-                        >
-                          {childLabel}
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
+              <NavDropdown
+                key={key}
+                trigger={parentLink}
+                items={children.map((child, childIndex) => ({
+                  key: child.id || `${key}-child-${childIndex}`,
+                  href: resolveHref(child.link),
+                  label: child.label || 'Untitled',
+                  newTab: child.link?.newTab ?? false,
+                }))}
+              />
             )
           })}
           {user ? (

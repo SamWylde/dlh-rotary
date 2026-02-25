@@ -1,6 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import { isAdmin } from '@/access'
+import { validateURL } from '@/utilities/validateURL'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
@@ -65,10 +66,11 @@ export const SiteSettings: GlobalConfig = {
         {
           name: 'facebook',
           type: 'text',
+          validate: validateURL,
           defaultValue: 'https://www.facebook.com/profile.php?id=100064347773545',
         },
-        { name: 'instagram', type: 'text' },
-        { name: 'myRotaryLink', type: 'text', defaultValue: 'https://my.rotary.org' },
+        { name: 'instagram', type: 'text', validate: validateURL },
+        { name: 'myRotaryLink', type: 'text', validate: validateURL, defaultValue: 'https://my.rotary.org' },
       ],
     },
     {
@@ -78,23 +80,25 @@ export const SiteSettings: GlobalConfig = {
         {
           name: 'ccepListing',
           type: 'text',
+          validate: validateURL,
           defaultValue: 'https://www.clintoncountyinfo.com/rotary-club-of-downtown-lock-haven',
         },
         {
           name: 'downtownLHListing',
           type: 'text',
+          validate: validateURL,
           defaultValue: 'https://lockhaven.org/listing/rotary-club-of-downtown-lock-haven/',
         },
-        { name: 'oldClubSite', type: 'text', defaultValue: 'http://www.rotaryclintoncountypa.org/' },
+        { name: 'oldClubSite', type: 'text', validate: validateURL, defaultValue: 'http://www.rotaryclintoncountypa.org/' },
       ],
     },
     {
       name: 'donationLinks',
       type: 'group',
       fields: [
-        { name: 'paypal', type: 'text' },
-        { name: 'venmo', type: 'text' },
-        { name: 'zelle', type: 'text' },
+        { name: 'paypal', type: 'text', validate: validateURL },
+        { name: 'venmo', type: 'text', validate: validateURL },
+        { name: 'zelle', type: 'text', validate: validateURL },
       ],
     },
     {

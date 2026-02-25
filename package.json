@@ -24,7 +24,6 @@
   "dependencies": {
     "@daypilot/daypilot-lite-react": "^5.4.0",
     "@payloadcms/admin-bar": "3.77.0",
-    "@payloadcms/db-mongodb": "3.77.0",
     "@payloadcms/db-postgres": "3.77.0",
     "@payloadcms/email-resend": "3.77.0",
     "@payloadcms/live-preview-react": "3.77.0",

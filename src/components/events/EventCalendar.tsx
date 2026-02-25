@@ -105,6 +105,7 @@ export const EventCalendar = ({ events }: EventCalendarProps) => {
         </div>
       </div>
 
+      <div aria-label="Monthly event calendar" role="region">
       <DayPilotMonth
         cellHeaderHeight={24}
         cellHeight={120}
@@ -126,6 +127,7 @@ export const EventCalendar = ({ events }: EventCalendarProps) => {
         timeRangeSelectedHandling="Disabled"
         weekStarts={0}
       />
+      </div>
     </div>
   )
 }

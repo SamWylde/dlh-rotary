@@ -20,6 +20,7 @@ import { Users } from '@/collections/Users'
 import { Navigation } from '@/globals/Navigation'
 import { SiteSettings } from '@/globals/SiteSettings'
 import { Theme } from '@/globals/Theme'
+import { BLOB_READ_WRITE_TOKEN, DATABASE_URL, PAYLOAD_SECRET, RESEND_API_KEY } from '@/lib/env'
 import { seed } from '@/seed'
 
 const filename = fileURLToPath(import.meta.url)
@@ -41,16 +42,16 @@ export default buildConfig({
   collections: [Users, Pages, Events, RSVPs, Announcements, Projects, Documents, Media],
   globals: [SiteSettings, Theme, Navigation],
   db: postgresAdapter({
-    push: true,
+    push: process.env.NODE_ENV !== 'production',
     pool: {
-      connectionString: process.env.DATABASE_URI || process.env.DATABASE_URL || '',
+      connectionString: DATABASE_URL,
     },
   }),
   editor: lexicalEditor(),
   email: resendAdapter({
     defaultFromAddress: process.env.DEFAULT_FROM_EMAIL || 'noreply@dlhrotary.org',
     defaultFromName: 'Rotary Club of Downtown Lock Haven',
-    apiKey: process.env.RESEND_API_KEY || '',
+    apiKey: RESEND_API_KEY,
   }),
   plugins: [
     vercelBlobStorage({
@@ -58,7 +59,7 @@ export default buildConfig({
       collections: {
         media: true,
       },
-      token: process.env.BLOB_READ_WRITE_TOKEN || '',
+      token: BLOB_READ_WRITE_TOKEN,
     }),
     formBuilderPlugin({
       fields: {
@@ -102,7 +103,7 @@ export default buildConfig({
       },
     }),
   ],
-  secret: process.env.PAYLOAD_SECRET || (process.env.NODE_ENV === 'production' ? (() => { throw new Error('PAYLOAD_SECRET env var is required in production') })() : 'dev-only-not-for-production'),
+  secret: PAYLOAD_SECRET,
   sharp,
   onInit: async (payload) => {
     if (process.env.RUN_SEED_ON_INIT !== 'true') return
