@@ -2,7 +2,20 @@
 
 ## For AI Agent Execution (Claude Code / Copilot / Cline)
 
-**V2 Changelog:** Fixed broken access control functions, added payload.config.ts, fixed Vercel Blob media config, corrected Tailwind v4 setup, added slug auto-generation hooks, RSVP uniqueness constraint, on-demand revalidation, plugin configuration, seed script skeleton, Neon cold-start warning, and various data corrections.
+**V2 Changelog:** Fixed access control functions, payload config wiring, Tailwind/Payload CSS separation, slug + revalidation hooks, and seed skeleton updates.
+
+
+
+### V2.1 Hardening Addendum (Implemented February 25, 2026)
+
+- Access contract split: public officer visibility vs authenticated member directory access
+- Privacy enforcement moved into API behavior (not just frontend display)
+- Members-only documents now use authenticated download proxy flow (/api/documents/[id])
+- RSVP uniqueness enforced at database level via unique eventUserKey (event:user composite key)
+- Hooks aligned and corrected to collection-level typings/imports
+- Seed flow made idempotent and env-driven (SEED_DEFAULT_PASSWORD, seedCompletedAt guard)
+- Cost/dependency language clarified: Vercel Blob + Resend are external services in addition to Neon
+
 
 ---
 
@@ -12,7 +25,7 @@ Build a complete club website for the Rotary Club of Downtown Lock Haven using *
 
 ### Key Principles
 
-- Code-first, fully in the repo — no external SaaS dependencies beyond Neon (free Postgres)
+- Code-first, fully in the repo � with managed services for Neon Postgres, Vercel Blob, and Resend email
 - Payload CMS admin panel serves as the editing interface for club officers
 - Role-based access: Admin (webmaster), Officer (president/secretary), Member (logged-in Rotarians), Public (anyone)
 - Theming system using CSS custom properties so the club can preview and choose design options
@@ -1935,3 +1948,4 @@ function getNextTuesday(): Date {
 *Specification V2 prepared by Thomas Darby — February 2026*
 *For the Rotary Club of Downtown Lock Haven*
 *Ready for AI agent execution*
+

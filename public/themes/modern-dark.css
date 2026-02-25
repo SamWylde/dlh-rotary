@@ -1,0 +1,19 @@
+:root {
+  --color-primary: #f7a81b;
+  --color-primary-foreground: #1a1a1a;
+  --color-secondary: #1f2937;
+  --color-secondary-foreground: #f9fafb;
+  --color-background: #111827;
+  --color-foreground: #f9fafb;
+  --color-muted: #1f2937;
+  --color-muted-foreground: #9ca3af;
+  --color-card: #1f2937;
+  --color-card-foreground: #f9fafb;
+  --color-accent: #fbbf24;
+  --color-border: #374151;
+  --color-header-bg: #111827;
+  --color-header-text: #f9fafb;
+  --color-footer-bg: #030712;
+  --color-footer-text: #d1d5db;
+  --radius: 0.5rem;
+}

@@ -1,0 +1,26 @@
+/* Scoped Tailwind to avoid breaking Payload admin defaults */
+@layer theme {
+  @import 'tailwindcss/theme.css';
+}
+
+@layer base {
+  .twp {
+    @import 'tailwindcss/preflight.css';
+  }
+
+  .twp .no-twp {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+      all: revert-layer;
+    }
+  }
+}
+
+@layer components;
+
+@layer utilities {
+  @import 'tailwindcss/utilities.css';
+}

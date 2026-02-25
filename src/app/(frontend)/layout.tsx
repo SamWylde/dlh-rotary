@@ -1,0 +1,63 @@
+import type { Metadata } from 'next'
+import React from 'react'
+
+import { SiteFooter } from '@/components/layout/SiteFooter'
+import { SiteHeader } from '@/components/layout/SiteHeader'
+import { ThemeLoader } from '@/components/layout/ThemeLoader'
+import { getCurrentUser } from '@/lib/auth'
+import type { NavEntry } from '@/lib/nav'
+import { getPayloadClient } from '@/lib/payload'
+
+import './globals.css'
+
+export const metadata: Metadata = {
+  title: 'Rotary Club of Downtown Lock Haven',
+  description: 'Service Above Self',
+}
+
+export default async function FrontendLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  let email: string | undefined
+  let mainNav: NavEntry[] = []
+  let footerNav: NavEntry[] = []
+  let activeTheme: string | undefined
+  let customAccentColor: string | undefined
+  let auth: Awaited<ReturnType<typeof getCurrentUser>> = { token: null, user: null }
+
+  try {
+    const payload = await getPayloadClient()
+
+    const [siteSettings, navigation, theme, authResult] = await Promise.all([
+      payload.findGlobal({ slug: 'site-settings', overrideAccess: false }),
+      payload.findGlobal({ slug: 'navigation', overrideAccess: false }),
+      payload.findGlobal({ slug: 'theme', overrideAccess: false }),
+      getCurrentUser(),
+    ])
+
+    email = siteSettings.email ?? undefined
+    mainNav = (navigation.mainNav ?? []) as NavEntry[]
+    footerNav = (navigation.footerNav ?? []) as NavEntry[]
+    activeTheme = theme.activeTheme ?? undefined
+    customAccentColor = theme.customAccentColor ?? undefined
+    auth = authResult
+  } catch {
+    // Degrade gracefully if DB is unavailable (e.g. Neon cold start timeout)
+  }
+
+  return (
+    <html lang="en">
+      <head>
+        <ThemeLoader activeTheme={activeTheme} customAccentColor={customAccentColor} />
+        <link href="/favicon.ico" rel="icon" sizes="32x32" />
+      </head>
+      <body className="flex flex-col">
+        <SiteHeader nav={mainNav} user={auth.user} />
+        <main className="mx-auto w-full max-w-6xl px-4 py-8">{children}</main>
+        <SiteFooter contactEmail={email} nav={footerNav} />
+      </body>
+    </html>
+  )
+}
