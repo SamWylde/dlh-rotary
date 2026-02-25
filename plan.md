@@ -1,4 +1,4 @@
-﻿# Rotary Club of Downtown Lock Haven â€” Implementation Status
+# Rotary Club of Downtown Lock Haven — Implementation Status
 
 ## Original Spec: V2.1 (February 2026) | Status Updated: February 25, 2026
 
@@ -26,31 +26,38 @@
 - [x] Admin custom.scss with scoped Tailwind (no admin breakage)
 - [x] Vercel deployment at dlh-rotary.vercel.app
 - [x] Postgres schema push enabled (`push: true`)
+- [x] `drizzle.config.ts` + `src/payload-generated-schema.ts` committed — use `npx dotenv-cli -e .env -- npx drizzle-kit push` locally when `push: true` fails to create new tables on Neon serverless
 
 ---
 
 ## PAYLOAD COLLECTIONS (8/8 created)
 
-- [x] **Users** â€” Auth, roles (admin/officer/member), privacy fields, afterRead hook strips email/phone per showEmail/showPhone
-- [x] **Pages** â€” Title, slug, membersOnly, content, featuredImage, versions/drafts
-- [x] **Events** â€” All fields: date, endDate, eventType, location, description, speaker fields, RSVP config, ticket fields, recurring
-- [x] **RSVPs** â€” event, user, eventUserKey (unique composite), status, guests, note, duplicate prevention hooks
-- [x] **Announcements** â€” title, slug, content, publishedDate, author, priority, membersOnly, pinned, versions/drafts
-- [x] **Projects** â€” All fields: category, status, gallery array, impactStats group, partners array, volunteerSignupEnabled
-- [x] **Documents** â€” title, category, file, description, meetingDate (conditional), membersOnly
-- [x] **Media** â€” alt, caption, isPublic, mime types, image sizes (thumbnail/card/hero)
+- [x] **Users** — Auth, roles (admin/officer/member), privacy fields, afterRead hook strips email/phone per showEmail/showPhone
+- [x] **Pages** — Title, slug, membersOnly, content (richText), layout (blocks), featuredImage, versions/drafts
+- [x] **Events** — All fields: date, endDate, eventType, location, description, speaker fields, RSVP config, ticket fields, recurring
+- [x] **RSVPs** — event, user, eventUserKey (unique composite), status, guests, note, duplicate prevention hooks
+- [x] **Announcements** — title, slug, content, publishedDate, author, priority, membersOnly, pinned, versions/drafts
+- [x] **Projects** — All fields: category, status, gallery array, impactStats group, partners array, volunteerSignupEnabled
+- [x] **Documents** — title, category, file, description, meetingDate (conditional), membersOnly
+- [x] **Media** — alt, caption, isPublic, mime types, image sizes (thumbnail/card/hero)
 
-### NOT YET IMPLEMENTED in Collections:
+### Pages layout blocks (7/7):
 
-- [ ] **Pages `layout` blocks field** â€” Plan specifies heroBlock, contentBlock, imageGalleryBlock, ctaBlock, officerGridBlock, statsBlock, contactFormBlock. Not implemented â€” Pages only have richText content field.
+- [x] `heroBlock` — Eyebrow, heading, body, image, primary + secondary links
+- [x] `contentBlock` — Heading + richText
+- [x] `imageGalleryBlock` — Heading + image array with captions
+- [x] `ctaBlock` — Heading, body, primary + secondary links
+- [x] `officerGridBlock` — Officer directory embed with heading, limit, showEmail/showPhone toggles
+- [x] `statsBlock` — Stats array (label, value, description)
+- [x] `contactFormBlock` — Heading, intro richText, Form Builder form relationship
 
 ---
 
 ## PAYLOAD GLOBALS (3/3 created)
 
-- [x] **SiteSettings** â€” All fields: clubName, tagline, logo, email, phone, address, presidentContact, meetingInfo, rotaryInfo, socialMedia, externalListings, donationLinks, seedCompletedAt
-- [x] **Theme** â€” activeTheme select (4 presets), customAccentColor override
-- [x] **Navigation** â€” mainNav + footerNav arrays with linkField (internal/external + newTab)
+- [x] **SiteSettings** — All fields: clubName, tagline, logo, email, phone, address, presidentContact, meetingInfo, rotaryInfo, socialMedia (facebook + instagram + myRotaryLink), externalListings, donationLinks, forms (joinForm + contactForm), seedCompletedAt
+- [x] **Theme** — activeTheme select (4 presets), customAccentColor override
+- [x] **Navigation** — mainNav + footerNav arrays with linkField (internal/external + newTab)
 
 ---
 
@@ -67,58 +74,59 @@
 
 ## HOOKS (3/3)
 
-- [x] **formatSlug** â€” beforeChange hook, auto-generates slug from title
-- [x] **revalidateAfterChange / revalidateAfterDelete** â€” ISR revalidation for collections
-- [x] **revalidatePageAfterChange / revalidatePageAfterDelete** â€” ISR revalidation for Pages
+- [x] **formatSlug** — beforeChange hook, auto-generates slug from title, respects manual slugs
+- [x] **revalidateAfterChange / revalidateAfterDelete** — ISR revalidation for collections
+- [x] **revalidatePageAfterChange / revalidatePageAfterDelete** — ISR revalidation for Pages
 
 ---
 
 ## SHARED FIELDS
 
-- [x] **linkField** â€” Internal (page reference) + external URL, newTab checkbox
+- [x] **linkField** — Internal (page reference) + external URL, newTab checkbox
 
 ---
 
 ## SEED SCRIPT
 
-- [x] Idempotent (checks seedCompletedAt, skips if already run unless force=true)
+- [x] Idempotent (checks seedCompletedAt at start, skips if already run unless force=true)
+- [x] `seedCompletedAt` set at the **end** of script (after all content created), not mid-way
 - [x] Uses SEED_DEFAULT_PASSWORD env var (no hardcoded passwords)
-- [x] Seeds admin user (Thomas Darby)
-- [x] Seeds 6 officers with titles
-- [x] Seeds 9 known members
-- [x] Seeds SiteSettings, Theme, Navigation globals
-- [x] Seeds 10 real projects with descriptions
-- [x] Seeds 7 pages (about, officers, scholarships, join, contact, donate, documents)
-- [x] Seeds sample event (weekly meeting) and announcement (welcome)
-- [x] Rich text fields use proper Lexical paragraph format
-- [x] Triggered via onInit (RUN_SEED_ON_INIT=true) or POST /next/seed (requires SEED_SECRET)
+- [x] Seeds admin user: Thomas Darby (inducted Dec 9, 2025; sponsor: Cathy Ballat)
+- [x] Seeds 7 officers with real names, titles, bios: Lisa Schropp, Janine Bruno, Wendy Stiver, Heather Lively, Carmen Banfill, Diahann Claghorn, Marianne Lotfi
+- [x] Seeds 8 members with real names and bios: Cathy Ballat, Bonnie Hannis, Jeanne Baker, Emma Persun, Nate Akeley, Sue Packer, Haley Jolin, Trey Reeder
+- [x] Seeds SiteSettings global with real club data (address, president contact, meeting info, Facebook + Instagram)
+- [x] Seeds Theme and Navigation globals
+- [x] Seeds 7 pages with **real content** (not placeholders): About (Four-Way Test, meeting format, Happy Dollars, press), Officers (2025-26 + 2026-27 slates), Scholarships (Roberta Way + Four-Way Test contest), Join Us, Contact (all real info), Support Us (flag sponsorship, Bingo, corporate), Documents
+- [x] Seeds 8 projects with real descriptions: Flags of Honor (ceremony details, deadlines, musicians), Angel Lights, Bingo Fundraiser (KBR, Sep 27, basket donors), Valentine's Day Goody Trays (2026 deliveries, The Express coverage), Holiday Gift Bags for Veterans (30 bags, $418, locations), Roberta Way Scholarship, Four-Way Test Speech Contest, old Scholarships stub
+- [x] Seeds 8 events: Weekly Club Meeting (recurring) + 6 Flags of Honor work sessions/ceremony/removal + Bingo Fundraiser (Sep 27, 2026)
+- [x] Seeds 4 announcements: Welcome, Flags of Honor 2026 (America's 250th), DLH Rotary on The Express front page, Bingo rescheduled
+- [x] Rich text fields use proper Lexical paragraph/heading format (h2, h3 helpers)
+- [x] Triggered via onInit (RUN_SEED_ON_INIT=true) or POST /next/seed (requires SEED_SECRET header)
+- [x] Seed route has error handling (returns JSON error on failure, not raw 500) and `maxDuration = 60`
 
 ---
 
 ## FRONTEND PAGES (17/19 pages exist)
 
-- [x] `/` â€” Home page: hero section, upcoming events (5), recent announcements (3), CTA buttons
-- [x] `/about` â€” Renders from Pages collection via getPageBySlug
-- [x] `/officers` â€” Lists users with role=officer, shows name/title/email/phone
-- [x] `/projects` â€” Grid of all published projects
-- [x] `/projects/[slug]` â€” Project detail with impactStats, generateMetadata
-- [x] `/events` â€” Upcoming events list with link to calendar
-- [x] `/events/[slug]` â€” Event detail with RSVPControls, generateMetadata
-- [x] `/announcements` â€” All announcements, pinned first
-- [x] `/announcements/[slug]` â€” Announcement detail, generateMetadata
-- [x] `/documents` â€” Members-only, download links via /api/documents/[id] proxy
-- [x] `/scholarships` â€” Three named scholarships with dollar amounts
-- [x] `/members` â€” Members-only directory, respects showInDirectory/showEmail/showPhone
-- [x] `/account` â€” Members-only, shows profile, links to /admin for editing
-- [x] `/login` â€” LoginForm component with full auth flow
-- [x] `/donate` â€” Donation links from SiteSettings.donationLinks
-- [x] `/[slug]` â€” Catch-all for dynamic Pages, excludes reserved slugs, generateMetadata
-
-### Formerly partial stub pages (now implemented):
-
-- [x] `/events/calendar` — Replaced list-only fallback with read-only DayPilot month calendar, month navigation, and click-through to event detail pages.
-- [x] `/join` — Frontend now renders configured Payload Form Builder form from SiteSettings with validation and form-submission handling.
-- [x] `/contact` — Contact info remains from SiteSettings and now renders configured Payload Form Builder form on the page.
+- [x] `/` — Home page: hero section, upcoming events (5), recent announcements (3), CTA buttons
+- [x] `/about` — Renders from Pages collection via getPageBySlug
+- [x] `/officers` — Lists users with role=officer, shows name/title/email/phone
+- [x] `/projects` — Grid of all published projects
+- [x] `/projects/[slug]` — Project detail with impactStats, generateMetadata
+- [x] `/events` — Upcoming events list with link to calendar
+- [x] `/events/[slug]` — Event detail with RSVPControls, generateMetadata
+- [x] `/announcements` — All announcements, pinned first
+- [x] `/announcements/[slug]` — Announcement detail, generateMetadata
+- [x] `/documents` — Members-only, download links via /api/documents/[id] proxy
+- [x] `/scholarships` — Renders from Pages collection
+- [x] `/members` — Members-only directory, respects showInDirectory/showEmail/showPhone
+- [x] `/account` — Members-only, shows profile, links to /admin for editing
+- [x] `/login` — LoginForm component with full auth flow
+- [x] `/donate` — Donation links from SiteSettings.donationLinks
+- [x] `/[slug]` — Catch-all for dynamic Pages, excludes reserved slugs, generateMetadata
+- [x] `/events/calendar` — DayPilot Lite read-only month calendar with click-through to event detail pages
+- [x] `/join` — Renders configured Payload Form Builder form from SiteSettings with validation
+- [x] `/contact` — Contact info from SiteSettings + configured Form Builder form
 
 ---
 
@@ -126,74 +134,75 @@
 
 ### Implemented:
 
-- [x] `layout/SiteHeader` â€” Desktop nav, login/logout, branding
-- [x] `layout/SiteFooter` â€” Contact email, footer nav links
-- [x] `layout/MobileNav` â€” Hamburger menu, closes on navigation
-- [x] `layout/ThemeLoader` â€” Loads theme CSS, applies customAccentColor (with XSS validation)
-- [x] `layout/LogoutButton` â€” Client component, POST /api/users/logout
-- [x] `events/RSVPControls` â€” Client component, yes/no/maybe toggle, calls /api/rsvp
-- [x] `members/LoginForm` â€” Email/password form, auth flow
-
-### NOT YET IMPLEMENTED (plan specified these as standalone components):
-
-- [ ] `events/EventCard` â€” Card component for events list (logic is inlined in page)
+- [x] `layout/SiteHeader` — Desktop nav, login/logout, branding
+- [x] `layout/SiteFooter` — Contact email, footer nav links
+- [x] `layout/MobileNav` — Hamburger menu, closes on navigation
+- [x] `layout/ThemeLoader` — Loads theme CSS, applies customAccentColor (with XSS validation)
+- [x] `layout/LogoutButton` — Client component, POST /api/users/logout
+- [x] `events/RSVPControls` — Client component, yes/no/maybe toggle, calls /api/rsvp
+- [x] `events/EventCard` — Extracted, used by /events and home Upcoming Events
+- [x] `events/UpcomingEvents` — Extracted, used on homepage
 - [x] `events/EventCalendar` — DayPilot Lite monthly calendar component
-- [ ] `events/UpcomingEvents` â€” Homepage widget (logic is inlined in home page)
-- [ ] `announcements/AnnouncementCard` â€” Card with priority styling (inlined)
-- [ ] `announcements/LatestAnnouncements` â€” Homepage widget (inlined)
-- [ ] `projects/ProjectCard` â€” Card with image/stats/badge (inlined)
-- [ ] `projects/ProjectGallery` â€” Lightbox gallery for project photos
-- [ ] `projects/ImpactStats` â€” Stats display component
-- [ ] `members/MemberCard` â€” Directory card (inlined)
-- [ ] `members/MemberDirectory` â€” Searchable/filterable grid (inlined)
-- [ ] `documents/DocumentList` â€” Filterable by category (inlined)
-- [ ] `documents/DocumentCard` â€” File icon + title + download (inlined)
-- [ ] `pages/Hero` â€” Hero section with image/text overlay
-- [ ] `pages/ContentBlock` â€” Rich text content section
-- [ ] `pages/OfficerGrid` â€” Grid of officers with photos (inlined in officers page)
-- [ ] `pages/StatsBar` â€” Impact numbers display
-- [ ] `pages/CTASection` â€” Call-to-action section
-- [ ] `forms/ContactForm` â€” Renders Form Builder forms
-- [ ] `forms/InterestForm` â€” "I want to join" form
-- [ ] `forms/VolunteerSignup` â€” Project volunteer sign-up
-- [ ] `payload/Logo` â€” Custom admin panel logo
-- [ ] `payload/Icon` â€” Custom admin panel sidebar icon
+- [x] `announcements/AnnouncementCard` — Extracted, used by /announcements
+- [x] `announcements/LatestAnnouncements` — Extracted, used on homepage
+- [x] `members/LoginForm` — Email/password form, auth flow
+- [x] `pages/blocks/HeroBlock` — Hero block renderer for dynamic page layouts
+- [x] `pages/blocks/ContentBlock` — Content block renderer
+- [x] `pages/blocks/OfficerGridBlock` — Officer grid embed renderer
+- [x] `pages/blocks/StatsBarBlock` — Stats display renderer
+- [x] `pages/blocks/CTASectionBlock` — CTA section renderer
+
+### Not yet extracted (logic inlined in page files):
+
+- [ ] `projects/ProjectCard` — Card with image/stats/badge
+- [ ] `projects/ProjectGallery` — Lightbox gallery for project photos
+- [ ] `projects/ImpactStats` — Stats display component
+- [ ] `members/MemberCard` — Directory card
+- [ ] `members/MemberDirectory` — Searchable/filterable grid
+- [ ] `documents/DocumentList` — Filterable by category
+- [ ] `documents/DocumentCard` — File icon + title + download
+
+### Not yet implemented:
+
+- [ ] `forms/ContactForm` — Renders Form Builder forms (join/contact pages render forms, but no shared component)
+- [ ] `payload/Logo` — Custom admin panel logo
+- [ ] `payload/Icon` — Custom admin panel sidebar icon
 
 ### shadcn/ui Components:
 
 - [ ] Not installed. Plan called for: button, card, badge, dialog, input, select, calendar, dropdown-menu, navigation-menu, avatar, sheet, toast, tabs, separator
 
-**NOTE:** Many "missing" components have their logic inlined directly in page files. The site is functional â€” these are refactoring/UX improvements, not blockers.
+**NOTE:** Many "missing" components have their logic inlined directly in page files. The site is fully functional — these are refactoring/UX improvements, not blockers.
 
 ---
 
 ## THEME CSS FILES
 
-- [ ] `/themes/rotary-classic.css` â€” Rotary Blue #17458F + Gold #F7A81B (default)
-- [ ] `/themes/modern-light.css` â€” Clean white/gray with blue accents
-- [ ] `/themes/modern-dark.css` â€” Dark mode with gold accents
-- [ ] `/themes/community-warm.css` â€” Warm earth tones
+- [x] `/themes/rotary-classic.css` — Rotary Blue #17458F + Gold #F7A81B (default)
+- [x] `/themes/modern-light.css` — Clean white/gray with blue accents
+- [x] `/themes/modern-dark.css` — Dark mode with gold accents
+- [x] `/themes/community-warm.css` — Warm earth tones
 
-**NOTE:** ThemeLoader references these files but they don't exist. Fallback CSS variables in globals.css and inline defaults on components (e.g., `bg-[var(--color-header-bg,#17458F)]`) make the site functional without them. Theme switching will not work until these are created.
+**NOTE:** Theme files exist in `public/themes/` and are loaded by ThemeLoader.
 
 ---
 
 ## API ROUTES
 
-- [x] `POST /api/rsvp` â€” Create/update RSVP, auth required, NaN validation, duplicate prevention
-- [x] `GET /api/documents/[id]` â€” Authenticated download proxy, filename sanitization, proper headers
-- [x] `POST /next/seed` â€” Seed endpoint, requires SEED_SECRET env var
+- [x] `POST /api/rsvp` — Create/update RSVP, auth required, NaN validation, duplicate prevention
+- [x] `GET /api/documents/[id]` — Authenticated download proxy, filename sanitization, proper headers
+- [x] `POST /next/seed` — Seed endpoint, requires SEED_SECRET header, returns JSON error on failure, maxDuration=60
 
 ---
 
 ## SECURITY HARDENING (Post-review fixes applied)
 
-- [x] ThemeLoader XSS fix â€” validates hex color before CSS injection
+- [x] ThemeLoader XSS fix — validates hex color before CSS injection
 - [x] Logout converted from `<Link>` to POST fetch (LogoutButton client component)
 - [x] PAYLOAD_SECRET throws in production if unset
 - [x] SEED_SECRET required on seed endpoint (403 if unconfigured)
-- [x] Host-header trust removed from url.ts â€” uses env var or localhost only
-- [x] Media read access restricted â€” members see only public media (not all)
+- [x] Host-header trust removed from url.ts — uses env var or localhost only
+- [x] Media read access restricted — members see only public media (not all)
 - [x] RSVP event ID validated for NaN after numeric coercion
 - [x] `rel="noopener noreferrer"` on all `target="_blank"` nav links
 - [x] Em dash replaced with ASCII dash in generateMetadata titles
@@ -208,37 +217,25 @@
 
 ## REMAINING WORK (prioritized)
 
-### P0 â€” Needed for site to function properly:
+### P1 — Should do before sharing with club:
 
-1. **Database tables** â€” Verify Vercel deploy with `push: true` creates schema. Visit /admin to trigger.
-2. **Create first admin user** â€” Visit /admin after tables exist, create admin account.
-3. **Run seed** â€” Set RUN_SEED_ON_INIT=true + SEED_DEFAULT_PASSWORD in Vercel env vars, or POST to /next/seed with SEED_SECRET header.
+1. **Upload Rotary logo** — Upload club logo to Media in /admin, set in SiteSettings.logo and SiteSettings.logoSimplified.
+2. **Update placeholder emails** — Replace `@dlhrotary.org` and `@placeholder.com` emails with real addresses for officers and members (do this in /admin, not the seed).
+3. **Configure join/contact forms** — Create Form Builder forms in /admin and link them in SiteSettings.forms.joinForm and SiteSettings.forms.contactForm.
+4. **Scholarships page dollar amounts** — Update Scholarships page in /admin with actual dollar amounts and eligibility criteria when available.
 
-### P1 â€” Should do before sharing with club:
+### P2 — Polish / nice-to-have:
 
-4. **Theme CSS files** â€” Create the 4 theme files so theme switching works.
-5. **Form Builder frontend rendering** - Completed on February 25, 2026. /join and /contact now render configured Form Builder forms.
-6. **DayPilot calendar** - Completed on February 25, 2026. /events/calendar now uses an interactive read-only month view.
-7. **Upload Rotary logo** â€” Upload to Media, set in SiteSettings.
-8. **Add rich text content to pages** â€” About, Scholarships, etc. via admin panel.
-9. **Update placeholder officer emails** â€” Replace @dlhrotary.org placeholders with real emails.
-
-### P2 â€” Polish / nice-to-have:
-
-10. **Extract standalone components** â€” EventCard, ProjectCard, MemberCard, etc. from inline page code.
-11. **Install shadcn/ui** â€” Generate button, card, badge, etc. for better UI.
-12. **Pages layout blocks** â€” Add heroBlock, contentBlock, etc. for flexible page layouts.
-13. **Admin panel branding** â€” Custom Logo and Icon components.
-14. **Notification system** â€” Email on new announcements via Payload hooks + Resend.
-15. **Navigation dropdown children** - Completed on February 25, 2026. Header and mobile nav now render child links with access-aware visibility.
-16. **Pagination** - Completed on February 25, 2026. Heavy list pages now support server-rendered `?page=` pagination.
-17. **Import generated Payload types** - In progress. High-value frontend shared-path casts were replaced in this sprint.
+5. **Install shadcn/ui** — Generate button, card, badge, etc. for better UI consistency.
+6. **Extract standalone components** — ProjectCard, MemberCard, MemberDirectory, DocumentList etc. currently inlined.
+7. **Admin panel branding** — Custom Logo and Icon components in /admin.
+8. **Notification system** — Email on new announcements via Payload hooks + Resend.
 
 ### Deferred (post-launch):
 
-18. **Custom domain** â€” Register dlhrotary.org, add to Vercel, update NEXT_PUBLIC_SERVER_URL.
-19. **Resend email** â€” Add RESEND_API_KEY, verify domain for branded sending.
-20. **Vercel Blob token** â€” Ensure BLOB_READ_WRITE_TOKEN is set for media uploads.
+9. **Custom domain** — Register dlhrotary.org, add to Vercel, update NEXT_PUBLIC_SERVER_URL.
+10. **Resend email** — Add RESEND_API_KEY, verify domain for branded sending.
+11. **Vercel Blob token** — Confirm BLOB_READ_WRITE_TOKEN is set before first media upload.
 
 ---
 
@@ -251,15 +248,25 @@
 | NEXT_PUBLIC_SERVER_URL | Set | https://dlh-rotary.vercel.app |
 | BLOB_READ_WRITE_TOKEN | Set | For Vercel Blob media storage |
 | RESEND_API_KEY | Not set | Needed for email (password resets, form submissions) |
-| SEED_SECRET | Not set | Needed to use POST /next/seed endpoint |
-| SEED_DEFAULT_PASSWORD | Not set | Needed for seed script user creation |
-| RUN_SEED_ON_INIT | Not set | Set to "true" to auto-seed on first deploy |
+| SEED_SECRET | Set | Used to authenticate POST /next/seed |
+| SEED_DEFAULT_PASSWORD | Set | Temporary password for all seeded users |
+| RUN_SEED_ON_INIT | Set (true) | Can be removed or set to false now that seed has run |
 
 ---
 
-*Original specification V2 by Thomas Darby â€” February 2026*
+## DATABASE NOTES
+
+- Schema auto-pushed via `push: true` in postgres adapter on Payload startup
+- When `push: true` fails to create new tables (common with Neon serverless + new block tables), run locally:
+  ```
+  npx payload generate:db-schema   # updates src/payload-generated-schema.ts
+  npx dotenv-cli -e .env -- npx drizzle-kit push
+  ```
+- After schema changes, re-run seed if needed: `curl -X POST "https://dlh-rotary.vercel.app/next/seed?force=true" -H "x-seed-secret: <SEED_SECRET>"`
+- The `forms_join_form_id` and `forms_contact_form_id` columns on `site_settings` were added manually after `push: true` missed them on initial deploy
+
+---
+
+*Original specification V2 by Thomas Darby — February 2026*
 *Implementation by AI agent, reviewed and hardened February 25, 2026*
-*Status tracking added February 25, 2026*
-
-
-
+*Content populated with real club data February 25, 2026*
