@@ -3,7 +3,16 @@ import Link from 'next/link'
 import { lexicalToPlainText } from '@/lib/richText'
 import type { Project } from '@/payload-types'
 
-const PROJECT_ICONS: Record<string, string> = {
+const PROJECT_ICONS_BY_SLUG: Record<string, string> = {
+  'angel-lights': '🕯️',
+  'bingo-fundraiser': '🎰',
+  'flags-of-honor': '🇺🇸',
+  'four-way-test-speech-contest': '🗣️',
+  'holiday-gift-bags-for-veterans': '🎁',
+  'roberta-way-scholarship': '🎓',
+}
+
+const CATEGORY_ICONS: Record<string, string> = {
   'community-service': '🤝',
   'youth': '🎓',
   'international': '🌍',
@@ -44,7 +53,7 @@ export const HomeProjectsGrid = ({ projects }: { projects: HomeProject[] }) => (
           style={{ gap: 'var(--project-grid-gap, 20px)' }}
         >
           {projects.map((project) => {
-            const icon = (project.category && PROJECT_ICONS[project.category]) || '⚙️'
+            const icon = PROJECT_ICONS_BY_SLUG[project.slug] || (project.category && CATEGORY_ICONS[project.category]) || '⚙️'
 
             return (
               <Link
