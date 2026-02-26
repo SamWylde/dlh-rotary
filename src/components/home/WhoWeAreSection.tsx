@@ -27,7 +27,7 @@ export const WhoWeAreSection = () => (
     >
       The Rotary Club of Downtown Lock Haven has been serving Clinton County for over 22 years.
       We&apos;re neighbors, friends, and community leaders who come together each week to create
-      positive, lasting change &mdash; locally and around the world. All are welcome.
+      positive, lasting change, locally and around the world. All are welcome.
     </p>
   </section>
 )

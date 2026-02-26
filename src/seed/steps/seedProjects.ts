@@ -18,9 +18,9 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
         p(
           'Flags of Honor is the club\'s signature project and largest annual fundraiser. Since approximately 2014, the club has transformed Triangle Park in downtown Lock Haven into a patriotic display of full-sized American flags sponsored by community members in honor or memory of their loved ones. In 2024, 168 flags flew in the park; in 2025, more than 150.',
         ),
-        h3('2026 — America\'s 250th'),
+        h3('2026: America\'s 250th'),
         p(
-          'This year marks the 12th annual Flags of Honor and coincides with America\'s 250th birthday celebration. The City of Lock Haven approved an extended display from May 22 through Flag Day, June 16 — over three weeks. The ceremony is Sunday, May 24 at 11 AM at Triangle Park, featuring Posting of Colors, the National Anthem, Folding of the Flag, and Taps played by an Army master sergeant. Vocalists Sheila Carroll and Kim Vance will perform.',
+          'This year marks the 12th annual Flags of Honor and coincides with America\'s 250th birthday celebration. The City of Lock Haven approved an extended display from May 22 through Flag Day, June 16, over three weeks. The ceremony is Sunday, May 24 at 11 AM at Triangle Park, featuring Posting of Colors, the National Anthem, Folding of the Flag, and Taps played by an Army master sergeant. Vocalists Sheila Carroll and Kim Vance will perform.',
         ),
         h3('How to Participate'),
         p(
@@ -153,7 +153,7 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
           'The club awards three annual scholarships to graduating seniors at Central Mountain High School, totaling $5,500. Scholarship amounts have been increased significantly in recent years, funded by Flags of Honor proceeds and the Bingo fundraiser.',
         ),
         p(
-          'The three named scholarships honor Eleanor E.J. Kodish ($2,000), Dr. Betty Baird Schantz ($2,000), and Roberta M. Way ($1,500) — dedicated club members who left a lasting impact on the community.',
+          'The three named scholarships honor Eleanor E.J. Kodish ($2,000), Dr. Betty Baird Schantz ($2,000), and Roberta M. Way ($1,500). These scholarships honor dedicated club members who left a lasting impact on the community.',
         ),
         p(
           'Applications are announced through Central Mountain High School each spring. Visit our Scholarships page for full details and eligibility requirements.',
@@ -195,7 +195,7 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
       _status: 'published',
       description: lexical(
         p(
-          "The Little Red Schoolhouse Libraries are the club's signature literacy project — free community book-sharing stations placed around Lock Haven. They are stocked exclusively with books and reading material for community members of all ages.",
+          "The Little Red Schoolhouse Libraries are the club's signature literacy project: free community book-sharing stations placed around Lock Haven. They are stocked exclusively with books and reading material for community members of all ages.",
         ),
         h3('Locations'),
         p(

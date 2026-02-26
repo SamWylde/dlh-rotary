@@ -122,7 +122,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       eventType: 'social',
       location: 'Poorman Gallery, 352 E. Water St., Lock Haven',
       description:
-        'Annual open house featuring local nonprofits, wine, and refreshments. The club donates $500 to each featured organization. Free and open to the public — a great way to learn about service opportunities in Clinton County.',
+        'Annual open house featuring local nonprofits, wine, and refreshments. The club donates $500 to each featured organization. Free and open to the public. A great way to learn about service opportunities in Clinton County.',
     },
     {
       slug: 'veterans-gift-bags-2026',

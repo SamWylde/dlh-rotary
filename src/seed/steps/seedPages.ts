@@ -22,7 +22,7 @@ export const seedPages = async (payload: Payload): Promise<void> => {
           'We are known throughout the community for our signature projects including Flags of Honor, Angel Lights, Little Red Schoolhouse Libraries, and our annual scholarship program. Our motto embraces Rotary\'s "Service Above Self" and "People of Action" principles.',
         ),
         p(
-          'Our members come from all walks of life — The Express newspaper, Woodlands Bank, Diakon/AmeriCorps Seniors, Rachel K Creations, and throughout Clinton County\'s business and nonprofit community. We share a commitment to improving our community through hands-on service, fundraising, and fellowship.',
+          'Our members come from all walks of life: The Express newspaper, Woodlands Bank, Diakon/AmeriCorps Seniors, Rachel K Creations, and throughout Clinton County\'s business and nonprofit community. We share a commitment to improving our community through hands-on service, fundraising, and fellowship.',
         ),
         h2('The Four-Way Test'),
         p(
@@ -33,7 +33,7 @@ export const seedPages = async (payload: Payload): Promise<void> => {
           'We meet every Tuesday at 5:30 PM (social time at 5:15) at the Poorman Gallery, 352 E. Water St., Lock Haven, PA. Meetings alternate between regular club meetings (guest speakers, program updates, fellowship) and work sessions for active projects. In severe weather, Zoom participation is available.',
         ),
         p(
-          'Happy Dollars — voluntary contributions made at meetings — go to a rotating local charity every six months. Current charity (January–June 2026): the Lock Haven Area Shoe Bank. In July–December 2025, $380 went to Haven Cupboard.',
+          'Happy Dollars are voluntary contributions made at meetings that go to a rotating local charity every six months. Current charity (January through June 2026): the Lock Haven Area Shoe Bank. In July through December 2025, $380 went to Haven Cupboard.',
         ),
         h2('Community Impact'),
         p(
@@ -109,21 +109,21 @@ export const seedPages = async (payload: Payload): Promise<void> => {
         p(
           'The Rotary Club of Downtown Lock Haven awards three annual scholarships to graduating seniors at Central Mountain High School, totaling $5,500. Scholarship amounts have been increased significantly in recent years, funded by Flags of Honor proceeds and our Bingo fundraiser.',
         ),
-        h2('Eleanor E.J. Kodish Memorial Scholarship — $2,000'),
+        h2('Eleanor E.J. Kodish Memorial Scholarship ($2,000)'),
         p(
           'Criteria: Pursuing a career in education; attending Commonwealth University-Mansfield (or Lock Haven, or Penn State as substitutes).',
         ),
         p(
           'About Eleanor: Eleanor Kodish was a former Avis Elementary School principal who received the Outstanding Educator Award from Mansfield University. She was active in the club at age 95 and was named Rotarian of the Year and received the Service Above Self Award. This is the newest of the three scholarships.',
         ),
-        h2('Dr. Betty Baird Schantz Memorial Scholarship — $2,000'),
+        h2('Dr. Betty Baird Schantz Memorial Scholarship ($2,000)'),
         p(
           'Criteria: Active Interact Club member.',
         ),
         p(
           'About Betty: Dr. Schantz owned the Partnership House Bed & Breakfast in Lock Haven and was a champion of local history. She retired from both Temple University (where she served as professor, director, and dean) and Lock Haven University (associate dean). She was active in the club into her 90s and was named Ross Library Friend of the Year. She originally chaired the Holiday Gift Bags for Veterans project.',
         ),
-        h2('Roberta M. Way Memorial Scholarship — $1,500'),
+        h2('Roberta M. Way Memorial Scholarship ($1,500)'),
         p(
           'Criteria: College-bound student who demonstrates strong academics, commitment, and service; pursuing a career in education.',
         ),
@@ -132,11 +132,11 @@ export const seedPages = async (payload: Payload): Promise<void> => {
         ),
         h2('Past Recipients'),
         p(
-          '2024: Sofia Dressler ($2,000, Dr. Betty Baird Schantz Memorial) — Interact president, received a dozen senior awards, earned 1st place in a national technical math competition.',
+          '2024: Sofia Dressler ($2,000, Dr. Betty Baird Schantz Memorial). Interact president, received a dozen senior awards, earned 1st place in a national technical math competition.',
         ),
         h3('What Recipients Say'),
         p(
-          '"I am super grateful to have received this scholarship. It helped me purchase some things for my dorm, as well as putting the rest of the money towards tuition and room and board, so my dog and I can live on campus and be more involved in the community." — Brooklynn Bechdel',
+          '"I am super grateful to have received this scholarship. It helped me purchase some things for my dorm, as well as putting the rest of the money towards tuition and room and board, so my dog and I can live on campus and be more involved in the community." - Brooklynn Bechdel',
         ),
         h2('How to Apply'),
         p(
@@ -166,14 +166,14 @@ export const seedPages = async (payload: Payload): Promise<void> => {
         ),
         h2('What to Expect'),
         p(
-          'Come to a meeting as our guest — no commitment required. We meet every Tuesday at 5:30 PM (social at 5:15) at the Poorman Gallery, 352 E. Water St., Lock Haven.',
+          'Come to a meeting as our guest, no commitment required. We meet every Tuesday at 5:30 PM (social at 5:15) at the Poorman Gallery, 352 E. Water St., Lock Haven.',
         ),
         p(
           'New members are proposed by an existing member (your sponsor), approved by the board, and inducted at a club dinner. You\'ll receive your Rotary pin from your sponsor at a subsequent meeting and give a short "about me" talk at a later date.',
         ),
         h2('From Interact to Rotary'),
         p(
-          'The club co-sponsors the Interact Club at Central Mountain High School — Rotary\'s organization for high school students. Several Interact alumni have gone on to become full Rotarians, including Emma Persun and Nate Akeley. If you\'re a current or former Interact member, we\'d especially love to hear from you.',
+          'The club co-sponsors the Interact Club at Central Mountain High School, Rotary\'s organization for high school students. Several Interact alumni have gone on to become full Rotarians, including Emma Persun and Nate Akeley. If you\'re a current or former Interact member, we\'d especially love to hear from you.',
         ),
         h2('Recent Members'),
         p(
@@ -181,7 +181,7 @@ export const seedPages = async (payload: Payload): Promise<void> => {
         ),
         h2('Dues & Commitment'),
         p(
-          'Annual dues cover Rotary International and district assessments. Members are encouraged to attend meetings regularly and participate in service projects — but the most important thing is showing up and connecting with the community.',
+          'Annual dues cover Rotary International and district assessments. Members are encouraged to attend meetings regularly and participate in service projects, but the most important thing is showing up and connecting with the community.',
         ),
         h2('Get in Touch'),
         p(
@@ -213,7 +213,7 @@ export const seedPages = async (payload: Payload): Promise<void> => {
         p('Tuesdays at 5:30 PM (social time begins at 5:15 PM)'),
         h2('Social Media'),
         p('Facebook & Instagram: @dlhrotaryclub'),
-        p('Press inquiries: contact Lisa Schropp at The Express — www.lockhaven.com'),
+        p('Press inquiries: contact Lisa Schropp at The Express (www.lockhaven.com)'),
       ),
     },
   })

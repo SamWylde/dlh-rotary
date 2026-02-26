@@ -27,7 +27,7 @@ export const StayConnectedSection = () => (
         marginBottom: 'var(--section-cta-body-mb, 24px)',
       }}
     >
-      Follow us on Facebook or get in touch — we&apos;d love to hear from you.
+      Follow us on Facebook or get in touch. We&apos;d love to hear from you.
     </p>
     <div style={{ display: 'inline-flex', gap: 'var(--section-cta-btn-gap, 16px)', flexWrap: 'wrap', justifyContent: 'center' }}>
       <a
