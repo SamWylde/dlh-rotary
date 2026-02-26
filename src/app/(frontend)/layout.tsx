@@ -16,14 +16,14 @@ const libreBaskerville = Libre_Baskerville({
   weight: ['400', '700'],
   style: ['normal', 'italic'],
   variable: '--font-libre-baskerville',
-  display: 'swap',
+  display: 'optional',
 })
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-dm-sans',
-  display: 'swap',
+  display: 'optional',
 })
 
 export const dynamic = 'force-dynamic'
