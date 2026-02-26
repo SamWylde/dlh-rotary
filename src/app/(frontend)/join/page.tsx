@@ -117,35 +117,6 @@ export default function JoinPage() {
         </div>
       </section>
 
-      {/* Meeting Info Bar */}
-      <div
-        className="full-bleed"
-        style={{
-          background: 'var(--color-secondary)',
-          padding: '14px 40px',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '24px',
-            flexWrap: 'wrap',
-            color: 'var(--color-secondary-foreground)',
-            fontSize: '14px',
-            fontWeight: 600,
-            fontFamily: 'var(--font-body)',
-          }}
-        >
-          <span>📅 Every Tuesday at 5:30 PM</span>
-          <span style={{ opacity: 0.4 }}>|</span>
-          <span>📍 Poorman Gallery (Room TBA), 352 E. Water St., Lock Haven</span>
-          <span style={{ opacity: 0.4 }}>|</span>
-          <span>☕ Social time starts at 5:15</span>
-        </div>
-      </div>
-
       {/* Just Show Up section */}
       <section
         style={{
@@ -171,12 +142,41 @@ export default function JoinPage() {
             lineHeight: 1.8,
             color: 'var(--color-muted-foreground)',
             fontFamily: 'var(--font-body)',
+            marginBottom: '24px',
           }}
         >
           No invitation needed. Come to any Tuesday meeting as our guest. Grab a seat, meet the members,
           and see what we&apos;re all about. We alternate between regular meetings with guest speakers and
           work sessions for active projects. In severe weather, Zoom is available.
         </p>
+        <div
+          style={{
+            background: 'var(--color-card)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '8px',
+            padding: '24px',
+            textAlign: 'left',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            fontSize: '15px',
+            fontFamily: 'var(--font-body)',
+            color: 'var(--color-foreground)',
+          }}
+        >
+          <p>
+            <strong style={{ color: 'var(--color-primary)' }}>When:</strong>{' '}
+            Every Tuesday at 5:30 PM (social time starts at 5:15)
+          </p>
+          <p>
+            <strong style={{ color: 'var(--color-primary)' }}>Where:</strong>{' '}
+            Poorman Gallery, 352 E. Water St., Lock Haven. Signs are posted in the building directing you to the meeting room.
+          </p>
+          <p>
+            <strong style={{ color: 'var(--color-primary)' }}>Contact:</strong>{' '}
+            <a href="mailto:dlhrotary@gmail.com" style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>dlhrotary@gmail.com</a>
+          </p>
+        </div>
       </section>
 
       {/* What to Expect Cards */}

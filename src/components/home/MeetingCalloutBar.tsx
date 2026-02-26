@@ -19,7 +19,7 @@ export const MeetingCalloutBar = () => (
         flexWrap: 'wrap',
       }}
     >
-      <span>📍 Every Tuesday at 5:30 PM</span>
+      <span>Every Tuesday at 5:30 PM</span>
       <span style={{ opacity: 'var(--meeting-separator-opacity, 0.4)' }}>|</span>
       <span>Poorman Gallery, 352 E. Water St., Lock Haven, PA</span>
       <span style={{ opacity: 'var(--meeting-separator-opacity, 0.4)' }}>|</span>
