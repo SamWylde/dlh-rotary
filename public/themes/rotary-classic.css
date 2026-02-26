@@ -152,8 +152,8 @@
   --radius: 0.5rem;
 
   /* ======= TYPOGRAPHY ======= */
-  --font-heading: var(--font-libre-baskerville), Georgia, serif;
-  --font-body: var(--font-dm-sans), sans-serif;
+  --font-heading: 'Libre Baskerville', Georgia, serif;
+  --font-body: 'DM Sans', sans-serif;
   --club-name-size: 15px;
   --club-name-weight: 700;
   --club-name-spacing: 0.02em;
