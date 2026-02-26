@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { DayPilotMonth } from '@daypilot/daypilot-lite-react'
 
@@ -54,6 +54,14 @@ export const EventCalendar = ({ events }: EventCalendarProps) => {
     const now = new Date()
     return formatMonthStart(now.getFullYear(), now.getMonth())
   })
+  const [cellHeight, setCellHeight] = useState(120)
+
+  useEffect(() => {
+    const updateHeight = () => setCellHeight(window.innerWidth < 640 ? 80 : 120)
+    updateHeight()
+    window.addEventListener('resize', updateHeight)
+    return () => window.removeEventListener('resize', updateHeight)
+  }, [])
 
   const calendarEvents = useMemo(
     () =>
@@ -110,7 +118,7 @@ export const EventCalendar = ({ events }: EventCalendarProps) => {
       <div aria-label="Monthly event calendar" role="region">
       <DayPilotMonth
         cellHeaderHeight={24}
-        cellHeight={120}
+        cellHeight={cellHeight}
         eventClickHandling="Enabled"
         eventDeleteHandling="Disabled"
         eventMoveHandling="Disabled"

@@ -1,4 +1,5 @@
-import { EventCalendar, type EventCalendarEvent } from '@/components/events/EventCalendar'
+import type { EventCalendarEvent } from '@/components/events/EventCalendar'
+import { LazyEventCalendar } from '@/components/events/LazyEventCalendar'
 import { PageHero } from '@/components/layout/PageHero'
 import { getCurrentUser } from '@/lib/auth'
 import { getEvents } from '@/lib/content'
@@ -40,7 +41,7 @@ export default async function EventsCalendarPage() {
         }}
       >
         {calendarEvents.length > 0 ? (
-          <EventCalendar events={calendarEvents} />
+          <LazyEventCalendar events={calendarEvents} />
         ) : (
           <p
             style={{

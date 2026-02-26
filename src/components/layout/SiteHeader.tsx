@@ -30,6 +30,8 @@ export const SiteHeader = ({
             src="/rotary-logo.svg"
             alt=""
             className="shrink-0"
+            width={42}
+            height={42}
             style={{ height: 'var(--header-logo-size, 42px)', width: 'var(--header-logo-size, 42px)' }}
             aria-hidden="true"
           />

@@ -20,10 +20,10 @@
   /* ======= TEXT HIERARCHY ======= */
   --color-foreground: #1a1a2e;
   --color-muted-foreground: #555;
-  --color-text-light: #888;
-  --color-text-lighter: #999;
-  --color-text-muted: #777;
-  --color-text-subtle: #666;
+  --color-text-light: #6b7280;
+  --color-text-lighter: #888;
+  --color-text-muted: #555;
+  --color-text-subtle: #555;
 
   /* ======= ON-DARK TEXT (for dark bgs like hero, CTA, footer) ======= */
   --color-on-dark: #ffffff;
@@ -152,8 +152,8 @@
   --radius: 0.5rem;
 
   /* ======= TYPOGRAPHY ======= */
-  --font-heading: 'Libre Baskerville', Georgia, serif;
-  --font-body: 'DM Sans', sans-serif;
+  --font-heading: var(--font-libre-baskerville), Georgia, serif;
+  --font-body: var(--font-dm-sans), sans-serif;
   --club-name-size: 15px;
   --club-name-weight: 700;
   --club-name-spacing: 0.02em;

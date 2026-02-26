@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { DM_Sans, Libre_Baskerville } from 'next/font/google'
 import React from 'react'
 
 import { SiteFooter } from '@/components/layout/SiteFooter'
@@ -9,6 +10,21 @@ import type { FooterNavEntry, MainNavEntry } from '@/lib/nav'
 import { getPayloadClient } from '@/lib/payload'
 
 import './globals.css'
+
+const libreBaskerville = Libre_Baskerville({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-libre-baskerville',
+  display: 'swap',
+})
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-dm-sans',
+  display: 'swap',
+})
 
 export const dynamic = 'force-dynamic'
 
@@ -57,14 +73,8 @@ export default async function FrontendLayout({
   }
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${libreBaskerville.variable} ${dmSans.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
-          rel="stylesheet"
-        />
         <ThemeLoader activeTheme={activeTheme} customAccentColor={customAccentColor} />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
       </head>

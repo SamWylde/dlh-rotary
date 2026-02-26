@@ -39,6 +39,7 @@ export const HeroBlock = ({ block }: { block: HeroBlockData }) => {
             alt={media?.alt || heading || 'Hero image'}
             className="object-cover"
             fill
+            priority
             sizes="(min-width: 768px) 40vw, 100vw"
             src={imageURL}
           />
