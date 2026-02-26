@@ -29,15 +29,9 @@ export const SiteFooter = ({
         </p>
         <p>{address || 'PO Box 634, Lock Haven, PA 17745'}</p>
         <p>
-          {contactPhone && (
-            <>📞 <a href={`tel:${contactPhone.replace(/\D/g, '')}`} style={{ color: 'inherit' }}>{contactPhone}</a> · </>
-          )}
-          {contactEmail && (
-            <>✉️ <a href={`mailto:${contactEmail}`} style={{ color: 'inherit' }}>{contactEmail}</a></>
-          )}
-          {!contactPhone && !contactEmail && (
-            <>📞 (814) 571-5324 · ✉️ dlhrotary@gmail.com</>
-          )}
+          📞 <a href={`tel:${(contactPhone || '(814) 571-5324').replace(/\D/g, '')}`} style={{ color: 'inherit' }}>{contactPhone || '(814) 571-5324'}</a>
+          {' · '}
+          ✉️ <a href={`mailto:${contactEmail || 'dlhrotary@gmail.com'}`} style={{ color: 'inherit' }}>{contactEmail || 'dlhrotary@gmail.com'}</a>
         </p>
       </div>
 

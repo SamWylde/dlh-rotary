@@ -5,11 +5,9 @@ import type { Project } from '@/payload-types'
 
 const PROJECT_ICONS: Record<string, string> = {
   'community-service': '🤝',
-  'youth-service': '🎓',
+  'youth': '🎓',
   'international': '🌍',
-  'fundraising': '💰',
-  'scholarship': '📚',
-  'environment': '🌳',
+  'fundraiser': '💰',
 }
 
 export type HomeProject = Pick<Project, 'id' | 'slug' | 'title' | 'category' | 'description'>

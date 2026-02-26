@@ -12,5 +12,10 @@ const readNodeText = (node: unknown): string => {
 
 export const lexicalToPlainText = (value: unknown): string => {
   if (!value || typeof value !== 'object') return ''
+
+  // Lexical stores content under a `root` property
+  const root = (value as { root?: unknown }).root
+  if (root && typeof root === 'object') return readNodeText(root)
+
   return readNodeText(value)
 }
