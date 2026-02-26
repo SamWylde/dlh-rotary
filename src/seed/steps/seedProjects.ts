@@ -24,7 +24,7 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
         ),
         h3('How to Participate'),
         p(
-          'Sponsor a flag for $35 to honor or remember someone special. Corporate sponsorships are also available. Flag sponsorship deadline: May 11, 2026. Corporate sponsorship deadline: May 8, 2026. Contact dlhrotary@gmail.com or Wendy Stiver at 570-295-3443.',
+          'Sponsor a flag for $35 to honor or remember someone special. Corporate sponsorships are also available. Flag sponsorship deadline: May 11, 2026. Corporate sponsorship deadline: May 8, 2026. Contact dlhrotary@gmail.com.',
         ),
         h3('Angel Partners'),
         p(

@@ -1,9 +1,11 @@
+import { RichText } from '@payloadcms/richtext-lexical/react'
+import type { SerializedEditorState } from 'lexical'
 import { notFound } from 'next/navigation'
 
+import { PageHero } from '@/components/layout/PageHero'
 import { getCurrentUser } from '@/lib/auth'
 import { getAnnouncementBySlug } from '@/lib/content'
 import { makeSlugMetadata } from '@/lib/metadata'
-import { lexicalToPlainText } from '@/lib/richText'
 
 export const generateMetadata = makeSlugMetadata(getAnnouncementBySlug, (a) => a.content)
 
@@ -16,13 +18,30 @@ export default async function AnnouncementDetailPage({ params }: { params: Promi
     notFound()
   }
 
+  const dateStr = new Date(announcement.publishedDate).toLocaleDateString('en-US', { dateStyle: 'medium' })
+
   return (
-    <article className="grid gap-4 rounded-lg border border-border bg-card p-6">
-      <h1 className="text-3xl font-semibold">{announcement.title}</h1>
-      <p className="text-sm text-muted-foreground">
-        {new Date(announcement.publishedDate).toLocaleDateString('en-US')} - {announcement.priority}
-      </p>
-      <p>{lexicalToPlainText(announcement.content)}</p>
-    </article>
+    <div className="-mt-8 -mb-8">
+      <PageHero title={announcement.title} subtitle={dateStr} />
+      <section
+        style={{
+          maxWidth: '700px',
+          margin: '0 auto',
+          padding: '48px 40px',
+        }}
+      >
+        {announcement.content && (
+          <div
+            className="prose max-w-none"
+            style={{
+              fontFamily: 'var(--font-body)',
+              color: 'var(--color-foreground)',
+            }}
+          >
+            <RichText data={announcement.content as SerializedEditorState} />
+          </div>
+        )}
+      </section>
+    </div>
   )
 }

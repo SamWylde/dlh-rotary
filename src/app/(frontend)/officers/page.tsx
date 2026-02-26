@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
+import { PageHero } from '@/components/layout/PageHero'
 import { PaginationControls } from '@/components/layout/PaginationControls'
 import { getCurrentUser } from '@/lib/auth'
 import { getOfficersPage } from '@/lib/content'
@@ -31,23 +32,80 @@ export default async function OfficersPage({
   const { currentPage, totalPages } = getPaginationState(page, officers)
 
   return (
-    <section className="grid gap-4">
-      <h1 className="text-3xl font-semibold">Current Officers</h1>
-      {officers.docs.length === 0 ? (
-        <p className="text-muted-foreground">No officers listed yet.</p>
-      ) : (
-        <div className="grid gap-3 md:grid-cols-2">
-          {officers.docs.map((officer) => (
-            <article className="rounded-lg border border-border bg-card p-4" key={officer.id}>
-              <h2 className="text-xl font-medium">{officer.fullName}</h2>
-              {officer.title ? <p className="text-sm text-muted-foreground">{officer.title}</p> : null}
-              {user && officer.email ? <p className="mt-2 text-sm">{officer.email}</p> : null}
-              {user && officer.phone ? <p className="text-sm">{officer.phone}</p> : null}
-            </article>
-          ))}
+    <div className="-mt-8 -mb-8">
+      <PageHero title="Current Officers" subtitle="2025-26 leadership team" />
+      <section
+        style={{
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: '48px 40px',
+        }}
+      >
+        {officers.docs.length === 0 ? (
+          <p
+            style={{
+              textAlign: 'center',
+              color: 'var(--color-muted-foreground)',
+              fontFamily: 'var(--font-body)',
+            }}
+          >
+            No officers listed yet.
+          </p>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2">
+            {officers.docs.map((officer) => (
+              <div
+                key={officer.id}
+                style={{
+                  background: 'var(--color-card)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '8px',
+                  padding: '20px',
+                }}
+              >
+                <p
+                  style={{
+                    fontWeight: 700,
+                    fontSize: '16px',
+                    color: 'var(--color-foreground)',
+                    fontFamily: 'var(--font-body)',
+                  }}
+                >
+                  {officer.fullName}
+                </p>
+                {officer.title && (
+                  <p
+                    style={{
+                      fontSize: '14px',
+                      color: 'var(--color-primary)',
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 600,
+                      marginTop: '4px',
+                    }}
+                  >
+                    {officer.title}
+                  </p>
+                )}
+                {user && officer.email && (
+                  <p
+                    style={{
+                      fontSize: '13px',
+                      color: 'var(--color-muted-foreground)',
+                      fontFamily: 'var(--font-body)',
+                      marginTop: '8px',
+                    }}
+                  >
+                    {officer.email}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        <div style={{ marginTop: '32px' }}>
+          <PaginationControls basePath="/officers" currentPage={currentPage} totalPages={totalPages} />
         </div>
-      )}
-      <PaginationControls basePath="/officers" currentPage={currentPage} totalPages={totalPages} />
-    </section>
+      </section>
+    </div>
   )
 }

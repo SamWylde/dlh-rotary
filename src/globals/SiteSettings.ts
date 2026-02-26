@@ -36,7 +36,7 @@ export const SiteSettings: GlobalConfig = {
       admin: { description: 'Current club president contact info (displayed on Contact page)' },
       fields: [
         { name: 'name', type: 'text', defaultValue: 'Lisa Schropp' },
-        { name: 'phone', type: 'text', defaultValue: '814-244-2929' },
+        { name: 'phone', type: 'text' },
         { name: 'email', type: 'email', defaultValue: 'lschropp3@icloud.com' },
       ],
     },

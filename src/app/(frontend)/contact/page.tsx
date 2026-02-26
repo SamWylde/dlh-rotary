@@ -3,8 +3,9 @@ import type { SerializedEditorState } from 'lexical'
 import type { Metadata } from 'next'
 
 import { ContactForm } from '@/components/forms/ContactForm'
+import { PageHero } from '@/components/layout/PageHero'
 import { getCurrentUser } from '@/lib/auth'
-import { getPageBySlug, getSiteSettings } from '@/lib/content'
+import { getPageBySlug } from '@/lib/content'
 
 export const metadata: Metadata = {
   title: 'Contact | Rotary Club of Downtown Lock Haven',
@@ -12,26 +13,64 @@ export const metadata: Metadata = {
 
 export default async function ContactPage() {
   const { user } = await getCurrentUser()
-  const [page, siteSettings] = await Promise.all([getPageBySlug('contact', user), getSiteSettings(user)])
+  const page = await getPageBySlug('contact', user)
 
   return (
-    <section className="grid gap-6">
-      <article className="grid gap-4 rounded-lg border border-border bg-card p-6">
-        <h1 className="text-3xl font-semibold">{page?.title ?? 'Contact'}</h1>
+    <div className="-mt-8 -mb-8">
+      <PageHero title="Get in Touch" subtitle="We'd love to hear from you" />
+      <section
+        style={{
+          maxWidth: '700px',
+          margin: '0 auto',
+          padding: '48px 40px',
+        }}
+      >
         {page?.content ? (
-          <RichText className="prose max-w-none" data={page.content as SerializedEditorState} />
+          <div
+            className="prose max-w-none"
+            style={{
+              fontFamily: 'var(--font-body)',
+              color: 'var(--color-foreground)',
+              marginBottom: '40px',
+            }}
+          >
+            <RichText data={page.content as SerializedEditorState} />
+          </div>
         ) : (
-          <>
-            <p>Email: {siteSettings.email || 'dlhrotary@gmail.com'}</p>
-            {siteSettings.meetingInfo?.day || siteSettings.meetingInfo?.time ? (
-              <p>
-                Meeting: {[siteSettings.meetingInfo.day, siteSettings.meetingInfo.time].filter(Boolean).join(' ')}
-              </p>
-            ) : null}
-          </>
+          <div
+            style={{
+              fontFamily: 'var(--font-body)',
+              color: 'var(--color-muted-foreground)',
+              marginBottom: '40px',
+              textAlign: 'center',
+            }}
+          >
+            <p>Email: dlhrotary@gmail.com</p>
+            <p>PO Box 634, Lock Haven, PA 17745</p>
+          </div>
         )}
-      </article>
-      <ContactForm user={user} />
-    </section>
+        <div
+          style={{
+            background: 'var(--color-card)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '8px',
+            padding: '32px',
+          }}
+        >
+          <h2
+            style={{
+              fontSize: '20px',
+              fontWeight: 700,
+              color: 'var(--color-primary)',
+              fontFamily: 'var(--font-heading)',
+              marginBottom: '20px',
+            }}
+          >
+            Send a Message
+          </h2>
+          <ContactForm user={user} />
+        </div>
+      </section>
+    </div>
   )
 }

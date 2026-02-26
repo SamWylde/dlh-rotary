@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 import { DocumentList } from '@/components/documents/DocumentList'
+import { PageHero } from '@/components/layout/PageHero'
 import { PaginationControls } from '@/components/layout/PaginationControls'
 import { requireUser } from '@/lib/auth'
 import { getDocumentsPage } from '@/lib/content'
@@ -40,10 +41,20 @@ export default async function DocumentsPage({
   const { currentPage, totalPages } = getPaginationState(page, documents)
 
   return (
-    <section className="grid gap-4">
-      <h1 className="text-3xl font-semibold">Document Repository</h1>
-      <DocumentList category={category} documents={documents.docs} query={q} />
-      <PaginationControls basePath="/documents" currentPage={currentPage} totalPages={totalPages} query={query} />
-    </section>
+    <div className="-mt-8 -mb-8">
+      <PageHero title="Documents" subtitle="Club files and resources" />
+      <section
+        style={{
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: '48px 40px',
+        }}
+      >
+        <DocumentList category={category} documents={documents.docs} query={q} />
+        <div style={{ marginTop: '32px' }}>
+          <PaginationControls basePath="/documents" currentPage={currentPage} totalPages={totalPages} query={query} />
+        </div>
+      </section>
+    </div>
   )
 }

@@ -2,6 +2,7 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 import type { SerializedEditorState } from 'lexical'
 import type { Metadata } from 'next'
 
+import { PageHero } from '@/components/layout/PageHero'
 import { PageLayoutRenderer } from '@/components/pages/PageLayoutRenderer'
 import { getCurrentUser } from '@/lib/auth'
 import { getPageBySlug } from '@/lib/content'
@@ -19,16 +20,40 @@ export default async function AboutPage() {
   }
 
   return (
-    <article className="grid gap-4 rounded-lg border border-border bg-card p-6">
-      <h1 className="text-3xl font-semibold">{page?.title ?? 'About Our Club'}</h1>
-      {page?.content ? (
-        <RichText className="prose max-w-none" data={page.content as SerializedEditorState} />
-      ) : (
-        <p>
-          The Rotary Club of Downtown Lock Haven serves Clinton County through local projects, scholarships,
-          and partnerships with community organizations.
-        </p>
-      )}
-    </article>
+    <div className="-mt-8 -mb-8">
+      <PageHero title="About Our Club" subtitle="Service Above Self since 2003" />
+      <section
+        style={{
+          maxWidth: '800px',
+          margin: '0 auto',
+          padding: '48px 40px',
+        }}
+      >
+        {page?.content ? (
+          <div
+            className="prose max-w-none"
+            style={{
+              fontFamily: 'var(--font-body)',
+              color: 'var(--color-foreground)',
+            }}
+          >
+            <RichText data={page.content as SerializedEditorState} />
+          </div>
+        ) : (
+          <p
+            style={{
+              fontSize: '16px',
+              lineHeight: 1.8,
+              color: 'var(--color-muted-foreground)',
+              fontFamily: 'var(--font-body)',
+              textAlign: 'center',
+            }}
+          >
+            The Rotary Club of Downtown Lock Haven serves Clinton County through local projects, scholarships,
+            and partnerships with community organizations.
+          </p>
+        )}
+      </section>
+    </div>
   )
 }

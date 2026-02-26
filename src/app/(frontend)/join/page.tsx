@@ -565,7 +565,9 @@ export default function JoinPage() {
             ✉️ dlhrotary@gmail.com
           </a>
           <a
-            href="tel:814-244-2929"
+            href="https://www.facebook.com/profile.php?id=100064347773545"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               border: '2px solid var(--color-on-dark-30)',
               color: 'var(--color-on-dark)',
@@ -578,7 +580,7 @@ export default function JoinPage() {
               background: 'transparent',
             }}
           >
-            📞 Lisa Schropp: 814-244-2929
+            📘 Follow on Facebook
           </a>
         </div>
       </section>

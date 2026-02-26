@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 import { EventCard } from '@/components/events/EventCard'
+import { PageHero } from '@/components/layout/PageHero'
 import { PaginationControls } from '@/components/layout/PaginationControls'
 import { getCurrentUser } from '@/lib/auth'
 import { getEventsPage } from '@/lib/content'
@@ -33,23 +34,50 @@ export default async function EventsPage({
   const { currentPage, totalPages } = getPaginationState(page, events)
 
   return (
-    <section className="grid gap-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-semibold">Events</h1>
-        <Link className="underline" href="/events/calendar">
-          Calendar View
-        </Link>
-      </div>
-      {events.docs.length === 0 ? (
-        <p className="text-muted-foreground">No events yet.</p>
-      ) : (
-        <div className="grid gap-3">
-          {events.docs.map((event) => (
-            <EventCard event={event} key={event.id} />
-          ))}
+    <div className="-mt-8 -mb-8">
+      <PageHero title="Events" subtitle="Meetings, service projects, and community gatherings" />
+      <section
+        style={{
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: '48px 40px',
+        }}
+      >
+        <div style={{ textAlign: 'right', marginBottom: '20px' }}>
+          <Link
+            href="/events/calendar"
+            style={{
+              color: 'var(--color-primary)',
+              fontFamily: 'var(--font-body)',
+              fontSize: '14px',
+              fontWeight: 600,
+              textDecoration: 'underline',
+            }}
+          >
+            Calendar View
+          </Link>
         </div>
-      )}
-      <PaginationControls basePath="/events" currentPage={currentPage} totalPages={totalPages} />
-    </section>
+        {events.docs.length === 0 ? (
+          <p
+            style={{
+              textAlign: 'center',
+              color: 'var(--color-muted-foreground)',
+              fontFamily: 'var(--font-body)',
+            }}
+          >
+            No events yet.
+          </p>
+        ) : (
+          <div className="grid gap-3">
+            {events.docs.map((event) => (
+              <EventCard event={event} key={event.id} />
+            ))}
+          </div>
+        )}
+        <div style={{ marginTop: '32px' }}>
+          <PaginationControls basePath="/events" currentPage={currentPage} totalPages={totalPages} />
+        </div>
+      </section>
+    </div>
   )
 }

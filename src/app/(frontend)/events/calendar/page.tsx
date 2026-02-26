@@ -1,5 +1,5 @@
 import { EventCalendar, type EventCalendarEvent } from '@/components/events/EventCalendar'
-
+import { PageHero } from '@/components/layout/PageHero'
 import { getCurrentUser } from '@/lib/auth'
 import { getEvents } from '@/lib/content'
 
@@ -30,16 +30,29 @@ export default async function EventsCalendarPage() {
     .filter((event): event is EventCalendarEvent => Boolean(event))
 
   return (
-    <section className="grid gap-4">
-      <h1 className="text-3xl font-semibold">Events Calendar</h1>
-      <p className="text-sm text-muted-foreground">Browse upcoming and past club events in a monthly calendar view.</p>
-      {calendarEvents.length > 0 ? (
-        <EventCalendar events={calendarEvents} />
-      ) : (
-        <p className="rounded border border-border bg-card p-4 text-sm text-muted-foreground">
-          No events are currently available.
-        </p>
-      )}
-    </section>
+    <div className="-mt-8 -mb-8">
+      <PageHero title="Events Calendar" subtitle="Browse upcoming and past club events" />
+      <section
+        style={{
+          maxWidth: '1000px',
+          margin: '0 auto',
+          padding: '48px 40px',
+        }}
+      >
+        {calendarEvents.length > 0 ? (
+          <EventCalendar events={calendarEvents} />
+        ) : (
+          <p
+            style={{
+              textAlign: 'center',
+              color: 'var(--color-muted-foreground)',
+              fontFamily: 'var(--font-body)',
+            }}
+          >
+            No events are currently available.
+          </p>
+        )}
+      </section>
+    </div>
   )
 }

@@ -11,7 +11,7 @@ export const seedGlobals = async (payload: Payload): Promise<void> => {
       address: 'PO Box 634\nLock Haven, PA 17745',
       presidentContact: {
         name: 'Lisa Schropp',
-        phone: '814-244-2929',
+        phone: '',
         email: 'lschropp3@icloud.com',
       },
       meetingInfo: {

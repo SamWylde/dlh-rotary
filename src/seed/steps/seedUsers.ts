@@ -29,7 +29,7 @@ export const seedUsers = async (payload: Payload, defaultPassword: string): Prom
       email: 'lschropp3@icloud.com',
       fullName: 'Lisa Schropp',
       title: 'President',
-      phone: '814-244-2929',
+      phone: '',
       bio: 'Club president. Works at The Express newspaper. Chairs publicity for Flags of Honor and co-leads the project overall.',
       showEmail: true,
     },

@@ -1,6 +1,5 @@
 export const SiteFooter = ({
   contactEmail,
-  contactPhone,
   address,
 }: {
   nav?: unknown[]
@@ -29,8 +28,6 @@ export const SiteFooter = ({
         </p>
         <p>{address || 'PO Box 634, Lock Haven, PA 17745'}</p>
         <p>
-          📞 <a href={`tel:${(contactPhone || '(814) 571-5324').replace(/\D/g, '')}`} style={{ color: 'inherit' }}>{contactPhone || '(814) 571-5324'}</a>
-          {' · '}
           ✉️ <a href={`mailto:${contactEmail || 'dlhrotary@gmail.com'}`} style={{ color: 'inherit' }}>{contactEmail || 'dlhrotary@gmail.com'}</a>
         </p>
       </div>

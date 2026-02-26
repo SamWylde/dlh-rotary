@@ -185,7 +185,7 @@ export const seedPages = async (payload: Payload): Promise<void> => {
         ),
         h2('Get in Touch'),
         p(
-          'Interested? Email us at dlhrotary@gmail.com, call President Lisa Schropp at 814-244-2929, or visit our Facebook page (Rotary Club of Downtown Lock Haven). You can also attend our October People of Action Open House to learn more. We\'d love to have you.',
+          'Interested? Email us at dlhrotary@gmail.com or visit our Facebook page (Rotary Club of Downtown Lock Haven). You can also attend our October People of Action Open House to learn more. We\'d love to have you.',
         ),
       ),
     },
@@ -206,8 +206,7 @@ export const seedPages = async (payload: Payload): Promise<void> => {
         p('Mailing Address: PO Box 634, Lock Haven, PA 17745'),
         h2('Club President'),
         p('Lisa Schropp'),
-        p('Phone: 814-244-2929'),
-        p('Email: lschropp3@icloud.com'),
+        p('Email: dlhrotary@gmail.com'),
         h2('Meeting Location'),
         p('Poorman Gallery, 352 E. Water St., Lock Haven, PA 17745'),
         p('Tuesdays at 5:30 PM (social time begins at 5:15 PM)'),
@@ -230,7 +229,7 @@ export const seedPages = async (payload: Payload): Promise<void> => {
       content: lexical(
         h2('Sponsor a Flag'),
         p(
-          'Support our Flags of Honor project by sponsoring an American flag ($35) to be displayed in Triangle Park during Memorial Day. Each flag is placed in honor or memory of someone special to you. Contact dlhrotary@gmail.com or Wendy Stiver at 570-295-3443 to order.',
+          'Support our Flags of Honor project by sponsoring an American flag ($35) to be displayed in Triangle Park during Memorial Day. Each flag is placed in honor or memory of someone special to you. Contact dlhrotary@gmail.com to order.',
         ),
         h2('Angel Lights Luminaries'),
         p(

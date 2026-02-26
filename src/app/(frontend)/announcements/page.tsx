@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 import { AnnouncementCard } from '@/components/announcements/AnnouncementCard'
+import { PageHero } from '@/components/layout/PageHero'
 import { PaginationControls } from '@/components/layout/PaginationControls'
 import { getCurrentUser } from '@/lib/auth'
 import { getAnnouncementsPage } from '@/lib/content'
@@ -32,22 +33,36 @@ export default async function AnnouncementsPage({
   const { currentPage, totalPages } = getPaginationState(page, announcements)
 
   return (
-    <section className="grid gap-4">
-      <h1 className="text-3xl font-semibold">Announcements</h1>
-      {announcements.docs.length === 0 ? (
-        <p className="text-muted-foreground">No announcements yet.</p>
-      ) : (
-        <div className="grid gap-3">
-          {announcements.docs.map((announcement) => (
-            <AnnouncementCard announcement={announcement} key={announcement.id} />
-          ))}
+    <div className="-mt-8 -mb-8">
+      <PageHero title="Announcements" subtitle="News and updates from the club" />
+      <section
+        style={{
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: '48px 40px',
+        }}
+      >
+        {announcements.docs.length === 0 ? (
+          <p
+            style={{
+              textAlign: 'center',
+              color: 'var(--color-muted-foreground)',
+              fontFamily: 'var(--font-body)',
+            }}
+          >
+            No announcements yet.
+          </p>
+        ) : (
+          <div className="grid gap-3">
+            {announcements.docs.map((announcement) => (
+              <AnnouncementCard announcement={announcement} key={announcement.id} />
+            ))}
+          </div>
+        )}
+        <div style={{ marginTop: '32px' }}>
+          <PaginationControls basePath="/announcements" currentPage={currentPage} totalPages={totalPages} />
         </div>
-      )}
-      <PaginationControls
-        basePath="/announcements"
-        currentPage={currentPage}
-        totalPages={totalPages}
-      />
-    </section>
+      </section>
+    </div>
   )
 }
