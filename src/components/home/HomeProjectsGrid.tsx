@@ -3,60 +3,95 @@ import Link from 'next/link'
 import { lexicalToPlainText } from '@/lib/richText'
 import type { Project } from '@/payload-types'
 
+const PROJECT_ICONS: Record<string, string> = {
+  'community-service': '🤝',
+  'youth-service': '🎓',
+  'international': '🌍',
+  'fundraising': '💰',
+  'scholarship': '📚',
+  'environment': '🌳',
+}
+
 export type HomeProject = Pick<Project, 'id' | 'slug' | 'title' | 'category' | 'description'>
 
 export const HomeProjectsGrid = ({ projects }: { projects: HomeProject[] }) => (
-  <div className="full-bleed" style={{ background: 'var(--color-background)' }}>
-    <div className="mx-auto max-w-6xl px-4 py-16">
-      <div className="mb-8 flex items-end justify-between">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-widest" style={{ color: 'var(--color-secondary)' }}>
-            Our Work
-          </p>
-          <h2 className="mt-1 text-3xl font-semibold">What We Do</h2>
-        </div>
-        <Link
-          className="text-sm font-medium underline-offset-4 hover:underline"
-          style={{ color: 'var(--color-primary)' }}
-          href="/projects"
-        >
-          All Projects -&gt;
-        </Link>
-      </div>
+  <div
+    className="full-bleed"
+    style={{ background: 'var(--color-background-white, #fff)' }}
+  >
+    <div
+      style={{
+        maxWidth: 'var(--section-projects-max-width, 1000px)',
+        margin: '0 auto',
+        padding: 'var(--section-projects-padding-y, 56px) var(--section-projects-padding-x, 40px)',
+      }}
+    >
+      <h2
+        style={{
+          fontSize: 'var(--section-projects-heading-size, 28px)',
+          color: 'var(--color-primary)',
+          textAlign: 'center',
+          marginBottom: 'var(--section-projects-heading-mb, 32px)',
+          fontFamily: 'var(--font-heading)',
+        }}
+      >
+        What We Do
+      </h2>
 
       {projects.length === 0 ? (
-        <p className="text-muted-foreground">No projects yet.</p>
+        <p style={{ color: 'var(--color-muted-foreground)', fontFamily: 'var(--font-body)' }}>No projects yet.</p>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
-            <Link
-              key={project.id}
-              href={`/projects/${project.slug}`}
-              className="group grid gap-3 rounded-xl border border-border bg-card p-5 transition-shadow hover:border-primary hover:shadow-md"
-            >
-              <div
-                className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold"
+        <div
+          className="grid md:grid-cols-2 lg:grid-cols-3"
+          style={{ gap: 'var(--project-grid-gap, 20px)' }}
+        >
+          {projects.map((project) => {
+            const icon = (project.category && PROJECT_ICONS[project.category]) || '⚙️'
+
+            return (
+              <Link
+                key={project.id}
+                href={`/projects/${project.slug}`}
                 style={{
-                  background: 'var(--color-secondary)',
-                  color: 'var(--color-secondary-foreground)',
+                  background: 'var(--color-card)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: 'var(--project-card-radius, 8px)',
+                  padding: 'var(--project-card-padding, 24px)',
+                  textAlign: 'center',
+                  textDecoration: 'none',
+                  display: 'block',
                 }}
               >
-                {project.title.charAt(0).toUpperCase()}
-              </div>
-              <p className="font-semibold leading-snug group-hover:text-primary">{project.title}</p>
-              {project.category ? (
-                <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'var(--color-secondary)' }}>
-                  {project.category.replace(/-/g, ' ')}
+                <div style={{ fontSize: 'var(--project-icon-size, 32px)', marginBottom: 'var(--project-icon-mb, 12px)' }}>
+                  {icon}
+                </div>
+                <p
+                  style={{
+                    fontWeight: 700,
+                    fontSize: 'var(--project-name-size, 15px)',
+                    color: 'var(--color-foreground)',
+                    fontFamily: 'var(--font-body)',
+                    marginBottom: '6px',
+                  }}
+                >
+                  {project.title}
                 </p>
-              ) : null}
-              <p className="line-clamp-3 text-sm text-muted-foreground">
-                {lexicalToPlainText(project.description).slice(0, 160)}
-              </p>
-            </Link>
-          ))}
+                <p
+                  style={{
+                    fontSize: 'var(--project-desc-size, 13px)',
+                    color: 'var(--color-text-muted)',
+                    fontFamily: 'var(--font-body)',
+                    lineHeight: 'var(--project-desc-line-height, 1.5)',
+                    margin: 0,
+                  }}
+                >
+                  {lexicalToPlainText(project.description).slice(0, 100)}
+                </p>
+              </Link>
+            )
+          })}
         </div>
       )}
     </div>
   </div>
 )
-

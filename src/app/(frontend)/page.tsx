@@ -37,8 +37,18 @@ export default function HomePage() {
       <MeetingCalloutBar />
       <WhoWeAreSection />
 
-      <section className="pb-12">
-        <div className="grid gap-8 md:grid-cols-2">
+      {/* Events + Announcements side by side */}
+      <section
+        style={{
+          maxWidth: 'var(--section-ea-max-width, 1000px)',
+          margin: '0 auto',
+          padding: 'var(--section-ea-padding-top, 20px) 40px var(--section-ea-padding-bottom, 56px)',
+        }}
+      >
+        <div
+          className="grid md:grid-cols-2"
+          style={{ gap: 'var(--section-ea-grid-gap, 32px)' }}
+        >
           <Suspense fallback={<SectionSkeleton />}>
             <UpcomingEventsSection />
           </Suspense>
@@ -56,4 +66,3 @@ export default function HomePage() {
     </div>
   )
 }
-

@@ -1,23 +1,33 @@
-import Link from 'next/link'
-
 export const WhoWeAreSection = () => (
-  <section className="py-12 text-center">
-    <p className="text-sm font-semibold uppercase tracking-widest" style={{ color: 'var(--color-secondary)' }}>
-      About Us
-    </p>
-    <h2 className="mx-auto mt-2 max-w-2xl text-3xl font-semibold">Who We Are</h2>
-    <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+  <section
+    style={{
+      maxWidth: 'var(--section-who-max-width, 800px)',
+      margin: '0 auto',
+      padding: 'var(--section-who-padding-top, 56px) 40px var(--section-who-padding-bottom, 40px)',
+      textAlign: 'center',
+    }}
+  >
+    <h2
+      style={{
+        fontSize: 'var(--section-who-heading-size, 28px)',
+        color: 'var(--color-primary)',
+        marginBottom: '16px',
+        fontFamily: 'var(--font-heading)',
+      }}
+    >
+      Who We Are
+    </h2>
+    <p
+      style={{
+        fontSize: 'var(--section-who-body-size, 16px)',
+        lineHeight: 'var(--section-who-body-line-height, 1.8)',
+        color: 'var(--color-muted-foreground)',
+        fontFamily: 'var(--font-body)',
+      }}
+    >
       The Rotary Club of Downtown Lock Haven has been serving Clinton County for over 22 years.
       We&apos;re neighbors, friends, and community leaders who come together each week to create
-      positive, lasting change - locally and around the world. All are welcome.
+      positive, lasting change &mdash; locally and around the world. All are welcome.
     </p>
-    <Link
-      href="/about"
-      className="mt-6 inline-block rounded-lg px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
-      style={{ background: 'var(--color-primary)' }}
-    >
-      Learn More About Us
-    </Link>
   </section>
 )
-

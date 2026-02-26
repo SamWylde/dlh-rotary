@@ -15,16 +15,61 @@ export const SiteHeader = ({
   user: SessionUser | null
 }) => {
   return (
-    <header className="relative border-b border-border bg-[var(--color-header-bg,#17458F)] text-[var(--color-header-text,#fff)]">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
-        <Link className="flex items-center gap-2.5 font-semibold tracking-wide" href="/">
+    <header
+      className="relative"
+      style={{
+        background: 'var(--color-header-bg)',
+        borderBottom: 'var(--border-header-width, 3px) solid var(--color-header-border)',
+        padding: 'var(--header-padding-y, 16px) var(--header-padding-x, 40px)',
+      }}
+    >
+      <div className="mx-auto flex max-w-6xl items-center justify-between">
+        <Link className="flex items-center gap-3" href="/" style={{ textDecoration: 'none' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/rotary-logo.svg" alt="" className="h-10 w-10 shrink-0" aria-hidden="true" />
-          <span className="text-lg">Rotary Club of Downtown Lock Haven</span>
+          <img
+            src="/rotary-logo.svg"
+            alt=""
+            className="shrink-0"
+            style={{ height: 'var(--header-logo-size, 42px)', width: 'var(--header-logo-size, 42px)' }}
+            aria-hidden="true"
+          />
+          <div style={{ lineHeight: 1.3 }}>
+            <div
+              style={{
+                fontWeight: 'var(--club-name-weight, 700)' as unknown as number,
+                fontSize: 'var(--club-name-size, 15px)',
+                color: 'var(--color-header-text)',
+                letterSpacing: 'var(--club-name-spacing, 0.02em)',
+                fontFamily: 'var(--font-body)',
+              }}
+            >
+              Rotary Club of
+            </div>
+            <div
+              style={{
+                fontWeight: 'var(--club-name-weight, 700)' as unknown as number,
+                fontSize: 'var(--club-name-size, 15px)',
+                color: 'var(--color-header-text)',
+                fontFamily: 'var(--font-body)',
+              }}
+            >
+              Downtown Lock Haven
+            </div>
+          </div>
         </Link>
 
         {/* Desktop nav */}
-        <nav aria-label="Main Navigation" className="hidden flex-wrap items-center gap-3 text-sm md:flex">
+        <nav
+          aria-label="Main Navigation"
+          className="hidden items-center md:flex"
+          style={{
+            gap: 'var(--nav-gap, 24px)',
+            fontFamily: 'var(--font-body)',
+            fontWeight: 'var(--nav-font-weight, 500)' as unknown as number,
+            fontSize: 'var(--nav-font-size, 13px)',
+            color: 'var(--color-nav-text)',
+          }}
+        >
           {nav.map((entry, index) => {
             const href = resolveHref(entry.link)
             const children = getVisibleChildren(entry, user)
@@ -34,23 +79,25 @@ export const SiteHeader = ({
 
             const parentLink = isValidHref(href) ? (
               <Link
-                className="rounded px-2 py-1 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]"
+                className="cursor-pointer transition-colors"
                 href={href}
                 target={entry.link?.newTab ? '_blank' : undefined}
                 rel={entry.link?.newTab ? 'noopener noreferrer' : undefined}
+                style={{ borderBottom: '2px solid transparent', paddingBottom: '2px' }}
               >
                 {label}
               </Link>
             ) : hasChildren ? (
               <button
                 aria-label={`Open submenu for ${label}`}
-                className="rounded px-2 py-1 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]"
+                className="cursor-pointer transition-colors"
                 type="button"
+                style={{ borderBottom: '2px solid transparent', paddingBottom: '2px' }}
               >
                 {label}
               </button>
             ) : (
-              <span className="rounded px-2 py-1 text-[var(--color-header-muted-text,rgba(255,255,255,0.85))]">{label}</span>
+              <span style={{ borderBottom: '2px solid transparent', paddingBottom: '2px', opacity: 0.6 }}>{label}</span>
             )
 
             if (!hasChildren) {
@@ -70,16 +117,43 @@ export const SiteHeader = ({
               />
             )
           })}
+
           {user ? (
             <>
-              <Link className="rounded border border-[var(--color-header-border-muted,rgba(255,255,255,0.5))] px-2 py-1 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]" href="/account">
+              <Link
+                href="/account"
+                style={{
+                  background: 'var(--color-primary)',
+                  color: 'var(--color-primary-foreground)',
+                  padding: 'var(--nav-btn-padding, 6px 16px)',
+                  borderRadius: 'var(--nav-btn-radius, 4px)',
+                  fontSize: 'var(--nav-btn-font-size, 12px)',
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  fontFamily: 'var(--font-body)',
+                }}
+              >
                 Account
               </Link>
               <LogoutButton />
             </>
           ) : (
-            <Link className="rounded border border-[var(--color-header-border-muted,rgba(255,255,255,0.5))] px-2 py-1 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]" href="/login">
-              Member Login
+            <Link
+              href="/join"
+              style={{
+                background: 'var(--color-primary)',
+                color: 'var(--color-primary-foreground)',
+                padding: 'var(--nav-btn-padding, 6px 16px)',
+                borderRadius: 'var(--nav-btn-radius, 4px)',
+                fontSize: 'var(--nav-btn-font-size, 12px)',
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                fontFamily: 'var(--font-body)',
+              }}
+            >
+              Join Us
             </Link>
           )}
         </nav>

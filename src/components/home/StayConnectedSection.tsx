@@ -1,57 +1,68 @@
 import Link from 'next/link'
 
-import { FacebookFeed } from '@/components/layout/FacebookFeed'
-
 export const StayConnectedSection = () => (
   <section
     className="full-bleed"
     style={{
-      background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%)',
+      background: 'var(--color-primary)',
+      padding: 'var(--section-cta-padding-y, 48px) var(--section-cta-padding-x, 40px)',
+      textAlign: 'center',
     }}
   >
-    <div className="mx-auto max-w-6xl px-4 py-16">
-      <div className="grid gap-10 md:grid-cols-2 md:items-start">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-widest" style={{ color: 'var(--color-secondary)' }}>
-            Stay Connected
-          </p>
-          <h2 className="mt-2 text-3xl font-semibold" style={{ color: 'var(--color-primary-foreground)' }}>
-            Follow Our Journey
-          </h2>
-          <p className="mt-3 leading-relaxed" style={{ color: 'rgba(255,255,255,0.8)' }}>
-            Stay up to date with our latest projects, events, and community impact on Facebook.
-          </p>
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <a
-              href="https://www.facebook.com/profile.php?id=100064347773545"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-fit items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
-              style={{
-                background: 'var(--color-secondary)',
-                color: 'var(--color-secondary-foreground)',
-              }}
-            >
-              Follow on Facebook
-            </a>
-            <Link
-              href="/join"
-              className="inline-flex w-fit items-center gap-2 rounded-lg border px-5 py-3 text-sm font-semibold transition-colors hover:bg-white/10"
-              style={{
-                borderColor: 'rgba(255,255,255,0.4)',
-                color: 'var(--color-primary-foreground)',
-              }}
-            >
-              Become a Member
-            </Link>
-          </div>
-        </div>
-
-        <div className="overflow-hidden rounded-xl bg-white shadow-lg">
-          <FacebookFeed />
-        </div>
-      </div>
+    <h2
+      style={{
+        color: 'var(--color-on-dark)',
+        fontSize: 'var(--section-cta-heading-size, 24px)',
+        marginBottom: '12px',
+        fontFamily: 'var(--font-heading)',
+      }}
+    >
+      Stay Connected
+    </h2>
+    <p
+      style={{
+        color: 'var(--color-on-dark-70)',
+        fontFamily: 'var(--font-body)',
+        fontSize: 'var(--section-cta-body-size, 15px)',
+        marginBottom: 'var(--section-cta-body-mb, 24px)',
+      }}
+    >
+      Follow us on Facebook or get in touch — we&apos;d love to hear from you.
+    </p>
+    <div style={{ display: 'inline-flex', gap: 'var(--section-cta-btn-gap, 16px)', flexWrap: 'wrap', justifyContent: 'center' }}>
+      <a
+        href="https://www.facebook.com/profile.php?id=100064347773545"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          background: 'var(--color-secondary)',
+          color: 'var(--color-secondary-foreground)',
+          padding: 'var(--section-cta-btn-padding, 12px 28px)',
+          borderRadius: 'var(--section-cta-btn-radius, 4px)',
+          fontWeight: 700,
+          fontSize: 'var(--section-cta-btn-size, 14px)',
+          fontFamily: 'var(--font-body)',
+          textDecoration: 'none',
+        }}
+      >
+        📘 Follow on Facebook
+      </a>
+      <Link
+        href="/contact"
+        style={{
+          border: '2px solid var(--color-on-dark-30)',
+          color: 'var(--color-on-dark)',
+          padding: 'var(--section-cta-btn-padding, 12px 28px)',
+          borderRadius: 'var(--section-cta-btn-radius, 4px)',
+          fontWeight: 600,
+          fontSize: 'var(--section-cta-btn-size, 14px)',
+          fontFamily: 'var(--font-body)',
+          textDecoration: 'none',
+          background: 'transparent',
+        }}
+      >
+        ✉️ Contact Us
+      </Link>
     </div>
   </section>
 )
-

@@ -1,28 +1,29 @@
-import Link from 'next/link'
-
 export const MeetingCalloutBar = () => (
-  <div className="full-bleed" style={{ background: 'var(--color-secondary)' }}>
+  <div
+    className="full-bleed"
+    style={{
+      background: 'var(--color-secondary)',
+      padding: 'var(--meeting-padding-y, 14px) var(--meeting-padding-x, 40px)',
+    }}
+  >
     <div
-      className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-4"
-      style={{ color: 'var(--color-secondary-foreground)' }}
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '24px',
+        fontFamily: 'var(--font-body)',
+        fontSize: 'var(--meeting-font-size, 14px)',
+        fontWeight: 'var(--meeting-font-weight, 600)' as unknown as number,
+        color: 'var(--color-secondary-foreground)',
+        flexWrap: 'wrap',
+      }}
     >
-      <div>
-        <p className="font-semibold">
-          We meet every Tuesday at 5:30 PM <span className="font-normal opacity-75">(social time at 5:15)</span>
-        </p>
-        <p className="text-sm opacity-75">Poorman Gallery, 352 E. Water Street, Lock Haven, PA</p>
-      </div>
-      <Link
-        href="/events"
-        className="shrink-0 rounded-lg border px-4 py-2 text-sm font-semibold transition-colors hover:bg-black/10"
-        style={{
-          borderColor: 'var(--color-secondary-foreground)',
-          color: 'var(--color-secondary-foreground)',
-        }}
-      >
-        See All Events
-      </Link>
+      <span>📍 Every Tuesday at 5:30 PM</span>
+      <span style={{ opacity: 'var(--meeting-separator-opacity, 0.4)' }}>|</span>
+      <span>Poorman Gallery, 352 E. Water St., Lock Haven, PA</span>
+      <span style={{ opacity: 'var(--meeting-separator-opacity, 0.4)' }}>|</span>
+      <span>Social time starts at 5:15</span>
     </div>
   </div>
 )
-
