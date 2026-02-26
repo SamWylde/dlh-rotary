@@ -16,22 +16,26 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
       _status: 'published',
       description: lexical(
         p(
-          'Each Memorial Day, DLH Rotary transforms Triangle Park into a patriotic display by placing American flags sponsored by community members in honor or memory of their loved ones.',
+          'Flags of Honor is the club\'s signature project and largest annual fundraiser. Since approximately 2014, the club has transformed Triangle Park in downtown Lock Haven into a patriotic display of full-sized American flags sponsored by community members in honor or memory of their loved ones. In 2024, 168 flags flew in the park; in 2025, more than 150.',
         ),
+        h3('2026 — America\'s 250th'),
         p(
-          "2026 is extra special: America's 250th celebration year. The City of Lock Haven has approved keeping the flags in the park from May 22 through Flag Day, June 16 - over three weeks of display.",
-        ),
-        h3('The Ceremony'),
-        p(
-          'The annual ceremony takes place at Triangle Park on May 24 at 11 AM. Lock Haven Mayor Joel Long will speak. Performers include vocalist Sheila Carroll, Kim Vance, and an Army master sergeant who will play Taps. Each musician receives a complimentary flag sponsorship.',
+          'This year marks the 12th annual Flags of Honor and coincides with America\'s 250th birthday celebration. The City of Lock Haven approved an extended display from May 22 through Flag Day, June 16 — over three weeks. The ceremony is Sunday, May 24 at 11 AM at Triangle Park, featuring Posting of Colors, the National Anthem, Folding of the Flag, and Taps played by an Army master sergeant. Vocalists Sheila Carroll and Kim Vance will perform.',
         ),
         h3('How to Participate'),
         p(
-          'Sponsor a flag to honor or remember someone special in your life. Corporate sponsorships are also available. Contact the club at dlhrotary@gmail.com or reach out to any member. Deadline for flag sponsorships: May 11, 2026. Deadline for corporate sponsorships: May 8, 2026.',
+          'Sponsor a flag for $35 to honor or remember someone special. Corporate sponsorships are also available. Flag sponsorship deadline: May 11, 2026. Corporate sponsorship deadline: May 8, 2026. Contact dlhrotary@gmail.com or Wendy Stiver at 570-295-3443.',
         ),
-        h3('Supported By'),
+        h3('Angel Partners'),
         p(
-          'Local businesses supporting Flags of Honor include SWC Realty and many downtown Lock Haven businesses. Contact Diahann Claghorn for corporate sponsorship opportunities.',
+          'Flags of Honor is supported by Angel Partners including Bear Country Radio, The Express, Nestlerode Contracting, and Schlesinger Communications, along with many corporate and individual sponsors from the Lock Haven community.',
+        ),
+        p(
+          'All proceeds fund scholarships for Central Mountain High School seniors and donations to local nonprofits.',
+        ),
+        h3('COVID Adaptation'),
+        p(
+          'In 2020, the club adapted the project to a newspaper ad format with $20 sponsorships, keeping the tradition alive during the pandemic.',
         ),
       ),
     },
@@ -49,7 +53,10 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
       _status: 'published',
       description: lexical(
         p(
-          'On September 11 each year, the club places luminaires throughout Lock Haven to remember the victims of 9/11 and honor local first responders.',
+          'Each September 11, the club places luminaries in Triangle Park to remember the victims of 9/11 and honor local first responders, veterans, teachers, friends, and loved ones.',
+        ),
+        p(
+          'Luminaries are $5 each. Sponsors can personalize and decorate the bags. They are available for purchase at The Bus Stops Here (25 E. Main St., Lock Haven) and during the Labor Day Regatta weekend.',
         ),
       ),
     },
@@ -67,13 +74,18 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
       _status: 'published',
       description: lexical(
         p(
-          'Our annual bingo fundraiser features basket raffles (goal: 50+ baskets), a 50-50 drawing, door prizes, rip tickets, and special bingo games.',
+          'The club\'s bingo fundraiser features basket raffles (goal: 50+ baskets), a 50-50 drawing, door prizes, rip tickets, and special bingo games. Food is provided by Citizens Hose Fire Co.',
+        ),
+        h3('2026 Details'),
+        p(
+          'The 2026 Bingo is scheduled for September 2026 at KBR Bingo Hall, 1 Piper Way, Lock Haven. Doors open at 11:00 AM, games start at 1:00 PM. Tickets are $20 in advance.',
+        ),
+        h3('Where to Buy Tickets'),
+        p(
+          'Tickets are available at The Bus Stops Here (25 E. Main St.), The Express (9 E. Main St.), Puff Discount (328 Bellefonte Ave. and 103 Hogan Blvd.), and from any Downtown Rotarian.',
         ),
         p(
-          'The 2026 Bingo is scheduled for Sunday, September 20 at KBR Bingo Hall. It was rescheduled from March 1 to avoid a conflict with a Keystone Central Foundation event.',
-        ),
-        p(
-          "Donations of gift cards or basket items from local businesses are welcome. Past supporters include SWC Realty, First Quality, Truck-Lite, West Pharmaceutical, Just Born (Peeps), Fox's Restaurant, Weis Market, Dunkin' Donuts, Pearl's Cafe, and many more.",
+          'Donations of gift cards or basket items from local businesses are welcome. Past supporters include SWC Realty, First Quality, Truck-Lite, West Pharmaceutical, Just Born (Peeps), and many more. All proceeds support club scholarships and community projects.',
         ),
       ),
     },
@@ -91,10 +103,14 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
       _status: 'published',
       description: lexical(
         p(
-          "Each February, club members assemble goody trays filled with cookies and candy and deliver them to local first responders, fire departments, police, the sheriff's department, and probation offices.",
+          'Each February, club members assemble cookie and candy trays at Covenant United Methodist Church and deliver them to local first responders and service organizations.',
+        ),
+        h3('2026 Deliveries'),
+        p(
+          'In 2026, the club expanded to 14 stops: Citizens Hose Co., Eastside Fire Co., Lock Haven Police, Lock Haven EMS, Goodwill Hose Co. (Flemington), Goodwill Ambulance, Dunnstown Fire, Castanea Fire, Mill Hall Fire, the Communications Center, the Sheriff\'s Office, Juvenile Probation, Adult Probation, and a special basket of low-calorie treats for Clark the service dog.',
         ),
         p(
-          "In 2026, the club made 13 trays and a special basket for Clark, the county courts' service dog. The deliveries were featured on the front page of The Express on February 14, 2026.",
+          'The deliveries were featured on the front page of The Express on February 14, 2026.',
         ),
       ),
     },
@@ -112,10 +128,11 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
       _status: 'published',
       description: lexical(
         p(
-          'Each holiday season, the club assembles and delivers gift bags to local veterans at care facilities and service organizations.',
+          'Each holiday season, the club assembles and delivers gift bags filled with puzzle books, toothpaste, and other useful items to local veterans in care facilities. The project was originally started in partnership with DAR, and the late Dr. Betty Schantz was its original chair. It is now co-chaired by Carmen Banfill and Diahann Claghorn.',
         ),
+        h3('2025 Deliveries'),
         p(
-          "In December 2025, the club spent $418 and delivered 30 gift bags to Fulmer's Personal Care Home, the VFW Veterans Benefits office, Haven Place, and Lock Haven Rehabilitation and Senior Living.",
+          "In December 2025, the club delivered 30 gift bags to Fulmer's Personal Care Home, the VFW Veterans Benefits office, Haven Place, and Lock Haven Rehabilitation and Senior Living (formerly Susque-View).",
         ),
       ),
     },
@@ -126,17 +143,20 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
     uniqueField: 'slug',
     uniqueValue: 'roberta-way-scholarship',
     data: {
-      title: 'Roberta Way Scholarship',
+      title: 'Scholarships',
       slug: 'roberta-way-scholarship',
       category: 'youth',
       projectStatus: 'active',
       _status: 'published',
       description: lexical(
         p(
-          'The club awards the Roberta Way Scholarship annually to a deserving local student. Scholarship funds are held in a dedicated account separate from general club operations.',
+          'The club awards three annual scholarships to graduating seniors at Central Mountain High School, totaling $5,500. Scholarship amounts have been increased significantly in recent years, funded by Flags of Honor proceeds and the Bingo fundraiser.',
         ),
         p(
-          'Applications are announced through Central Mountain High School each spring. Contact dlhrotary@gmail.com for information.',
+          'The three named scholarships honor Eleanor E.J. Kodish ($2,000), Dr. Betty Baird Schantz ($2,000), and Roberta M. Way ($1,500) — dedicated club members who left a lasting impact on the community.',
+        ),
+        p(
+          'Applications are announced through Central Mountain High School each spring. Visit our Scholarships page for full details and eligibility requirements.',
         ),
       ),
     },
@@ -154,13 +174,62 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
       _status: 'published',
       description: lexical(
         p(
-          "The club sponsors students from Central Mountain High School to compete in Rotary's Four-Way Test speech contest at regional and district levels.",
+          "The club co-sponsors with the Lock Haven Rotary Club (the \"noon club\") a Four-Way Test speech contest at Central Mountain High School. Students deliver speeches based on Rotary's Four-Way Test ethical framework.",
         ),
         p(
-          'This initiative is conducted in partnership with the Lock Haven Rotary Club. The club voted to sponsor a winner to advance to regional and district competition.',
+          'The club voted unanimously to sponsor a winning student to compete at the regional contest and, if successful, advance to the district-wide competition in Rotary District 7360.',
+        ),
+      ),
+    },
+  })
+
+  await upsertByField(payload, {
+    collection: 'projects',
+    uniqueField: 'slug',
+    uniqueValue: 'little-red-schoolhouse-libraries',
+    data: {
+      title: 'Little Red Schoolhouse Libraries',
+      slug: 'little-red-schoolhouse-libraries',
+      category: 'community-service',
+      projectStatus: 'active',
+      _status: 'published',
+      description: lexical(
+        p(
+          "The Little Red Schoolhouse Libraries are the club's signature literacy project — free community book-sharing stations placed around Lock Haven. They are stocked exclusively with books and reading material for community members of all ages.",
+        ),
+        h3('Locations'),
+        p(
+          'Libraries are located at Triangle Park, Piper, Tiger Den, and Hanna Park. Diahann Claghorn is the primary person who fills and maintains them.',
+        ),
+        p(
+          'Community members are welcome to take a book or leave a book. The libraries are intended exclusively for reading material.',
+        ),
+      ),
+    },
+  })
+
+  await upsertByField(payload, {
+    collection: 'projects',
+    uniqueField: 'slug',
+    uniqueValue: 'people-of-action-open-house',
+    data: {
+      title: 'People of Action Open House',
+      slug: 'people-of-action-open-house',
+      category: 'community-service',
+      projectStatus: 'active',
+      _status: 'published',
+      description: lexical(
+        p(
+          'Each October, the club hosts a People of Action Open House at the Poorman Gallery from 5:00 to 7:00 PM, with wine and refreshments. The event features 3-4 local nonprofit organizations, and the club donates $500 to each.',
+        ),
+        h3('Recent Featured Organizations'),
+        p(
+          '2025: Sleep in Heavenly Peace, Boxes of Hope, and The New Love Center. 2024: Boxes of Hope, Haven Cupboard, and the Lock Haven Area Shoe Bank.',
+        ),
+        p(
+          'The Open House is free and open to the public. It is a great opportunity to learn about nonprofits serving Clinton County and to see how the Rotary Club of Downtown Lock Haven supports the community.',
         ),
       ),
     },
   })
 }
-

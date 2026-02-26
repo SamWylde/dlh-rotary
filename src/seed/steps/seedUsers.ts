@@ -65,14 +65,14 @@ export const seedUsers = async (payload: Payload, defaultPassword: string): Prom
       email: 'areagovernor@dlhrotary.org',
       fullName: 'Diahann Claghorn',
       title: 'Area Governor & Board Member',
-      bio: 'Area Governor for Rotary District 7360 and board member. Chairs corporate sponsorships and co-leads Labels & Plaques for Flags of Honor.',
+      bio: 'Sapphire-level Paul Harris Fellow. Area Governor for Rotary District 7360 and board member. Former teacher at Woodward Elementary. Primary maintainer of the Little Red Schoolhouse Libraries. Manages the Lock Haven Area Shoe Bank. Chairs corporate sponsorships and co-leads Labels & Plaques for Flags of Honor.',
       showEmail: true,
     },
     {
       email: 'pastpresident@dlhrotary.org',
       fullName: 'Marianne Lotfi',
       title: 'Immediate Past President & Board Member',
-      bio: 'Immediate past president and board member. Co-leads Flags of Honor overall and co-chairs Orders & Money.',
+      bio: 'Immediate past president and board member. Manages Shoe Bank work sessions at Covenant UMC. Co-leads Flags of Honor overall and co-chairs Orders & Money.',
       showEmail: true,
     },
   ]
@@ -93,7 +93,7 @@ export const seedUsers = async (payload: Payload, defaultPassword: string): Prom
     },
     {
       fullName: 'Bonnie Hannis',
-      bio: 'Longtime member.',
+      bio: 'Paul Harris Fellow and longtime educator. One of the club\'s most dedicated members.',
     },
     {
       fullName: 'Jeanne Baker',
@@ -101,11 +101,11 @@ export const seedUsers = async (payload: Payload, defaultPassword: string): Prom
     },
     {
       fullName: 'Emma Persun',
-      bio: 'Manages the club Instagram account. Incoming club treasurer for the 2026-27 Rotary year. Part of the Publicity committee for Flags of Honor.',
+      bio: 'Works at Rachel K Creations. Former Interact Club alumna. Manages the club Instagram account. Incoming club treasurer for the 2026-27 Rotary year. Part of the Publicity committee for Flags of Honor.',
     },
     {
       fullName: 'Nate Akeley',
-      bio: 'Member. Penn State connection.',
+      bio: 'Former Central Mountain HS class president (3 years) and Interact member. Penn State electrical engineering student. Sponsored by aunt Wendy Stiver.',
     },
     {
       fullName: 'Sue Packer',

@@ -104,5 +104,52 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       },
     })
   }
+
+  const annualEvents = [
+    {
+      slug: 'angel-lights-2026',
+      title: 'Angel Lights',
+      date: '2026-09-11T19:00:00.000Z',
+      eventType: 'social',
+      location: 'Triangle Park, Lock Haven',
+      description:
+        'Annual luminary display in Triangle Park honoring first responders, veterans, teachers, and loved ones on the anniversary of September 11. Luminaries are $5 each and available at The Bus Stops Here (25 E. Main St.).',
+    },
+    {
+      slug: 'people-of-action-open-house-2026',
+      title: 'People of Action Open House',
+      date: '2026-10-06T17:00:00.000Z',
+      eventType: 'social',
+      location: 'Poorman Gallery, 352 E. Water St., Lock Haven',
+      description:
+        'Annual open house featuring local nonprofits, wine, and refreshments. The club donates $500 to each featured organization. Free and open to the public — a great way to learn about service opportunities in Clinton County.',
+    },
+    {
+      slug: 'veterans-gift-bags-2026',
+      title: 'Holiday Gift Bags for Veterans',
+      date: '2026-12-17T13:00:00.000Z',
+      eventType: 'service',
+      location: 'Covenant United Methodist Church, 44 W. Main St., Lock Haven',
+      description:
+        "Annual delivery of gift bags to local veterans in care facilities. Meeting point at Covenant UMC. Bags are assembled and delivered to Fulmer's Personal Care Home, the VFW, Haven Place, and Lock Haven Rehabilitation.",
+    },
+  ]
+
+  for (const event of annualEvents) {
+    await upsertByField(payload, {
+      collection: 'events',
+      uniqueField: 'slug',
+      uniqueValue: event.slug,
+      data: {
+        title: event.title,
+        slug: event.slug,
+        date: event.date,
+        eventType: event.eventType,
+        location: event.location,
+        description: lexicalParagraph(event.description),
+        _status: 'published',
+      },
+    })
+  }
 }
 

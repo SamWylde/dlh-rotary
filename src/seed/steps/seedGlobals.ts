@@ -22,12 +22,18 @@ export const seedGlobals = async (payload: Payload): Promise<void> => {
       },
       rotaryInfo: {
         district: 'District 7360',
+        clubId: '61484',
         foundedYear: 2003,
       },
       socialMedia: {
         facebook: 'https://www.facebook.com/dlhrotaryclub',
         instagram: 'https://www.instagram.com/dlhrotaryclub',
         myRotaryLink: 'https://my.rotary.org',
+      },
+      externalListings: {
+        ccepListing: 'https://www.clintoncountyinfo.com/rotary-club-of-downtown-lock-haven',
+        downtownLHListing: 'https://lockhaven.org/listing/rotary-club-of-downtown-lock-haven/',
+        oldClubSite: 'http://www.rotaryclintoncountypa.org/',
       },
     },
     overrideAccess: true,
@@ -48,7 +54,6 @@ export const seedGlobals = async (payload: Payload): Promise<void> => {
         { label: 'Events', link: { type: 'external', url: '/events' } },
         { label: 'Announcements', link: { type: 'external', url: '/announcements' } },
         { label: 'Scholarships', link: { type: 'external', url: '/scholarships' } },
-        { label: 'Join Us', link: { type: 'external', url: '/join' } },
         { label: 'Contact', link: { type: 'external', url: '/contact' } },
       ],
       footerNav: [
