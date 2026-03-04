@@ -69,9 +69,49 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
   await upsertByField(payload, {
     collection: 'announcements',
     uniqueField: 'slug',
+    uniqueValue: 'speech-contest-2026',
+    data: {
+      title: 'Four-Way Test Speech Contest Update',
+      slug: 'speech-contest-2026',
+      publishedDate: '2026-03-03T00:00:00.000Z',
+      priority: 'normal',
+      pinned: false,
+      membersOnly: false,
+      _status: 'published',
+      content: lexicalParagraph(
+        'The Four-Way Test Speech Contest has taken place at Central Mountain High School. Our club is sponsoring a student for the regional contest. Congratulations to all the participants and award recipients!',
+      ),
+    },
+  })
+
+  await upsertByField(payload, {
+    collection: 'announcements',
+    uniqueField: 'slug',
+    uniqueValue: 'upcoming-speakers-2026',
+    data: {
+      title: 'Upcoming Guest Speakers',
+      slug: 'upcoming-speakers-2026',
+      publishedDate: '2026-03-03T00:00:00.000Z',
+      priority: 'normal',
+      pinned: false,
+      membersOnly: false,
+      _status: 'published',
+      content: lexical(
+        p('We have several exciting guest visits coming up at our Tuesday meetings:'),
+        p('Ed Hosler & Clark will be visiting the club.'),
+        p('Brooklyn Bechdel, one of our scholarship recipients, will speak to us about her experiences.'),
+        p('A representative from the dialysis center will present to the club.'),
+        p('Stay tuned for specific dates!'),
+      ),
+    },
+  })
+
+  await upsertByField(payload, {
+    collection: 'announcements',
+    uniqueField: 'slug',
     uniqueValue: 'bingo-rescheduled-2026',
     data: {
-      title: 'Bingo Fundraiser Rescheduled to September 27',
+      title: 'Bingo Fundraiser Rescheduled to September 20',
       slug: 'bingo-rescheduled-2026',
       publishedDate: '2026-01-15T00:00:00.000Z',
       priority: 'normal',

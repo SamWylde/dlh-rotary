@@ -26,6 +26,44 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
     },
   })
 
+  const upcomingEvents = [
+    {
+      slug: 'tri-district-pels-2026',
+      title: 'Tri-District PELS',
+      date: '2026-03-07T09:00:00.000Z',
+      eventType: 'meeting',
+      location: 'TBD',
+      description:
+        'Tri-District Presidents-Elect Leadership Seminar. Lisa and Diahann will be attending.',
+    },
+    {
+      slug: 'charter-date-2026',
+      title: 'Club Charter Date Anniversary',
+      date: '2026-03-13T17:30:00.000Z',
+      eventType: 'social',
+      location: 'Poorman Gallery, 352 E. Water St., Lock Haven',
+      description:
+        "Celebrating our club's charter date! The Rotary Club of Downtown Lock Haven was chartered on this date.",
+    },
+  ]
+
+  for (const event of upcomingEvents) {
+    await upsertByField(payload, {
+      collection: 'events',
+      uniqueField: 'slug',
+      uniqueValue: event.slug,
+      data: {
+        title: event.title,
+        slug: event.slug,
+        date: event.date,
+        eventType: event.eventType,
+        location: event.location,
+        description: lexicalParagraph(event.description),
+        _status: 'published',
+      },
+    })
+  }
+
   const flagsEvents = [
     {
       slug: 'foh-label-plaques-2026',
@@ -33,7 +71,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       date: '2026-05-05T17:30:00.000Z',
       eventType: 'service',
       location: 'Covenant United Methodist Church, 44 W. Main St., Lock Haven',
-      description: 'Work session to put labels on plaques for Flags of Honor.',
+      description: 'Full club work session to put labels on plaques for Flags of Honor. 5:30 p.m. (may start earlier).',
     },
     {
       slug: 'foh-find-holes-2026',
@@ -41,7 +79,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       date: '2026-05-12T17:30:00.000Z',
       eventType: 'service',
       location: 'Triangle Park, Lock Haven',
-      description: 'Work session in the park to locate and mark flagpole holes before installation day.',
+      description: 'Full club work session in the park to find the flagpole holes. 5:30 p.m. (may start earlier).',
     },
     {
       slug: 'foh-banner-plaques-2026',
@@ -49,7 +87,25 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       date: '2026-05-19T17:30:00.000Z',
       eventType: 'service',
       location: 'Covenant United Methodist Church, 44 W. Main St., Lock Haven',
-      description: 'Work session to make the corporate sponsorship banner and sort plaques for installation.',
+      description: 'Full club work session to make the banner and finish plaques. 5:30 p.m. (may start earlier).',
+    },
+    {
+      slug: 'foh-corporate-deadline-2026',
+      title: 'Flags of Honor — Corporate Sponsorship Deadline',
+      date: '2026-05-08T17:00:00.000Z',
+      eventType: 'service',
+      location: 'Poorman Gallery, 352 E. Water St., Lock Haven',
+      description:
+        'Deadline for corporate sponsorships for Flags of Honor 2026. Email dlhrotary@gmail.com to sponsor.',
+    },
+    {
+      slug: 'foh-flag-deadline-2026',
+      title: 'Flags of Honor — Flag Sponsorship Deadline',
+      date: '2026-05-11T17:00:00.000Z',
+      eventType: 'service',
+      location: 'Poorman Gallery, 352 E. Water St., Lock Haven',
+      description:
+        'Deadline for individual flag sponsorships for Flags of Honor 2026. $35 per flag. Email dlhrotary@gmail.com to order.',
     },
     {
       slug: 'foh-install-2026',
@@ -58,7 +114,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       eventType: 'service',
       location: 'Triangle Park, Lock Haven',
       description:
-        'Install flags in Triangle Park. Bring gardening gloves, trowel, tape measure, screwdriver, and a kneeling pad.',
+        'Full club work session in the park to install the flags. Bring gardening gloves, trowel, tape measure, screwdriver, and a kneeling pad if you have one.',
     },
     {
       slug: 'foh-ceremony-2026',

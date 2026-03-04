@@ -42,9 +42,9 @@ export const seedUsers = async (payload: Payload, defaultPassword: string): Prom
     },
     {
       email: 'secretary@dlhrotary.org',
-      fullName: 'Wendy Stiver',
+      fullName: 'Wendy Doherty',
       title: 'Secretary',
-      bio: 'Club secretary. Writes detailed meeting minutes and the club newsletter. Chairs the Booklet & Ad committee for Flags of Honor.',
+      bio: 'Club secretary.',
       showEmail: true,
     },
     {
@@ -64,7 +64,7 @@ export const seedUsers = async (payload: Payload, defaultPassword: string): Prom
     {
       email: 'areagovernor@dlhrotary.org',
       fullName: 'Diahann Claghorn',
-      title: 'Area Governor & Board Member',
+      title: 'Past President, Area Governor & Board Member',
       bio: 'Sapphire-level Paul Harris Fellow. Area Governor for Rotary District 7360 and board member. Former teacher at Woodward Elementary. Primary maintainer of the Little Red Schoolhouse Libraries. Manages the Lock Haven Area Shoe Bank. Chairs corporate sponsorships and co-leads Labels & Plaques for Flags of Honor.',
       showEmail: true,
     },
