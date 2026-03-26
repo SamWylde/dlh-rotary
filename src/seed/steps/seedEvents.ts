@@ -1,7 +1,7 @@
 import type { Payload } from 'payload'
 
 import { getNextTuesday } from '@/seed/core/date'
-import { lexicalParagraph } from '@/seed/core/richText'
+import { lexical, lexicalParagraph, p } from '@/seed/core/richText'
 import { upsertByField } from '@/seed/core/upsert'
 
 export const seedEvents = async (payload: Payload): Promise<void> => {
@@ -38,12 +38,39 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
     },
     {
       slug: 'charter-date-2026',
-      title: 'Club Charter Date Anniversary',
-      date: '2026-03-13T17:30:00.000Z',
+      title: 'Club Charter Anniversary Dinner',
+      date: '2026-03-24T17:30:00.000Z',
       eventType: 'social',
+      location: "Fox's Pizza Den, Lock Haven",
+      description:
+        "The club celebrated our charter date anniversary with a dinner at Fox's Pizza Den on March 24. Haley Jolin was inducted as our newest member at the event.",
+    },
+    {
+      slug: 'no-meeting-2026-03-31',
+      title: 'No Meeting — March 31',
+      date: '2026-03-31T17:30:00.000Z',
+      eventType: 'meeting',
       location: 'Poorman Gallery, 352 E. Water St., Lock Haven',
       description:
-        "Celebrating our club's charter date! The Rotary Club of Downtown Lock Haven was chartered on this date.",
+        'There will be no club meeting on March 31. Regular meetings resume the following Tuesday.',
+    },
+    {
+      slug: 'best-of-clinton-county-2026',
+      title: 'Best of Clinton County Day',
+      date: '2026-06-13T09:00:00.000Z',
+      eventType: 'social',
+      location: 'TBD',
+      description:
+        'The club will participate in Best of Clinton County Day. More details to come as the event approaches.',
+    },
+    {
+      slug: 'district-governor-visit-2026',
+      title: 'District Governor Visit — Sean Murtagh',
+      date: '2026-07-28T17:30:00.000Z',
+      eventType: 'meeting',
+      location: 'Poorman Gallery, 352 E. Water St., Lock Haven',
+      description:
+        'The club will host our new Rotary District 7360 Governor, Sean Murtagh, at our regular Tuesday meeting. All members and prospective members are welcome to attend.',
     },
   ]
 
@@ -63,6 +90,31 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       },
     })
   }
+
+  await upsertByField(payload, {
+    collection: 'events',
+    uniqueField: 'slug',
+    uniqueValue: 'wine-in-the-wilds-2026',
+    data: {
+      title: 'Wine in the Wilds',
+      slug: 'wine-in-the-wilds-2026',
+      date: '2026-04-25T14:00:00.000Z',
+      endDate: '2026-04-25T18:00:00.000Z',
+      eventType: 'fundraiser',
+      location: 'Clinton County Fairgrounds',
+      ticketPrice: 40,
+      description: lexical(
+        p(
+          'Join us at Wine in the Wilds, a fundraiser hosted by the Clinton County Historical Society! The Rotary Club of Downtown Lock Haven will be on-site selling soft pretzels and showcasing a ShelterBox display.',
+        ),
+        p(
+          'Our club is part of a tri-district challenge to raise money for ShelterBox by May 1. All pretzel sale profits will go directly toward the challenge. Stop by, enjoy great local wine, and support two great causes at once.',
+        ),
+        p('Admission: $40'),
+      ),
+      _status: 'published',
+    },
+  })
 
   const flagsEvents = [
     {

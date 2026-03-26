@@ -22,6 +22,9 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
         p(
           'This year marks the 12th annual Flags of Honor and coincides with America\'s 250th birthday celebration. The City of Lock Haven approved an extended display from May 22 through Flag Day, June 16, over three weeks. The ceremony is Sunday, May 24 at 11 AM at Triangle Park, featuring Posting of Colors, the National Anthem, Folding of the Flag, and Taps played by an Army master sergeant. Vocalists Sheila Carroll and Kim Vance will perform.',
         ),
+        p(
+          'Kim Vance has been asked to sing "God Bless America" at the ceremony, with Heather Lively coordinating. District Governor Dawn Linn is confirmed to participate. Flags of Honor promotional posters are being distributed by Wendy Stiver — contact the club if you\'d like one to display.',
+        ),
         h3('How to Participate'),
         p(
           'Sponsor a flag for $35 to honor or remember someone special. Corporate sponsorships are also available. Flag sponsorship deadline: May 11, 2026. Corporate sponsorship deadline: May 8, 2026. Contact dlhrotary@gmail.com.',
