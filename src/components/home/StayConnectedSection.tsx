@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import { FacebookFeed } from '@/components/layout/FacebookFeed'
+
 export const StayConnectedSection = () => (
   <section
     className="full-bleed"
@@ -29,7 +31,7 @@ export const StayConnectedSection = () => (
     >
       Follow us on Facebook or get in touch. We&apos;d love to hear from you.
     </p>
-    <div style={{ display: 'inline-flex', gap: 'var(--section-cta-btn-gap, 16px)', flexWrap: 'wrap', justifyContent: 'center' }}>
+    <div style={{ display: 'inline-flex', gap: 'var(--section-cta-btn-gap, 16px)', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '32px' }}>
       <a
         href="https://www.facebook.com/profile.php?id=100064347773545"
         target="_blank"
@@ -63,6 +65,17 @@ export const StayConnectedSection = () => (
       >
         ✉️ Contact Us
       </Link>
+    </div>
+    <div
+      style={{
+        background: 'white',
+        borderRadius: '8px',
+        padding: '16px',
+        display: 'inline-block',
+        maxWidth: '100%',
+      }}
+    >
+      <FacebookFeed />
     </div>
   </section>
 )
