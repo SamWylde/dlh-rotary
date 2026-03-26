@@ -6,7 +6,7 @@ export const HomeHero = () => (
     style={{
       background:
         'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 60%, var(--color-primary-deep) 100%)',
-      padding: 'var(--hero-padding-top, 80px) var(--hero-padding-x, 40px) var(--hero-padding-bottom, 70px)',
+      padding: 'var(--hero-padding-top, 64px) var(--hero-padding-x, 40px) var(--hero-padding-bottom, 56px)',
       textAlign: 'center',
     }}
   >
