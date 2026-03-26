@@ -1,9 +1,15 @@
+'use client'
+
+import { useState } from 'react'
+
 import Link from 'next/link'
 
 import type { Event } from '@/payload-types'
 
+import { EventQuickView } from './EventQuickView'
+
 export type UpcomingEventsProps = {
-  events: Array<Pick<Event, 'id' | 'slug' | 'title' | 'date'>>
+  events: Array<Pick<Event, 'id' | 'slug' | 'title' | 'date' | 'endDate' | 'location' | 'description' | 'eventType'>>
   heading?: string
   emptyMessage?: string
   viewAllHref?: string
@@ -15,6 +21,8 @@ export const UpcomingEvents = ({
   emptyMessage = 'No events posted yet.',
   viewAllHref,
 }: UpcomingEventsProps) => {
+  const [selectedEvent, setSelectedEvent] = useState<UpcomingEventsProps['events'][number] | null>(null)
+
   return (
     <section>
       <h2
@@ -35,9 +43,10 @@ export const UpcomingEvents = ({
       ) : (
         <div>
           {events.map((event) => (
-            <Link
+            <button
               key={event.id}
-              href={`/events/${event.slug}`}
+              type="button"
+              onClick={() => setSelectedEvent(event)}
               style={{
                 display: 'flex',
                 gap: 'var(--event-row-gap, 14px)',
@@ -45,6 +54,12 @@ export const UpcomingEvents = ({
                 borderBottom: '1px solid var(--color-border)',
                 alignItems: 'flex-start',
                 textDecoration: 'none',
+                background: 'none',
+                border: 'none',
+                borderBlockEnd: '1px solid var(--color-border)',
+                cursor: 'pointer',
+                textAlign: 'left',
+                width: '100%',
               }}
             >
               <span style={{ fontSize: 'var(--event-icon-size, 24px)', lineHeight: 1 }}>📅</span>
@@ -72,7 +87,7 @@ export const UpcomingEvents = ({
                   {new Date(event.date).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}
                 </p>
               </div>
-            </Link>
+            </button>
           ))}
         </div>
       )}
@@ -93,6 +108,8 @@ export const UpcomingEvents = ({
           View all events
         </Link>
       ) : null}
+
+      <EventQuickView event={selectedEvent} onClose={() => setSelectedEvent(null)} />
     </section>
   )
 }
