@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import React from 'react'
 
 import { SiteFooter } from '@/components/layout/SiteFooter'
@@ -16,6 +17,8 @@ export const metadata: Metadata = {
   title: 'Rotary Club of Downtown Lock Haven',
   description: 'Service Above Self',
 }
+
+const GOOGLE_ANALYTICS_ID = 'G-Z5JENXY6S6'
 
 export default async function FrontendLayout({
   children,
@@ -65,6 +68,19 @@ export default async function FrontendLayout({
           href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
           rel="stylesheet"
         />
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GOOGLE_ANALYTICS_ID}');
+          `}
+        </Script>
         <ThemeLoader activeTheme={activeTheme} customAccentColor={customAccentColor} />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
       </head>

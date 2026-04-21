@@ -105,7 +105,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       ticketPrice: 40,
       description: lexical(
         p(
-          'Join us at Wine in the Wilds, a fundraiser hosted by the Clinton County Historical Society, from 2 to 6 PM at the Clinton County Fairgrounds. The Rotary Club of Downtown Lock Haven will be on-site selling soft pretzels again, and as of the April 14 meeting there were 19 wine and beer vendors, 16 other vendors, and 2 food trucks signed up.',
+          'Join us at Wine in the Wilds, a fundraiser hosted by the Clinton County Historical Society, from 2 to 6 PM at the Clinton County Fairgrounds. Club setup begins at 1 PM. The Rotary Club of Downtown Lock Haven will be on-site selling soft pretzels again, and as of the April 14 meeting there were 19 wine and beer vendors, 16 other vendors, and 2 food trucks signed up.',
         ),
         p(
           'Our club is part of a tri-district challenge to raise money for ShelterBox by May 1. All pretzel sale profits will go directly toward the challenge. Stop by, enjoy great local wine, and support two great causes at once.',
@@ -117,6 +117,16 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
   })
 
   const flagsEvents = [
+    {
+      slug: 'club-leadership-learning-seminar-2026',
+      title: 'Club Leadership Learning Seminar',
+      date: '2026-05-12T09:00:00.000Z',
+      endDate: '2026-05-14T17:00:00.000Z',
+      eventType: 'meeting',
+      location: 'TBD',
+      description:
+        'Club Leadership Learning Seminar running May 12 through May 14. Additional details will be shared with participating members.',
+    },
     {
       slug: 'foh-label-plaques-2026',
       title: 'Flags of Honor - Label Plaques',
@@ -205,6 +215,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
         title: event.title,
         slug: event.slug,
         date: event.date,
+        endDate: 'endDate' in event ? event.endDate : undefined,
         eventType: event.eventType,
         location: event.location,
         description: lexicalParagraph(event.description),

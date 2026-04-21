@@ -117,6 +117,8 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
         p('We have several guest visits coming up at our Tuesday meetings:'),
         p("Rick Schulze, Lock Haven's new Downtown Manager, has been invited to speak to the club."),
         p('Ed Hosler and Clark, the Clinton County Courthouse therapy dog, will be visiting.'),
+        p('Brooklynn Bechdel, one of our scholarship recipients, is also on the club\'s upcoming speaker list.'),
+        p('We are also planning to host a representative from the dialysis center.'),
         p(
           'We also hope to host a presentation on ShelterBox, the global disaster relief organization our club is supporting through the tri-district fundraising challenge.',
         ),
@@ -163,7 +165,7 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
       _status: 'published',
       content: lexical(
         p(
-          'Mark your calendars for Saturday, April 25. Wine in the Wilds runs from 2 to 6 PM at the Clinton County Fairgrounds, and the Rotary Club of Downtown Lock Haven will be selling soft pretzels again. As of the April 14 meeting, 19 wine and beer vendors, 16 other vendors, and 2 food trucks were signed up.',
+          'Mark your calendars for Saturday, April 25. Wine in the Wilds runs from 2 to 6 PM at the Clinton County Fairgrounds, with club setup at 1 PM, and the Rotary Club of Downtown Lock Haven will be selling soft pretzels again. As of the April 14 meeting, 19 wine and beer vendors, 16 other vendors, and 2 food trucks were signed up.',
         ),
         p(
           "We're also proud to be part of a tri-district challenge to raise money for ShelterBox by May 1. ShelterBox provides emergency shelter and essential supplies to families displaced by disaster and conflict around the world. Our club has committed $100 and will add all pretzel sale profits to our donation. A ShelterBox will be on display at the event so you can see exactly what your support provides.",
@@ -223,11 +225,12 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
       content: lexical(
         h3('Upcoming Dates'),
         p('Apr 21: Club meeting at the regular time and place.'),
-        p('Apr 25: Wine in the Wilds, 2 to 6 PM at the Clinton County Fairgrounds. The club will be selling soft pretzels again.'),
+        p('Apr 25: Wine in the Wilds, 2 to 6 PM at the Clinton County Fairgrounds, with setup at 1 PM. The club will be selling soft pretzels again.'),
         p('Apr 28: Tentative board meeting and the last regular club meeting for a while.'),
         p('May 5: Full club work session to label plaques, 5:30 PM at Covenant Church.'),
         p('May 8: Corporate sponsorship deadline for Flags of Honor.'),
         p('May 11: Flag sponsorship deadline for Flags of Honor.'),
+        p('May 12-14: Club Leadership Learning Seminar.'),
         p('May 12: Full club work session in the park to locate flagpole holes, 5:30 PM.'),
         p('May 19: Full club work session to make the banner and sort plaques, 5:30 PM at Covenant Church.'),
         p(
@@ -236,7 +239,7 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
         p('May 24: Public ceremony in the park. Arrive at 11 AM. Lunch afterward at Restless Oaks Restaurant.'),
         h3('Meeting Notes'),
         p('Wine in the Wilds update: 19 wine and beer vendors, 16 other vendors, and 2 food trucks were signed up as of the meeting.'),
-        p('Club picnic update: Janine is hosting on Tuesday, July 7, with Tuesday, July 14 as the alternate date.'),
+        p('Club picnic update: Janine is hosting at her house on Tuesday, July 7, with Tuesday, July 14 as the alternate date.'),
         h3('Flags of Honor Updates'),
         p(
           'Members were asked to text Wendy after putting up all of their posters. A list of previous corporate sponsors who have not yet responded is coming, and all members are asked to help contact them.',
