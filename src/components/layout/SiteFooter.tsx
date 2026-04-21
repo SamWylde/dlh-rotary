@@ -35,7 +35,7 @@ export const SiteFooter = ({
       <div className="md:text-right">
         <p>Rotary District 7360 | Rotary International</p>
         <p style={{ marginTop: '4px' }}>&copy; {new Date().getFullYear()} Rotary Club of Downtown Lock Haven</p>
-        <p style={{ marginTop: '8px', fontSize: '12px' }}>Website by Thomas Darby</p>
+        <p style={{ marginTop: '4px', fontSize: '12px' }}>Website by Thomas Darby</p>
       </div>
     </div>
   </footer>
