@@ -105,7 +105,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       ticketPrice: 40,
       description: lexical(
         p(
-          'Join us at Wine in the Wilds, a fundraiser hosted by the Clinton County Historical Society! The Rotary Club of Downtown Lock Haven will be on-site selling soft pretzels and showcasing a ShelterBox display.',
+          'Join us at Wine in the Wilds, a fundraiser hosted by the Clinton County Historical Society, from 2 to 6 PM at the Clinton County Fairgrounds. The Rotary Club of Downtown Lock Haven will be on-site selling soft pretzels again, and as of the April 14 meeting there were 19 wine and beer vendors, 16 other vendors, and 2 food trucks signed up.',
         ),
         p(
           'Our club is part of a tri-district challenge to raise money for ShelterBox by May 1. All pretzel sale profits will go directly toward the challenge. Stop by, enjoy great local wine, and support two great causes at once.',
@@ -131,7 +131,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       date: '2026-05-12T17:30:00.000Z',
       eventType: 'service',
       location: 'Triangle Park, Lock Haven',
-      description: 'Full club work session in the park to find the flagpole holes. 5:30 p.m. (may start earlier).',
+      description: 'Full club work session in the park to locate the flagpole holes. 5:30 p.m. (may start earlier).',
     },
     {
       slug: 'foh-banner-plaques-2026',
@@ -139,7 +139,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       date: '2026-05-19T17:30:00.000Z',
       eventType: 'service',
       location: 'Covenant United Methodist Church, 44 W. Main St., Lock Haven',
-      description: 'Full club work session to make the banner and finish plaques. 5:30 p.m. (may start earlier).',
+      description: 'Full club work session to make the banner and make and sort plaques. 5:30 p.m. (may start earlier).',
     },
     {
       slug: 'foh-corporate-deadline-2026',
@@ -175,7 +175,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       eventType: 'social',
       location: 'Triangle Park, Lock Haven',
       description:
-        "Annual Flags of Honor ceremony - this year celebrating America's 250th birthday. Mayor Joel Long will speak. Live music including Taps played by an Army master sergeant. Arrive at 11 AM. Club lunch to follow.",
+        "Annual Flags of Honor ceremony celebrating America's 250th birthday. Amy Kowatch will sing the national anthem, Scouts will present the colors, the National Guard will perform the ceremonial flag-folding, Carmen will read the meaning of each fold, and Master Sgt. Anderson will play Taps. The Pennsylvania governor has been invited, Mayor Joel Long will receive a formal invitation to speak, and lunch will follow at Restless Oaks Restaurant.",
     },
     {
       slug: 'foh-removal-2026',
@@ -260,4 +260,3 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
     })
   }
 }
-

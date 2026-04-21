@@ -20,10 +20,10 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
         ),
         h3('2026: America\'s 250th'),
         p(
-          'This year marks the 12th annual Flags of Honor and coincides with America\'s 250th birthday celebration. The City of Lock Haven approved an extended display from May 22 through Flag Day, June 16, over three weeks. The ceremony is Sunday, May 24 at 11 AM at Triangle Park, featuring Posting of Colors, the National Anthem, Folding of the Flag, and Taps played by an Army master sergeant. Vocalists Sheila Carroll and Kim Vance will perform.',
+          'This year marks the 12th annual Flags of Honor and coincides with America\'s 250th birthday celebration. The City of Lock Haven approved an extended display from May 22 through Flag Day, June 16, over three weeks. The ceremony is Sunday, May 24 at 11 AM at Triangle Park, with Amy Kowatch singing the national anthem, Scouts presenting the colors, the National Guard performing the ceremonial flag-folding, Carmen reading the meaning of each fold, and Master Sgt. Anderson playing Taps.',
         ),
         p(
-          'Kim Vance has been asked to sing "God Bless America" at the ceremony, with Heather Lively coordinating. District Governor Dawn Linn is confirmed to participate. Flags of Honor promotional posters are being distributed by Wendy Stiver — contact the club if you\'d like one to display.',
+          'The Pennsylvania governor has been invited to the ceremony, and Mayor Joel Long will receive a formal invitation to speak. Honored guests will include veteran officers, city council members, and county commissioners. Kim Vance declined an invitation to sing "God Bless America" and will be recognized with a complimentary flag sponsorship for her past participation. Flags of Honor promotional posters are being distributed by Wendy Stiver - contact the club if you\'d like one to display.',
         ),
         h3('How to Participate'),
         p(
@@ -177,7 +177,7 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
       _status: 'published',
       description: lexical(
         p(
-          "The club co-sponsors with the Lock Haven Rotary Club (the \"noon club\") a Four-Way Test speech contest at Central Mountain High School. Students deliver speeches based on Rotary's Four-Way Test ethical framework.",
+          'The club co-sponsors with the Lock Haven Rotary Club (the "noon club") a Four-Way Test speech contest at Central Mountain High School. Students deliver speeches based on Rotary\'s Four-Way Test ethical framework.',
         ),
         p(
           'The club voted unanimously to sponsor a winning student to compete at the regional contest and, if successful, advance to the district-wide competition in Rotary District 7360.',
