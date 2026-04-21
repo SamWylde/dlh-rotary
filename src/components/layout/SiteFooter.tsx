@@ -18,26 +18,24 @@ export const SiteFooter = ({
       fontSize: 'var(--footer-font-size, 13px)',
     }}
   >
-    <div
-      className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:justify-between"
-    >
-      {/* Left side */}
+    <div className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:justify-between">
       <div>
         <p style={{ color: 'var(--color-footer-heading)', fontWeight: 600, marginBottom: '4px' }}>
           Rotary Club of Downtown Lock Haven
         </p>
         <p>{address || 'PO Box 634, Lock Haven, PA 17745'}</p>
         <p>
-          ✉️ <a href={`mailto:${contactEmail || 'dlhrotary@gmail.com'}`} style={{ color: 'inherit' }}>{contactEmail || 'dlhrotary@gmail.com'}</a>
+          Email:{' '}
+          <a href={`mailto:${contactEmail || 'dlhrotary@gmail.com'}`} style={{ color: 'inherit' }}>
+            {contactEmail || 'dlhrotary@gmail.com'}
+          </a>
         </p>
       </div>
 
-      {/* Right side */}
       <div className="md:text-right">
-        <p>Rotary District 7360 · Rotary International</p>
-        <p style={{ marginTop: '4px' }}>
-          &copy; {new Date().getFullYear()} Rotary Club of Downtown Lock Haven
-        </p>
+        <p>Rotary District 7360 | Rotary International</p>
+        <p style={{ marginTop: '4px' }}>&copy; {new Date().getFullYear()} Rotary Club of Downtown Lock Haven</p>
+        <p style={{ marginTop: '8px', fontSize: '12px' }}>Website by Thomas Darby</p>
       </div>
     </div>
   </footer>

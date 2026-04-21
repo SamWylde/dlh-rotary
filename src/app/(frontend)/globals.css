@@ -115,3 +115,14 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.event-calendar-grid .month_default_main {
+  min-width: 900px;
+}
+
+.event-calendar-grid .month_default_event_inner {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 12px;
+}

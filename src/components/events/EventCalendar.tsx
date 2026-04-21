@@ -115,28 +115,30 @@ export const EventCalendar = ({ events }: EventCalendarProps) => {
         </div>
       </div>
 
-      <div aria-label="Monthly event calendar" role="region">
-      <DayPilotMonth
-        cellHeaderHeight={24}
-        cellHeight={cellHeight}
-        eventClickHandling="Enabled"
-        eventDeleteHandling="Disabled"
-        eventMoveHandling="Disabled"
-        eventResizeHandling="Disabled"
-        events={calendarEvents}
-        lineSpace={2}
-        onEventClick={(args) => {
-          args.preventDefault()
+      <div aria-label="Monthly event calendar" className="event-calendar-grid overflow-x-auto" role="region">
+        <div className="min-w-[900px]">
+          <DayPilotMonth
+            cellHeaderHeight={24}
+            cellHeight={cellHeight}
+            eventClickHandling="Enabled"
+            eventDeleteHandling="Disabled"
+            eventMoveHandling="Disabled"
+            eventResizeHandling="Disabled"
+            events={calendarEvents}
+            lineSpace={2}
+            onEventClick={(args) => {
+              args.preventDefault()
 
-          const slug = (args.e.data as { tags?: { slug?: string } }).tags?.slug
-          if (slug) {
-            router.push(`/events/${slug}`)
-          }
-        }}
-        startDate={startDate}
-        timeRangeSelectedHandling="Disabled"
-        weekStarts={0}
-      />
+              const slug = (args.e.data as { tags?: { slug?: string } }).tags?.slug
+              if (slug) {
+                router.push(`/events/${slug}`)
+              }
+            }}
+            startDate={startDate}
+            timeRangeSelectedHandling="Disabled"
+            weekStarts={0}
+          />
+        </div>
       </div>
     </div>
   )
