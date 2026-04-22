@@ -13,20 +13,67 @@ const learnMoreHref = '/projects/flags-of-honor'
 export function FlagsOfHonorCampaignPopup() {
   const [isMounted, setIsMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const [isHighlighting, setIsHighlighting] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
 
-    try {
-      const dismissed = window.sessionStorage.getItem(dismissStorageKey) === 'true'
-      const shouldOpenByDefault = window.innerWidth >= 640
-      setIsOpen(!dismissed && shouldOpenByDefault)
-    } catch {
-      setIsOpen(true)
+    let flashTimer: number | undefined
+    let openTimer: number | undefined
+
+    const beginIntroSequence = () => {
+      try {
+        const dismissed = window.sessionStorage.getItem(dismissStorageKey) === 'true'
+
+        if (dismissed) {
+          setIsOpen(false)
+          setIsHighlighting(false)
+          return
+        }
+
+        setIsOpen(false)
+
+        flashTimer = window.setTimeout(() => {
+          setIsHighlighting(true)
+        }, 1200)
+
+        openTimer = window.setTimeout(() => {
+          setIsHighlighting(false)
+          setIsOpen(true)
+        }, 2300)
+      } catch {
+        flashTimer = window.setTimeout(() => {
+          setIsHighlighting(true)
+        }, 1200)
+
+        openTimer = window.setTimeout(() => {
+          setIsHighlighting(false)
+          setIsOpen(true)
+        }, 2300)
+      }
+    }
+
+    if (document.readyState === 'complete') {
+      beginIntroSequence()
+    } else {
+      window.addEventListener('load', beginIntroSequence, { once: true })
+    }
+
+    return () => {
+      window.removeEventListener('load', beginIntroSequence)
+
+      if (flashTimer) {
+        window.clearTimeout(flashTimer)
+      }
+
+      if (openTimer) {
+        window.clearTimeout(openTimer)
+      }
     }
   }, [])
 
   const openPopup = () => {
+    setIsHighlighting(false)
     setIsOpen(true)
 
     try {
@@ -37,6 +84,7 @@ export function FlagsOfHonorCampaignPopup() {
   }
 
   const closePopup = () => {
+    setIsHighlighting(false)
     setIsOpen(false)
 
     try {
@@ -121,7 +169,11 @@ export function FlagsOfHonorCampaignPopup() {
         <button
           type="button"
           onClick={isOpen ? closePopup : openPopup}
-          className="flex items-center gap-3 rounded-full border border-white/35 px-4 py-3 text-left shadow-[0_20px_40px_rgba(8,22,57,0.28)] transition-transform duration-200 hover:-translate-y-0.5"
+          className={`flex items-center gap-3 rounded-full border border-white/35 px-4 py-3 text-left transition-all duration-300 hover:-translate-y-0.5 ${
+            isHighlighting
+              ? 'scale-[1.04] shadow-[0_0_0_5px_rgba(247,168,27,0.18),0_24px_48px_rgba(8,22,57,0.32)]'
+              : 'shadow-[0_20px_40px_rgba(8,22,57,0.28)]'
+          }`}
           aria-expanded={isOpen}
           aria-controls="flags-of-honor-popup"
           style={{
