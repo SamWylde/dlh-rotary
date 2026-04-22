@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import { VolunteerSignup } from '@/components/forms/VolunteerSignup'
 import { ImpactStats } from '@/components/projects/ImpactStats'
+import { FlagsOfHonorSponsorSection } from '@/components/projects/FlagsOfHonorSponsorSection'
 import { ProjectGallery } from '@/components/projects/ProjectGallery'
 import { getCurrentUser } from '@/lib/auth'
 import { getProjectBySlug } from '@/lib/content'
@@ -21,7 +22,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     notFound()
   }
 
-  const subtitle = [project.category, project.projectStatus].filter(Boolean).join(' \u00B7 ') || undefined
+  const subtitle =
+    [project.category, project.projectStatus].filter(Boolean).join(' \u00B7 ') || undefined
 
   return (
     <div className="-mt-8 -mb-8">
@@ -46,6 +48,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           </div>
         )}
         <ImpactStats impactStats={project.impactStats} />
+        {project.slug === 'flags-of-honor' ? <FlagsOfHonorSponsorSection /> : null}
         <ProjectGallery gallery={project.gallery} />
         <VolunteerSignup project={project} user={user} />
       </section>

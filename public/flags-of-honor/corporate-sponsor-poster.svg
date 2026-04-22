@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Flags of Honor 2026 corporate sponsor poster</title>
+  <desc id="desc">Poster inviting businesses to become a one hundred dollar corporate sponsor for Flags of Honor 2026 in Lock Haven.</desc>
+  <defs>
+    <linearGradient id="topBand" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b0000" />
+      <stop offset="100%" stop-color="#c32026" />
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1200" fill="#f9f7f2" />
+  <rect x="0" y="0" width="900" height="84" fill="url(#topBand)" />
+  <text x="450" y="52" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" text-anchor="middle" letter-spacing="5">DOWNTOWN LOCK HAVEN ROTARY</text>
+  <text x="450" y="154" fill="#a0121b" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" text-anchor="middle">Become a Corporate Sponsor for</text>
+  <text x="450" y="214" fill="#111111" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="56" font-weight="900" text-anchor="middle">FLAGS OF HONOR 2026</text>
+  <text x="450" y="262" fill="#a0121b" font-family="Georgia, Times New Roman, serif" font-size="32" font-style="italic" font-weight="700" text-anchor="middle">It&apos;s America&apos;s 250th!</text>
+  <text x="450" y="312" fill="#111111" font-family="Georgia, Times New Roman, serif" font-size="26" font-style="italic" font-weight="700" text-anchor="middle">Don&apos;t miss out on this milestone year.</text>
+  <text x="450" y="364" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" text-anchor="middle">Flags in Triangle Park, Lock Haven will run through</text>
+  <text x="450" y="400" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" text-anchor="middle">both Memorial Day and Flag Day.</text>
+  <rect x="85" y="442" width="730" height="122" rx="26" fill="#ffffff" stroke="#d9d2c6" stroke-width="2" />
+  <text x="450" y="486" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle">Support veterans, soldiers, first responders,</text>
+  <text x="450" y="520" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle">and everyone honored and remembered at Flags of Honor.</text>
+  <text x="450" y="618" fill="#111111" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="54" font-weight="900" text-anchor="middle">Corporate Sponsorship: $100</text>
+  <text x="150" y="690" fill="#111111" font-family="Georgia, Times New Roman, serif" font-size="34" font-weight="700">Includes:</text>
+  <circle cx="128" cy="752" r="6" fill="#0c3b79" />
+  <text x="150" y="760" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="28">A sign to display in your business</text>
+  <circle cx="128" cy="806" r="6" fill="#0c3b79" />
+  <text x="150" y="814" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="28">Your business name in the event booklet</text>
+  <circle cx="128" cy="860" r="6" fill="#0c3b79" />
+  <text x="150" y="868" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="28">Your business listed in The Express newspaper</text>
+  <circle cx="128" cy="914" r="6" fill="#0c3b79" />
+  <text x="150" y="922" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="28">Your business named on the sponsor banner</text>
+  <rect x="100" y="964" width="700" height="72" rx="20" fill="#0c3b79" />
+  <text x="450" y="1010" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" text-anchor="middle">Deadline for sponsorships: May 8, 2026</text>
+  <text x="450" y="1086" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="23" text-anchor="middle">Email dlhrotary@gmail.com or call Diahann at 814-571-5324</text>
+  <text x="450" y="1120" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="23" text-anchor="middle">Checks payable to Downtown Lock Haven Rotary</text>
+  <text x="450" y="1152" fill="#111111" font-family="Arial, Helvetica, sans-serif" font-size="23" text-anchor="middle">Mail to Rotary Club of Downtown Lock Haven, P.O. Box 634, Lock Haven, PA 17745</text>
+</svg>
