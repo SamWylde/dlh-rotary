@@ -22,13 +22,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     notFound()
   }
 
-  const subtitle =
-    [project.category, project.projectStatus].filter(Boolean).join(' \u00B7 ') || undefined
   const isFlagsOfHonor = project.slug === 'flags-of-honor'
 
   return (
     <div className="-mt-8 -mb-8">
-      <PageHero title={project.title} subtitle={subtitle} />
+      <PageHero title={project.title} />
       <section
         style={{
           maxWidth: '800px',
