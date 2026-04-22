@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 
 import { LatestAnnouncements } from '@/components/announcements/LatestAnnouncements'
 import { UpcomingEvents } from '@/components/events/UpcomingEvents'
+import { FlagsOfHonorCampaignPopup } from '@/components/home/FlagsOfHonorCampaignPopup'
 import { HomeHero } from '@/components/home/HomeHero'
 import { HomeProjectsGrid } from '@/components/home/HomeProjectsGrid'
 import { MeetingCalloutBar } from '@/components/home/MeetingCalloutBar'
@@ -33,6 +34,7 @@ async function ProjectsSection() {
 export default function HomePage() {
   return (
     <div className="-mt-8 -mb-8">
+      <FlagsOfHonorCampaignPopup />
       <HomeHero />
       <MeetingCalloutBar />
       <WhoWeAreSection />
