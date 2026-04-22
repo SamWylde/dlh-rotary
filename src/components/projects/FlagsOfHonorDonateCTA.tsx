@@ -16,7 +16,9 @@ export const FlagsOfHonorDonateCTA = () => (
     </div>
     <div className="flex md:justify-end">
       <Button asChild className="h-auto px-8 py-4 text-base text-white">
-        <Link href="/projects/flags-of-honor/donate">Donate to Flags of Honor</Link>
+        <Link href="/projects/flags-of-honor/donate" style={{ color: '#ffffff' }}>
+          Donate to Flags of Honor
+        </Link>
       </Button>
     </div>
   </section>
