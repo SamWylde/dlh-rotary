@@ -1,12 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { X } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
-const dismissStorageKey = 'flags-of-honor-campaign-dismissed'
 const sponsorHref = '/projects/flags-of-honor/donate'
 const learnMoreHref = '/projects/flags-of-honor'
 
@@ -14,43 +13,38 @@ export function FlagsOfHonorCampaignPopup() {
   const [isMounted, setIsMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [isHighlighting, setIsHighlighting] = useState(false)
+  const flashTimerRef = useRef<number | null>(null)
+  const openTimerRef = useRef<number | null>(null)
+
+  const clearIntroSequence = () => {
+    if (flashTimerRef.current !== null) {
+      window.clearTimeout(flashTimerRef.current)
+      flashTimerRef.current = null
+    }
+
+    if (openTimerRef.current !== null) {
+      window.clearTimeout(openTimerRef.current)
+      openTimerRef.current = null
+    }
+
+    setIsHighlighting(false)
+  }
 
   useEffect(() => {
     setIsMounted(true)
 
-    let flashTimer: number | undefined
-    let openTimer: number | undefined
-
     const beginIntroSequence = () => {
-      try {
-        const dismissed = window.sessionStorage.getItem(dismissStorageKey) === 'true'
+      clearIntroSequence()
+      setIsOpen(false)
 
-        if (dismissed) {
-          setIsOpen(false)
-          setIsHighlighting(false)
-          return
-        }
+      flashTimerRef.current = window.setTimeout(() => {
+        setIsHighlighting(true)
+      }, 450)
 
-        setIsOpen(false)
-
-        flashTimer = window.setTimeout(() => {
-          setIsHighlighting(true)
-        }, 1200)
-
-        openTimer = window.setTimeout(() => {
-          setIsHighlighting(false)
-          setIsOpen(true)
-        }, 2300)
-      } catch {
-        flashTimer = window.setTimeout(() => {
-          setIsHighlighting(true)
-        }, 1200)
-
-        openTimer = window.setTimeout(() => {
-          setIsHighlighting(false)
-          setIsOpen(true)
-        }, 2300)
-      }
+      openTimerRef.current = window.setTimeout(() => {
+        setIsHighlighting(false)
+        setIsOpen(true)
+      }, 1100)
     }
 
     if (document.readyState === 'complete') {
@@ -61,37 +55,18 @@ export function FlagsOfHonorCampaignPopup() {
 
     return () => {
       window.removeEventListener('load', beginIntroSequence)
-
-      if (flashTimer) {
-        window.clearTimeout(flashTimer)
-      }
-
-      if (openTimer) {
-        window.clearTimeout(openTimer)
-      }
+      clearIntroSequence()
     }
   }, [])
 
   const openPopup = () => {
-    setIsHighlighting(false)
+    clearIntroSequence()
     setIsOpen(true)
-
-    try {
-      window.sessionStorage.removeItem(dismissStorageKey)
-    } catch {
-      // Ignore storage failures and keep the popup interactive.
-    }
   }
 
   const closePopup = () => {
-    setIsHighlighting(false)
+    clearIntroSequence()
     setIsOpen(false)
-
-    try {
-      window.sessionStorage.setItem(dismissStorageKey, 'true')
-    } catch {
-      // Ignore storage failures and keep the popup interactive.
-    }
   }
 
   if (!isMounted) {
