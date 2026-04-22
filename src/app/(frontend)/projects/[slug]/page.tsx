@@ -24,34 +24,85 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   const subtitle =
     [project.category, project.projectStatus].filter(Boolean).join(' \u00B7 ') || undefined
+  const isFlagsOfHonor = project.slug === 'flags-of-honor'
+  const hasFollowupContent =
+    Boolean(project.volunteerSignupEnabled) || Boolean((project.gallery || []).length)
 
   return (
     <div className="-mt-8 -mb-8">
       <PageHero title={project.title} subtitle={subtitle} />
-      <section
-        style={{
-          maxWidth: '800px',
-          margin: '0 auto',
-          padding: '48px 40px',
-        }}
-      >
-        {project.description && (
-          <div
-            className="prose max-w-none"
+      {isFlagsOfHonor ? (
+        <>
+          <section
             style={{
-              fontFamily: 'var(--font-body)',
-              color: 'var(--color-foreground)',
-              marginBottom: '32px',
+              maxWidth: '800px',
+              margin: '0 auto',
+              padding: '48px 40px 28px',
             }}
           >
-            <RichText data={project.description as SerializedEditorState} />
-          </div>
-        )}
-        <ImpactStats impactStats={project.impactStats} />
-        {project.slug === 'flags-of-honor' ? <FlagsOfHonorSponsorSection /> : null}
-        <ProjectGallery gallery={project.gallery} />
-        <VolunteerSignup project={project} user={user} />
-      </section>
+            {project.description && (
+              <div
+                className="prose max-w-none"
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  color: 'var(--color-foreground)',
+                  marginBottom: '32px',
+                }}
+              >
+                <RichText data={project.description as SerializedEditorState} />
+              </div>
+            )}
+            <ImpactStats impactStats={project.impactStats} />
+          </section>
+
+          <section
+            style={{
+              maxWidth: '1180px',
+              margin: '0 auto',
+              padding: '0 40px 40px',
+            }}
+          >
+            <FlagsOfHonorSponsorSection />
+          </section>
+
+          {hasFollowupContent ? (
+            <section
+              style={{
+                maxWidth: '800px',
+                margin: '0 auto',
+                padding: '0 40px 48px',
+              }}
+            >
+              <ProjectGallery gallery={project.gallery} />
+              <VolunteerSignup project={project} user={user} />
+            </section>
+          ) : null}
+        </>
+      ) : (
+        <section
+          style={{
+            maxWidth: '800px',
+            margin: '0 auto',
+            padding: '48px 40px',
+          }}
+        >
+          {project.description && (
+            <div
+              className="prose max-w-none"
+              style={{
+                fontFamily: 'var(--font-body)',
+                color: 'var(--color-foreground)',
+                marginBottom: '32px',
+              }}
+            >
+              <RichText data={project.description as SerializedEditorState} />
+            </div>
+          )}
+          <ImpactStats impactStats={project.impactStats} />
+          <ProjectGallery gallery={project.gallery} />
+          <VolunteerSignup project={project} user={user} />
+        </section>
+      )}
     </div>
   )
 }

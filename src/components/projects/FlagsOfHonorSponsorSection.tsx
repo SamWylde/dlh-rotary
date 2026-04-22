@@ -19,6 +19,7 @@ const sponsorFlyers = [
     alt: 'Flags of Honor 2026 corporate sponsor poster',
     width: 900,
     height: 1200,
+    previewClassName: 'max-h-[24rem]',
   },
   {
     title: 'Corporate sponsor letter',
@@ -27,12 +28,13 @@ const sponsorFlyers = [
     alt: 'Flags of Honor 2026 corporate sponsor letter',
     width: 1200,
     height: 760,
+    previewClassName: 'max-h-[15rem]',
   },
 ] as const
 
 export const FlagsOfHonorSponsorSection = () => (
   <section
-    className="grid gap-6 rounded-[24px] border border-border bg-card p-6 md:p-8"
+    className="grid gap-8 rounded-[28px] border border-border bg-card p-6 md:p-8 lg:p-10"
     id="corporate-sponsorship"
   >
     <div className="grid gap-3">
@@ -43,7 +45,7 @@ export const FlagsOfHonorSponsorSection = () => (
         <h2 className="text-3xl font-semibold leading-tight md:text-4xl">
           Become a corporate sponsor for America&apos;s 250th celebration year
         </h2>
-        <p className="max-w-3xl text-base leading-7 text-muted-foreground">
+        <p className="max-w-4xl text-base leading-7 text-muted-foreground">
           Downtown Lock Haven Rotary is inviting local businesses to help bring Flags of Honor back
           to Triangle Park. A $100 corporate sponsorship supports the patriotic display,
           scholarships for Central Mountain High School students, and local nonprofits that directly
@@ -52,8 +54,8 @@ export const FlagsOfHonorSponsorSection = () => (
       </div>
     </div>
 
-    <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
-      <Card className="border-border/80 bg-background">
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.92fr)] lg:items-start">
+      <Card className="border-border/80 bg-background shadow-sm">
         <CardHeader className="gap-3">
           <div className="inline-flex w-fit rounded-full bg-[color:var(--color-primary)] px-4 py-1 text-sm font-semibold text-white">
             Corporate Sponsorship: $100
@@ -137,8 +139,11 @@ export const FlagsOfHonorSponsorSection = () => (
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <Button asChild>
-              <a href="mailto:dlhrotary@gmail.com?subject=Flags%20of%20Honor%20Corporate%20Sponsorship">
+            <Button asChild className="text-white">
+              <a
+                href="mailto:dlhrotary@gmail.com?subject=Flags%20of%20Honor%20Corporate%20Sponsorship"
+                style={{ color: '#ffffff' }}
+              >
                 Email about sponsorship
               </a>
             </Button>
@@ -151,14 +156,14 @@ export const FlagsOfHonorSponsorSection = () => (
 
       <div className="grid gap-4">
         {sponsorFlyers.map((flyer) => (
-          <Card className="border-border/80 bg-background" key={flyer.href}>
+          <Card className="border-border/80 bg-background shadow-sm" key={flyer.href}>
             <CardHeader className="gap-2">
               <CardTitle className="text-xl">{flyer.title}</CardTitle>
               <CardDescription className="leading-6">{flyer.description}</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
               <a
-                className="block overflow-hidden rounded-xl border border-border bg-white"
+                className="grid min-h-[220px] place-items-center overflow-hidden rounded-xl border border-border bg-white p-4"
                 download
                 href={flyer.href}
                 target="_blank"
@@ -166,9 +171,11 @@ export const FlagsOfHonorSponsorSection = () => (
               >
                 <Image
                   alt={flyer.alt}
-                  className="h-auto w-full"
+                  className={`h-auto w-auto max-w-full ${flyer.previewClassName}`}
                   height={flyer.height}
+                  loading="eager"
                   src={flyer.href}
+                  unoptimized
                   width={flyer.width}
                 />
               </a>
