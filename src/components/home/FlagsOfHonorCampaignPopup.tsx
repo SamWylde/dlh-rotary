@@ -79,7 +79,7 @@ export function FlagsOfHonorCampaignPopup() {
         {isOpen ? (
           <section
             id="flags-of-honor-popup"
-            className="relative w-full max-w-[332px] overflow-hidden rounded-[24px] border border-[#d9d7cf] bg-[#fffdf8] p-4 shadow-[0_24px_60px_rgba(7,16,43,0.22)] transition-all duration-300 sm:max-w-[360px] sm:p-5"
+            className="relative w-full max-w-[282px] overflow-hidden rounded-[22px] border border-[#d9d7cf] bg-[#fffdf8] p-3.5 shadow-[0_24px_60px_rgba(7,16,43,0.22)] transition-all duration-300 sm:max-w-[360px] sm:rounded-[24px] sm:p-5"
             aria-label="Flags of Honor sponsorship announcement"
           >
             <button
@@ -93,7 +93,7 @@ export function FlagsOfHonorCampaignPopup() {
 
             <div className="pr-8 text-center">
               <p
-                className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#5b6780]"
+                className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#5b6780] sm:text-[11px] sm:tracking-[0.24em]"
                 style={{ fontFamily: 'var(--font-body)' }}
               >
                 America&apos;s 250th
@@ -104,13 +104,13 @@ export function FlagsOfHonorCampaignPopup() {
                 <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#d8a11a]" />
               </div>
               <h2
-                className="mt-3 text-[26px] font-semibold leading-[1.08] text-[#122047] sm:text-[31px]"
+                className="mt-2.5 text-[22px] font-semibold leading-[1.08] text-[#122047] sm:mt-3 sm:text-[31px]"
                 style={{ fontFamily: 'var(--font-heading)' }}
               >
                 Flags of Honor 2026
               </h2>
               <p
-                className="mt-3 text-[14px] leading-6 text-[#556173] sm:text-[15px]"
+                className="mt-2.5 text-[13px] leading-[1.7] text-[#556173] sm:mt-3 sm:text-[15px] sm:leading-6"
                 style={{ fontFamily: 'var(--font-body)' }}
               >
                 Support the patriotic display in Triangle Park and help us honor our heroes during
@@ -118,10 +118,10 @@ export function FlagsOfHonorCampaignPopup() {
               </p>
             </div>
 
-            <div className="mt-5 grid gap-3">
+            <div className="mt-4 grid gap-2.5 sm:mt-5 sm:gap-3">
               <Button
                 asChild
-                className="h-12 w-full rounded-full bg-[var(--color-primary)] text-base font-semibold text-white shadow-[0_16px_30px_rgba(0,61,165,0.24)] hover:bg-[var(--color-primary-dark)]"
+                className="h-11 w-full rounded-full bg-[var(--color-primary)] text-sm font-semibold text-white shadow-[0_16px_30px_rgba(0,61,165,0.24)] hover:bg-[var(--color-primary-dark)] sm:h-12 sm:text-base"
               >
                 <Link
                   href={sponsorHref}
@@ -132,7 +132,7 @@ export function FlagsOfHonorCampaignPopup() {
               </Button>
               <Link
                 href={learnMoreHref}
-                className="text-center text-[15px] font-semibold text-[#44536d] underline underline-offset-4 transition-colors hover:text-[#122047]"
+                className="text-center text-[14px] font-semibold text-[#44536d] underline underline-offset-4 transition-colors hover:text-[#122047] sm:text-[15px]"
                 style={{ fontFamily: 'var(--font-body)' }}
               >
                 Learn More
@@ -144,7 +144,7 @@ export function FlagsOfHonorCampaignPopup() {
         <button
           type="button"
           onClick={isOpen ? closePopup : openPopup}
-          className={`flex items-center gap-3 rounded-full border border-white/35 px-4 py-3 text-left transition-all duration-300 hover:-translate-y-0.5 ${
+          className={`flex items-center gap-2.5 rounded-full border border-white/35 px-3.5 py-2.5 text-left transition-all duration-300 hover:-translate-y-0.5 sm:gap-3 sm:px-4 sm:py-3 ${
             isHighlighting
               ? 'scale-[1.04] shadow-[0_0_0_5px_rgba(247,168,27,0.18),0_24px_48px_rgba(8,22,57,0.32)]'
               : 'shadow-[0_20px_40px_rgba(8,22,57,0.28)]'
@@ -155,7 +155,7 @@ export function FlagsOfHonorCampaignPopup() {
             background: 'linear-gradient(135deg, #1849a6 0%, #0f347d 100%)',
           }}
         >
-          <span className="relative block h-5 w-7 overflow-hidden rounded-[3px] shadow-sm ring-1 ring-white/45">
+          <span className="relative block h-4.5 w-6 overflow-hidden rounded-[3px] shadow-sm ring-1 ring-white/45 sm:h-5 sm:w-7">
             <span
               className="absolute inset-0"
               style={{
@@ -167,13 +167,13 @@ export function FlagsOfHonorCampaignPopup() {
           </span>
           <span className="grid gap-0.5">
             <span
-              className="text-[14px] font-semibold leading-none text-white"
+              className="text-[13px] font-semibold leading-none text-white sm:text-[14px]"
               style={{ fontFamily: 'var(--font-body)' }}
             >
               Flags of Honor
             </span>
             <span
-              className="text-[13px] leading-none text-white/80"
+              className="text-[12px] leading-none text-white/80 sm:text-[13px]"
               style={{ fontFamily: 'var(--font-body)' }}
             >
               2026
