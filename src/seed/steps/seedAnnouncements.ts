@@ -57,7 +57,7 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
           "This year's Flags of Honor is extra special as we celebrate America's 250th birthday. The City of Lock Haven has approved keeping flags in Triangle Park from May 22 through June 16.",
         ),
         p(
-          'The ceremony is Sunday, May 24 at 11 AM at Triangle Park. Amy Kowatch will sing the national anthem, Kim Vance will sing "America the Beautiful," and Janine is inviting the Central Mountain Middle School Choir to sing. Scouts will present the colors, the National Guard will perform the ceremonial flag-folding, Carmen will read the meaning of each fold, and Master Sgt. Anderson will play Taps.',
+          'The ceremony is Sunday, May 24 at 11 AM at Triangle Park. Amy Kowatch will sing the national anthem, and Kim Vance will sing "America the Beautiful"; Janine is inviting the Central Mountain Middle School Choir to sing. Scouts will present the colors, the National Guard will perform the ceremonial flag-folding, Carmen will read the meaning of each fold, and Master Sgt. Anderson will play Taps.',
         ),
         p(
           'The Pennsylvania governor has been invited, and Mayor Joel Long will receive a formal invitation to speak. The club is inviting 15 or 16 honored guests who will sit under the tent, in comfortable chairs, and be introduced.',

@@ -20,7 +20,7 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
         ),
         h3("2026: America's 250th"),
         p(
-          'This year marks the 12th annual Flags of Honor and coincides with America\'s 250th birthday celebration. The City of Lock Haven approved an extended display from May 22 through Flag Day, June 16, over three weeks. The ceremony is Sunday, May 24 at 11 AM at Triangle Park, with Amy Kowatch singing the national anthem, Kim Vance singing "America the Beautiful," and Janine inviting the Central Mountain Middle School Choir to sing. Scouts will present the colors, the National Guard will perform the ceremonial flag-folding, Carmen will read the meaning of each fold, and Master Sgt. Anderson will play Taps.',
+          'This year marks the 12th annual Flags of Honor and coincides with America\'s 250th birthday celebration. The City of Lock Haven approved an extended display from May 22 through Flag Day, June 16, over three weeks. The ceremony is Sunday, May 24 at 11 AM at Triangle Park, with Amy Kowatch singing the national anthem and Kim Vance singing "America the Beautiful"; Janine is inviting the Central Mountain Middle School Choir to sing. Scouts will present the colors, the National Guard will perform the ceremonial flag-folding, Carmen will read the meaning of each fold, and Master Sgt. Anderson will play Taps.',
         ),
         p(
           "The Pennsylvania governor has been invited to the ceremony, and Mayor Joel Long will receive a formal invitation to speak. The club is inviting 15 or 16 honored guests who will sit under the tent, in comfortable chairs, and be introduced. Flags of Honor promotional posters are being distributed by Wendy Stiver - contact the club if you'd like one to display.",

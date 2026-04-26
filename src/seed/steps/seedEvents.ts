@@ -205,7 +205,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       eventType: 'social',
       location: 'Triangle Park, Lock Haven',
       description:
-        'Annual Flags of Honor ceremony celebrating America\'s 250th birthday. Please arrive at 11 AM. Amy Kowatch will sing the national anthem, Kim Vance will sing "America the Beautiful," and Janine is inviting the Central Mountain Middle School Choir to sing. The club is inviting 15 or 16 honored guests to sit under the tent and be introduced. Club lunch will follow the ceremony.',
+        'Annual Flags of Honor ceremony celebrating America\'s 250th birthday. Please arrive at 11 AM. Amy Kowatch will sing the national anthem, and Kim Vance will sing "America the Beautiful"; Janine is inviting the Central Mountain Middle School Choir to sing. The club is inviting 15 or 16 honored guests to sit under the tent and be introduced. Club lunch will follow the ceremony.',
     },
     {
       slug: 'foh-removal-2026',
