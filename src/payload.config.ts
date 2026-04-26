@@ -1,5 +1,5 @@
-import { resendAdapter } from '@payloadcms/email-resend'
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -21,7 +21,18 @@ import { Users } from '@/collections/Users'
 import { Navigation } from '@/globals/Navigation'
 import { SiteSettings } from '@/globals/SiteSettings'
 import { Theme } from '@/globals/Theme'
-import { BLOB_READ_WRITE_TOKEN, DATABASE_URL, PAYLOAD_SECRET, RESEND_API_KEY } from '@/lib/env'
+import {
+  BLOB_READ_WRITE_TOKEN,
+  DATABASE_URL,
+  DEFAULT_FROM_EMAIL,
+  DEFAULT_FROM_NAME,
+  PAYLOAD_SECRET,
+  SMTP_HOST,
+  SMTP_PASSWORD,
+  SMTP_PORT,
+  SMTP_SECURE,
+  SMTP_USER,
+} from '@/lib/env'
 import { seed } from '@/seed'
 
 const filename = fileURLToPath(import.meta.url)
@@ -49,10 +60,18 @@ export default buildConfig({
     },
   }),
   editor: lexicalEditor(),
-  email: resendAdapter({
-    defaultFromAddress: process.env.DEFAULT_FROM_EMAIL || 'noreply@dlhrotary.org',
-    defaultFromName: 'Rotary Club of Downtown Lock Haven',
-    apiKey: RESEND_API_KEY,
+  email: nodemailerAdapter({
+    defaultFromAddress: DEFAULT_FROM_EMAIL,
+    defaultFromName: DEFAULT_FROM_NAME,
+    transportOptions: {
+      host: SMTP_HOST,
+      port: SMTP_PORT,
+      secure: SMTP_SECURE,
+      auth: {
+        user: SMTP_USER,
+        pass: SMTP_PASSWORD,
+      },
+    },
   }),
   plugins: [
     vercelBlobStorage({

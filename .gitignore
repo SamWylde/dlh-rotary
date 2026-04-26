@@ -4,6 +4,8 @@ node_modules
 .DS_Store
 .env
 .env.local
+.env.*
+!.env.example
 .next
 .vercel
 *.tsbuildinfo
@@ -26,5 +28,12 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Local artifacts
+.lighthouse-tmp/
+lighthouse-*.json
+*.docx
+*.pdf
+invoice-draft*.md
 
 .vercel

@@ -15,6 +15,7 @@ export const MobileNav = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUse
   const pathname = usePathname()
   const triggerRef = useRef<HTMLButtonElement>(null)
   const navRef = useRef<HTMLElement>(null)
+  const canManage = user?.role === 'admin' || user?.role === 'officer'
 
   const close = useCallback(() => {
     setOpen(false)
@@ -160,7 +161,12 @@ export const MobileNav = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUse
             })}
             <li className="mt-2 border-t border-[var(--color-header-border-muted,rgba(255,255,255,0.2))] pt-2">
               {user ? (
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  {canManage ? (
+                    <Link className="block rounded px-3 py-2 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]" href="/manage">
+                      Manage
+                    </Link>
+                  ) : null}
                   <Link className="block rounded px-3 py-2 hover:bg-[var(--color-header-hover,rgba(255,255,255,0.1))]" href="/account">
                     Account
                   </Link>

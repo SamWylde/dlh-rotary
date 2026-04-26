@@ -2,10 +2,16 @@ import type { CollectionConfig, Where } from 'payload'
 
 import { type AuthUser, isAdmin, isAdminFieldAccess, isAdminOrOfficer, isAdminOrSelf } from '@/access'
 import { isPrivilegedRole } from '@/constants/roles'
+import { generatePasswordResetEmailHTML, generatePasswordResetEmailSubject } from '@/lib/authEmails'
 
 export const Users: CollectionConfig = {
   slug: 'users',
-  auth: true,
+  auth: {
+    forgotPassword: {
+      generateEmailHTML: generatePasswordResetEmailHTML,
+      generateEmailSubject: generatePasswordResetEmailSubject,
+    },
+  },
   admin: {
     useAsTitle: 'fullName',
     defaultColumns: ['fullName', 'email', 'role'],

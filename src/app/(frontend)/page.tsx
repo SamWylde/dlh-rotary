@@ -1,37 +1,42 @@
-import { Suspense } from 'react'
-
 import { LatestAnnouncements } from '@/components/announcements/LatestAnnouncements'
 import { UpcomingEvents } from '@/components/events/UpcomingEvents'
 import { FlagsOfHonorCampaignPopup } from '@/components/home/FlagsOfHonorCampaignPopup'
 import { HomeHero } from '@/components/home/HomeHero'
 import { HomeProjectsGrid } from '@/components/home/HomeProjectsGrid'
 import { MeetingCalloutBar } from '@/components/home/MeetingCalloutBar'
-import { ProjectsSkeleton, SectionSkeleton } from '@/components/home/Skeletons'
 import { StayConnectedSection } from '@/components/home/StayConnectedSection'
 import { WhoWeAreSection } from '@/components/home/WhoWeAreSection'
 import { getCurrentUser } from '@/lib/auth'
 import { getProjects, getRecentAnnouncements, getUpcomingEvents } from '@/lib/content'
 
-async function UpcomingEventsSection() {
-  const { user } = await getCurrentUser()
-  const events = await getUpcomingEvents(5, user)
-  return <UpcomingEvents events={events.docs} viewAllHref="/events" />
+const getHomeContent = async () => {
+  try {
+    const { user } = await getCurrentUser()
+    const [events, announcements, projects] = await Promise.all([
+      getUpcomingEvents(5, user),
+      getRecentAnnouncements(3, user),
+      getProjects(user),
+    ])
+
+    return {
+      announcements: announcements.docs,
+      events: events.docs,
+      projects: projects.docs.slice(0, 6),
+    }
+  } catch (error) {
+    console.error('Failed to load homepage content:', error)
+
+    return {
+      announcements: [],
+      events: [],
+      projects: [],
+    }
+  }
 }
 
-async function LatestAnnouncementsSection() {
-  const { user } = await getCurrentUser()
-  const announcements = await getRecentAnnouncements(3, user)
-  return <LatestAnnouncements announcements={announcements.docs} viewAllHref="/announcements" />
-}
+export default async function HomePage() {
+  const { announcements, events, projects } = await getHomeContent()
 
-async function ProjectsSection() {
-  const { user } = await getCurrentUser()
-  const projects = await getProjects(user)
-  const featured = projects.docs.slice(0, 6)
-  return <HomeProjectsGrid projects={featured} />
-}
-
-export default function HomePage() {
   return (
     <div className="-mt-8 -mb-8">
       <FlagsOfHonorCampaignPopup />
@@ -44,25 +49,17 @@ export default function HomePage() {
         style={{
           maxWidth: 'var(--section-ea-max-width, 1000px)',
           margin: '0 auto',
-          padding: 'var(--section-ea-padding-top, 20px) 40px var(--section-ea-padding-bottom, 56px)',
+          padding:
+            'var(--section-ea-padding-top, 20px) 40px var(--section-ea-padding-bottom, 56px)',
         }}
       >
-        <div
-          className="grid md:grid-cols-2"
-          style={{ gap: 'var(--section-ea-grid-gap, 32px)' }}
-        >
-          <Suspense fallback={<SectionSkeleton />}>
-            <UpcomingEventsSection />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton />}>
-            <LatestAnnouncementsSection />
-          </Suspense>
+        <div className="grid md:grid-cols-2" style={{ gap: 'var(--section-ea-grid-gap, 32px)' }}>
+          <UpcomingEvents events={events} viewAllHref="/events" />
+          <LatestAnnouncements announcements={announcements} viewAllHref="/announcements" />
         </div>
       </section>
 
-      <Suspense fallback={<ProjectsSkeleton />}>
-        <ProjectsSection />
-      </Suspense>
+      <HomeProjectsGrid projects={projects} />
 
       <StayConnectedSection />
     </div>

@@ -33,6 +33,9 @@ const eslintConfig = [
   {
     // Relax rules for generated files
     files: ['**/payload-types.ts', '**/payload-generated-schema.ts', '**/migrations/**'],
+    linterOptions: {
+      reportUnusedDisableDirectives: false,
+    },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',

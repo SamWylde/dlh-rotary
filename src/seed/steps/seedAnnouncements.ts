@@ -57,16 +57,16 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
           "This year's Flags of Honor is extra special as we celebrate America's 250th birthday. The City of Lock Haven has approved keeping flags in Triangle Park from May 22 through June 16.",
         ),
         p(
-          'The ceremony is Sunday, May 24 at 11 AM at Triangle Park. Amy Kowatch will sing the national anthem, Scouts will present the colors, the National Guard will perform the ceremonial flag-folding, Carmen will read the meaning of each fold, and Master Sgt. Anderson will play Taps.',
+          'The ceremony is Sunday, May 24 at 11 AM at Triangle Park. Amy Kowatch will sing the national anthem, Kim Vance will sing "America the Beautiful," and Janine is inviting the Central Mountain Middle School Choir to sing. Scouts will present the colors, the National Guard will perform the ceremonial flag-folding, Carmen will read the meaning of each fold, and Master Sgt. Anderson will play Taps.',
         ),
         p(
-          'The Pennsylvania governor has been invited, and Mayor Joel Long will receive a formal invitation to speak. Honored guests will include veteran officers, city council members, and county commissioners.',
+          'The Pennsylvania governor has been invited, and Mayor Joel Long will receive a formal invitation to speak. The club is inviting 15 or 16 honored guests who will sit under the tent, in comfortable chairs, and be introduced.',
         ),
         p(
           'Sponsor a flag to honor or remember someone special. Deadline for flag orders: May 11. Corporate sponsorship deadline: May 8. Email dlhrotary@gmail.com to order.',
         ),
         p(
-          'Flags of Honor promotional posters are being distributed by Wendy Stiver. Kim Vance was invited to sing "God Bless America" but declined, and the club will recognize her past participation with a complimentary flag sponsorship.',
+          "Flags of Honor promotional posters are being distributed by Wendy Stiver. Contact the club if you'd like one to display.",
         ),
       ),
     },
@@ -115,9 +115,13 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
       _status: 'published',
       content: lexical(
         p('We have several guest visits coming up at our Tuesday meetings:'),
-        p("Rick Schulze, Lock Haven's new Downtown Manager, has been invited to speak to the club."),
+        p(
+          "Rick Schulze, Lock Haven's new Downtown Manager, has been invited to speak to the club.",
+        ),
         p('Ed Hosler and Clark, the Clinton County Courthouse therapy dog, will be visiting.'),
-        p('Brooklynn Bechdel, one of our scholarship recipients, is also on the club\'s upcoming speaker list.'),
+        p(
+          "Brooklynn Bechdel, one of our scholarship recipients, is also on the club's upcoming speaker list.",
+        ),
         p('We are also planning to host a representative from the dialysis center.'),
         p(
           'We also hope to host a presentation on ShelterBox, the global disaster relief organization our club is supporting through the tri-district fundraising challenge.',
@@ -156,7 +160,7 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
     uniqueField: 'slug',
     uniqueValue: 'wine-wilds-shelterbox-2026',
     data: {
-      title: 'Wine in the Wilds - April 25',
+      title: 'Wine in the Wilds Recap - April 25',
       slug: 'wine-wilds-shelterbox-2026',
       publishedDate: '2026-03-26T00:00:00.000Z',
       priority: 'normal',
@@ -165,12 +169,14 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
       _status: 'published',
       content: lexical(
         p(
-          'Mark your calendars for Saturday, April 25. Wine in the Wilds runs from 2 to 6 PM at the Clinton County Fairgrounds, with club setup at 1 PM, and the Rotary Club of Downtown Lock Haven will be selling soft pretzels again. As of the April 14 meeting, 19 wine and beer vendors, 16 other vendors, and 2 food trucks were signed up.',
+          'The club sold out of soft pretzels Saturday, April 25 at Wine in the Wilds, sponsored by the Clinton County Historical Society.',
         ),
         p(
-          "We're also proud to be part of a tri-district challenge to raise money for ShelterBox by May 1. ShelterBox provides emergency shelter and essential supplies to families displaced by disaster and conflict around the world. Our club has committed $100 and will add all pretzel sale profits to our donation. A ShelterBox will be on display at the event so you can see exactly what your support provides.",
+          'Thanks to Lisa and Tom for selling pretzels, and especially to Diahann for picking up the pretzels and staying to sell them.',
         ),
-        p('Come out, enjoy local wine, and help us make a difference locally and globally.'),
+        p(
+          'The club had discussed setting up a ShelterBox at the event, but did not have enough Rotarians available to do it.',
+        ),
       ),
     },
   })
@@ -204,7 +210,9 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
         p(
           'Challenges discussed included reduced store revenue because of higher supply and gas prices, along with alleys in need of repair. Rick encouraged store owners to attend PA Small Business Day in Harrisburg on May 5 and mentioned an idea to promote teachers with apple coupons for downtown businesses.',
         ),
-        p('Flags of Honor update: Janine and Heather discussed the Kim Vance question and left the decision with her.'),
+        p(
+          'Flags of Honor update: Janine and Heather discussed the Kim Vance question and left the decision with her.',
+        ),
         p('Attending April 7: Janine, Heather, Jeanne, Cathy, Carmen, Bonnie, Haley, and Emma.'),
       ),
     },
@@ -225,21 +233,32 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
       content: lexical(
         h3('Upcoming Dates'),
         p('Apr 21: Club meeting at the regular time and place.'),
-        p('Apr 25: Wine in the Wilds, 2 to 6 PM at the Clinton County Fairgrounds, with setup at 1 PM. The club will be selling soft pretzels again.'),
+        p(
+          'Apr 25: Wine in the Wilds, 2 to 6 PM at the Clinton County Fairgrounds, with setup at 1 PM. The club will be selling soft pretzels again.',
+        ),
         p('Apr 28: Tentative board meeting and the last regular club meeting for a while.'),
-        p('May 5: Full club work session to label plaques, 5:30 PM at Covenant Church.'),
+        p('May 5: Regular club meeting.'),
         p('May 8: Corporate sponsorship deadline for Flags of Honor.'),
         p('May 11: Flag sponsorship deadline for Flags of Honor.'),
         p('May 12-14: Club Leadership Learning Seminar.'),
-        p('May 12: Full club work session in the park to locate flagpole holes, 5:30 PM.'),
-        p('May 19: Full club work session to make the banner and sort plaques, 5:30 PM at Covenant Church.'),
         p(
-          'May 22: Full club work session in the park to install flags. Bring gardening gloves, a trowel, tape measure, screwdriver, and kneeling pad if you have one.',
+          'May 12: Full club work session to make the first batch of flag plaques, 5:30 PM at Covenant Church.',
         ),
-        p('May 24: Public ceremony in the park. Arrive at 11 AM. Lunch afterward at Restless Oaks Restaurant.'),
+        p(
+          'May 19: Full club work session to make the banner and make and sort plaques, 5:30 PM at Covenant Church.',
+        ),
+        p(
+          'May 20: Full club work session in the park to find the flagpole holes, 5:30 PM. Bring gardening gloves, a trowel, tape measure, screwdriver, and a kneeling pad if you have one.',
+        ),
+        p('May 22: Full club work session in the park to install flags.'),
+        p('May 24: Public ceremony in the park. Arrive at 11 AM. Club lunch follows.'),
         h3('Meeting Notes'),
-        p('Wine in the Wilds update: 19 wine and beer vendors, 16 other vendors, and 2 food trucks were signed up as of the meeting.'),
-        p('Club picnic update: Janine is hosting at her house on Tuesday, July 7, with Tuesday, July 14 as the alternate date.'),
+        p(
+          'Wine in the Wilds update: 19 wine and beer vendors, 16 other vendors, and 2 food trucks were signed up as of the meeting.',
+        ),
+        p(
+          'Club picnic update: Janine is hosting at her house on Tuesday, July 7, with Tuesday, July 14 as the alternate date.',
+        ),
         h3('Flags of Honor Updates'),
         p(
           'Members were asked to text Wendy after putting up all of their posters. A list of previous corporate sponsors who have not yet responded is coming, and all members are asked to help contact them.',
@@ -247,9 +266,11 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
         p(
           'The Pennsylvania governor has been invited and a response is expected in about two weeks. If the governor is unavailable, Rick Vilello, DCED Deputy Secretary for Community Affairs, and the former Lock Haven mayor are backup options. Current Mayor Joel Long will receive a formal invitation to speak.',
         ),
-        p('Honored guests who will attend but not speak include veteran officers, city council members, and county commissioners.'),
         p(
-          'Amy Kowatch will sing the national anthem. Kim Vance declined the invitation to sing "God Bless America" and will receive a complimentary flag sponsorship in recognition of her past participation. Janine will reach out to the Central Mountain Middle School Choir director about participating.',
+          'Honored guests who will attend but not speak include veteran officers, city council members, and county commissioners.',
+        ),
+        p(
+          'Amy Kowatch will sing the national anthem. Kim Vance has agreed to participate and will sing "America the Beautiful." Janine is also inviting the Central Mountain Middle School Choir to sing.',
         ),
         p(
           'Scouts will present the colors, the National Guard will conduct the ceremonial flag-folding, Carmen will read the meaning of each fold, Master Sgt. Anderson will play Taps, and Brady Carnahan will take drone photos.',
@@ -257,7 +278,81 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
         p(
           'Carmen reminded the city about mowing. The sound system and outlets will be tested in advance, and community service workers will help set up and take down the flags.',
         ),
-        p('Attending April 14: Janine, Heather, Carmen, Marianne, Diahann, Jeanne, Bonnie, and Emma.'),
+        p(
+          'Attending April 14: Janine, Heather, Carmen, Marianne, Diahann, Jeanne, Bonnie, and Emma.',
+        ),
+      ),
+    },
+  })
+
+  await upsertByField(payload, {
+    collection: 'announcements',
+    uniqueField: 'slug',
+    uniqueValue: 'club-minutes-april-21-2026',
+    data: {
+      title: 'Club Minutes - April 21 Meeting',
+      slug: 'club-minutes-april-21-2026',
+      publishedDate: '2026-04-26T00:00:00.000Z',
+      priority: 'normal',
+      pinned: false,
+      membersOnly: false,
+      _status: 'published',
+      content: lexical(
+        h3('Coming Right Up'),
+        p('Tuesday, April 28: Board meeting / club meeting.'),
+        p('Tuesday, May 5: Club meeting.'),
+        p(
+          'Tuesday, May 12: Full club work session to make the first batch of flag plaques, 5:30 PM at Covenant Church.',
+        ),
+        p(
+          'Tuesday, May 19: Full club work session to make the banner, and to make and sort plaques, 5:30 PM at Covenant Church.',
+        ),
+        p(
+          'Wednesday, May 20: Full club work session in the park to find the flagpole holes, 5:30 PM. Bring gardening gloves, a trowel, tape measure, screwdriver, and a kneeling pad if you have one.',
+        ),
+        p('Friday, May 22: Full club work session in the park to install the flags.'),
+        p('Sunday, May 24: Ceremony in the park. Arrive at 11 AM, followed by club lunch.'),
+        h3("What We've Been Doing"),
+        h3('Club Meeting on April 21'),
+        p('The club met April 21 at Poorman Gallery.'),
+        h3('Dates Changed'),
+        p(
+          'Tuesday, May 5 will be a regular club meeting. Flags of Honor work sessions will be held Tuesday, May 12 at Covenant Church at 5:30 PM; Tuesday, May 19 at Covenant Church at 5:30 PM; Wednesday, May 20 in the park at 5:30 PM; and Friday, May 22 in the park.',
+        ),
+        h3('Corporate Sponsors'),
+        p(
+          "Rotarians volunteered to contact businesses that were corporate sponsors in 2025 but haven't signed up for this year yet.",
+        ),
+        p("Heather: Domino's and Lucky Seven Travel Plaza."),
+        p("Cathy: First Citizens Community Bank and Kliney's."),
+        p('Tom: Terrapin & SWC.'),
+        p(
+          "Lisa: Creek Unique, Fleming Eatery, Beiter's, Triangle Park Building, and Hear the Birds (Bayliff's).",
+        ),
+        p(
+          'Janine: Brigandi, Gleghorn and Haffley Insurance; Chatham Run Feed Mill; Davis Insurance; Raymond dentistry.',
+        ),
+        p("Carmen: Addie's and First National Bank."),
+        p('Thank you to all who volunteered!'),
+        h3('Flags Ceremony'),
+        p(
+          'Kim Vance has agreed to participate in the ceremony and will sing "America the Beautiful." Janine is also inviting the Central Mountain Middle School Choir to sing.',
+        ),
+        p(
+          'The club is inviting 15 or 16 honored guests who will not participate in the program but will sit under the tent, in comfortable chairs, and be introduced.',
+        ),
+        h3('Wine in the Wilds'),
+        p(
+          'The club sold out of soft pretzels Saturday, April 25 at Wine in the Wilds, sponsored by the Clinton County Historical Society.',
+        ),
+        p(
+          'Thanks to Lisa and Tom for selling pretzels, and especially to Diahann for picking up the pretzels and staying to sell them.',
+        ),
+        p(
+          'The club had discussed setting up a ShelterBox at the event, but did not have enough Rotarians available to do it.',
+        ),
+        h3('Attending'),
+        p('Lisa, Janine, Heather, Wendy, Carmen, Marianne, Jeanne, Cathy, Tom, Haley, and Emma.'),
       ),
     },
   })

@@ -16,14 +16,14 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
       _status: 'published',
       description: lexical(
         p(
-          'Flags of Honor is the club\'s signature project and largest annual fundraiser. Since approximately 2014, the club has transformed Triangle Park in downtown Lock Haven into a patriotic display of full-sized American flags sponsored by community members in honor or memory of their loved ones. In 2024, 168 flags flew in the park; in 2025, more than 150.',
+          "Flags of Honor is the club's signature project and largest annual fundraiser. Since approximately 2014, the club has transformed Triangle Park in downtown Lock Haven into a patriotic display of full-sized American flags sponsored by community members in honor or memory of their loved ones. In 2024, 168 flags flew in the park; in 2025, more than 150.",
         ),
-        h3('2026: America\'s 250th'),
+        h3("2026: America's 250th"),
         p(
-          'This year marks the 12th annual Flags of Honor and coincides with America\'s 250th birthday celebration. The City of Lock Haven approved an extended display from May 22 through Flag Day, June 16, over three weeks. The ceremony is Sunday, May 24 at 11 AM at Triangle Park, with Amy Kowatch singing the national anthem, Scouts presenting the colors, the National Guard performing the ceremonial flag-folding, Carmen reading the meaning of each fold, and Master Sgt. Anderson playing Taps.',
+          'This year marks the 12th annual Flags of Honor and coincides with America\'s 250th birthday celebration. The City of Lock Haven approved an extended display from May 22 through Flag Day, June 16, over three weeks. The ceremony is Sunday, May 24 at 11 AM at Triangle Park, with Amy Kowatch singing the national anthem, Kim Vance singing "America the Beautiful," and Janine inviting the Central Mountain Middle School Choir to sing. Scouts will present the colors, the National Guard will perform the ceremonial flag-folding, Carmen will read the meaning of each fold, and Master Sgt. Anderson will play Taps.',
         ),
         p(
-          'The Pennsylvania governor has been invited to the ceremony, and Mayor Joel Long will receive a formal invitation to speak. Honored guests will include veteran officers, city council members, and county commissioners. Kim Vance declined an invitation to sing "God Bless America" and will be recognized with a complimentary flag sponsorship for her past participation. Flags of Honor promotional posters are being distributed by Wendy Stiver - contact the club if you\'d like one to display.',
+          "The Pennsylvania governor has been invited to the ceremony, and Mayor Joel Long will receive a formal invitation to speak. The club is inviting 15 or 16 honored guests who will sit under the tent, in comfortable chairs, and be introduced. Flags of Honor promotional posters are being distributed by Wendy Stiver - contact the club if you'd like one to display.",
         ),
         h3('How to Participate'),
         p(
@@ -77,7 +77,7 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
       _status: 'published',
       description: lexical(
         p(
-          'The club\'s bingo fundraiser features basket raffles (goal: 50+ baskets), a 50-50 drawing, door prizes, rip tickets, and special bingo games. Food is provided by Citizens Hose Fire Co.',
+          "The club's bingo fundraiser features basket raffles (goal: 50+ baskets), a 50-50 drawing, door prizes, rip tickets, and special bingo games. Food is provided by Citizens Hose Fire Co.",
         ),
         h3('2026 Details'),
         p(
@@ -110,11 +110,9 @@ export const seedProjects = async (payload: Payload): Promise<void> => {
         ),
         h3('2026 Deliveries'),
         p(
-          'In 2026, the club expanded to 14 stops: Citizens Hose Co., Eastside Fire Co., Lock Haven Police, Lock Haven EMS, Goodwill Hose Co. (Flemington), Goodwill Ambulance, Dunnstown Fire, Castanea Fire, Mill Hall Fire, the Communications Center, the Sheriff\'s Office, Juvenile Probation, Adult Probation, and a special basket of low-calorie treats for Clark the service dog.',
+          "In 2026, the club expanded to 14 stops: Citizens Hose Co., Eastside Fire Co., Lock Haven Police, Lock Haven EMS, Goodwill Hose Co. (Flemington), Goodwill Ambulance, Dunnstown Fire, Castanea Fire, Mill Hall Fire, the Communications Center, the Sheriff's Office, Juvenile Probation, Adult Probation, and a special basket of low-calorie treats for Clark the service dog.",
         ),
-        p(
-          'The deliveries were featured on the front page of The Express on February 14, 2026.',
-        ),
+        p('The deliveries were featured on the front page of The Express on February 14, 2026.'),
       ),
     },
   })

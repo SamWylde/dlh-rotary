@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { CSSProperties } from 'react'
 
 import type { SessionUser } from '@/lib/auth'
 import { getVisibleChildren, isValidHref, resolveHref, type MainNavEntry } from '@/lib/nav'
@@ -7,13 +8,31 @@ import { LogoutButton } from './LogoutButton'
 import { MobileNav } from './MobileNav'
 import { NavDropdown } from './NavDropdown'
 
-export const SiteHeader = ({
-  nav,
-  user,
-}: {
-  nav: MainNavEntry[]
-  user: SessionUser | null
-}) => {
+const navButtonBaseStyle = {
+  padding: 'var(--nav-btn-padding, 6px 16px)',
+  borderRadius: 'var(--nav-btn-radius, 4px)',
+  fontSize: 'var(--nav-btn-font-size, 12px)',
+  letterSpacing: '0.04em',
+  textTransform: 'uppercase',
+  fontWeight: 600,
+  fontFamily: 'var(--font-body)',
+} satisfies CSSProperties
+
+const navButtonOutlineStyle = {
+  ...navButtonBaseStyle,
+  border: '1px solid var(--color-primary)',
+  color: 'var(--color-primary)',
+} satisfies CSSProperties
+
+const navButtonPrimaryStyle = {
+  ...navButtonBaseStyle,
+  background: 'var(--color-primary)',
+  color: 'var(--color-primary-foreground)',
+} satisfies CSSProperties
+
+export const SiteHeader = ({ nav, user }: { nav: MainNavEntry[]; user: SessionUser | null }) => {
+  const canManage = user?.role === 'admin' || user?.role === 'officer'
+
   return (
     <header
       className="relative"
@@ -32,7 +51,10 @@ export const SiteHeader = ({
             className="shrink-0"
             width={42}
             height={42}
-            style={{ height: 'var(--header-logo-size, 42px)', width: 'var(--header-logo-size, 42px)' }}
+            style={{
+              height: 'var(--header-logo-size, 42px)',
+              width: 'var(--header-logo-size, 42px)',
+            }}
             aria-hidden="true"
           />
           <div style={{ lineHeight: 1.3 }}>
@@ -99,7 +121,15 @@ export const SiteHeader = ({
                 {label}
               </button>
             ) : (
-              <span style={{ borderBottom: '2px solid transparent', paddingBottom: '2px', opacity: 0.6 }}>{label}</span>
+              <span
+                style={{
+                  borderBottom: '2px solid transparent',
+                  paddingBottom: '2px',
+                  opacity: 0.6,
+                }}
+              >
+                {label}
+              </span>
             )
 
             if (!hasChildren) {
@@ -122,39 +152,18 @@ export const SiteHeader = ({
 
           {user ? (
             <>
-              <Link
-                href="/account"
-                style={{
-                  background: 'var(--color-primary)',
-                  color: 'var(--color-primary-foreground)',
-                  padding: 'var(--nav-btn-padding, 6px 16px)',
-                  borderRadius: 'var(--nav-btn-radius, 4px)',
-                  fontSize: 'var(--nav-btn-font-size, 12px)',
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase',
-                  fontWeight: 600,
-                  fontFamily: 'var(--font-body)',
-                }}
-              >
+              {canManage ? (
+                <Link href="/manage" style={navButtonOutlineStyle}>
+                  Manage
+                </Link>
+              ) : null}
+              <Link href="/account" style={navButtonPrimaryStyle}>
                 Account
               </Link>
               <LogoutButton />
             </>
           ) : (
-            <Link
-              href="/join"
-              style={{
-                background: 'var(--color-primary)',
-                color: 'var(--color-primary-foreground)',
-                padding: 'var(--nav-btn-padding, 6px 16px)',
-                borderRadius: 'var(--nav-btn-radius, 4px)',
-                fontSize: 'var(--nav-btn-font-size, 12px)',
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                fontWeight: 600,
-                fontFamily: 'var(--font-body)',
-              }}
-            >
+            <Link href="/join" style={navButtonPrimaryStyle}>
               Join Us
             </Link>
           )}

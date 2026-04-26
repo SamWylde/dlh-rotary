@@ -6,6 +6,7 @@ import { SiteFooter } from '@/components/layout/SiteFooter'
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { ThemeLoader } from '@/components/layout/ThemeLoader'
 import { getCurrentUser } from '@/lib/auth'
+import { fontVariables } from '@/lib/fonts'
 import type { FooterNavEntry, MainNavEntry } from '@/lib/nav'
 import { getPayloadClient } from '@/lib/payload'
 
@@ -20,11 +21,7 @@ export const metadata: Metadata = {
 
 const GOOGLE_ANALYTICS_ID = 'G-Z5JENXY6S6'
 
-export default async function FrontendLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
   let email: string | undefined
   let phone: string | undefined
   let address: string | undefined
@@ -60,14 +57,8 @@ export default async function FrontendLayout({
   }
 
   return (
-    <html lang="en">
+    <html className={fontVariables} lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
-          rel="stylesheet"
-        />
         <Script
           async
           src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`}
@@ -87,7 +78,13 @@ export default async function FrontendLayout({
       <body className="flex flex-col">
         <SiteHeader nav={mainNav} user={auth.user} />
         <main className="mx-auto w-full max-w-6xl px-4 py-8">{children}</main>
-        <SiteFooter contactEmail={email} contactPhone={phone} address={address} facebookUrl={facebookUrl} nav={footerNav} />
+        <SiteFooter
+          contactEmail={email}
+          contactPhone={phone}
+          address={address}
+          facebookUrl={facebookUrl}
+          nav={footerNav}
+        />
       </body>
     </html>
   )

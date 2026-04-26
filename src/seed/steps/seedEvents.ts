@@ -28,6 +28,22 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
 
   const upcomingEvents = [
     {
+      slug: 'meeting-2026-04-28',
+      title: 'Board Meeting / Club Meeting',
+      date: '2026-04-28T17:30:00.000Z',
+      eventType: 'board',
+      location: 'Poorman Gallery, 352 E. Water St., Lock Haven',
+      description: 'Board meeting and regular club meeting at the regular Tuesday meeting time.',
+    },
+    {
+      slug: 'meeting-2026-05-05',
+      title: 'Club Meeting',
+      date: '2026-05-05T17:30:00.000Z',
+      eventType: 'meeting',
+      location: 'Poorman Gallery, 352 E. Water St., Lock Haven',
+      description: 'Regular Tuesday club meeting.',
+    },
+    {
       slug: 'tri-district-pels-2026',
       title: 'Tri-District PELS',
       date: '2026-03-07T09:00:00.000Z',
@@ -105,12 +121,14 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       ticketPrice: 40,
       description: lexical(
         p(
-          'Join us at Wine in the Wilds, a fundraiser hosted by the Clinton County Historical Society, from 2 to 6 PM at the Clinton County Fairgrounds. Club setup begins at 1 PM. The Rotary Club of Downtown Lock Haven will be on-site selling soft pretzels again, and as of the April 14 meeting there were 19 wine and beer vendors, 16 other vendors, and 2 food trucks signed up.',
+          'The Rotary Club of Downtown Lock Haven sold out of soft pretzels at Wine in the Wilds, a fundraiser hosted by the Clinton County Historical Society.',
         ),
         p(
-          'Our club is part of a tri-district challenge to raise money for ShelterBox by May 1. All pretzel sale profits will go directly toward the challenge. Stop by, enjoy great local wine, and support two great causes at once.',
+          'Thanks to Lisa and Tom for selling pretzels, and especially to Diahann for picking up the pretzels and staying to sell them.',
         ),
-        p('Admission: $40'),
+        p(
+          'The club had discussed setting up a ShelterBox at the event, but did not have enough Rotarians available to do it.',
+        ),
       ),
       _status: 'published',
     },
@@ -129,19 +147,21 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
     },
     {
       slug: 'foh-label-plaques-2026',
-      title: 'Flags of Honor - Label Plaques',
-      date: '2026-05-05T17:30:00.000Z',
+      title: 'Flags of Honor - Make Flag Plaques',
+      date: '2026-05-12T17:30:00.000Z',
       eventType: 'service',
       location: 'Covenant United Methodist Church, 44 W. Main St., Lock Haven',
-      description: 'Full club work session to put labels on plaques for Flags of Honor. 5:30 p.m. (may start earlier).',
+      description:
+        'Full club work session to make the first batch of flag plaques for Flags of Honor. 5:30 PM at Covenant Church.',
     },
     {
       slug: 'foh-find-holes-2026',
       title: 'Flags of Honor - Find Flagpole Holes',
-      date: '2026-05-12T17:30:00.000Z',
+      date: '2026-05-20T17:30:00.000Z',
       eventType: 'service',
       location: 'Triangle Park, Lock Haven',
-      description: 'Full club work session in the park to locate the flagpole holes. 5:30 p.m. (may start earlier).',
+      description:
+        'Full club work session in the park to find the flagpole holes. 5:30 PM. Bring gardening gloves, a trowel, tape measure, screwdriver, and a kneeling pad if you have one.',
     },
     {
       slug: 'foh-banner-plaques-2026',
@@ -149,7 +169,8 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       date: '2026-05-19T17:30:00.000Z',
       eventType: 'service',
       location: 'Covenant United Methodist Church, 44 W. Main St., Lock Haven',
-      description: 'Full club work session to make the banner and make and sort plaques. 5:30 p.m. (may start earlier).',
+      description:
+        'Full club work session to make the banner, and to make and sort plaques. 5:30 PM at Covenant Church.',
     },
     {
       slug: 'foh-corporate-deadline-2026',
@@ -175,8 +196,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       date: '2026-05-22T09:00:00.000Z',
       eventType: 'service',
       location: 'Triangle Park, Lock Haven',
-      description:
-        'Full club work session in the park to install the flags. Bring gardening gloves, trowel, tape measure, screwdriver, and a kneeling pad if you have one.',
+      description: 'Full club work session in the park to install the Flags of Honor display.',
     },
     {
       slug: 'foh-ceremony-2026',
@@ -185,7 +205,7 @@ export const seedEvents = async (payload: Payload): Promise<void> => {
       eventType: 'social',
       location: 'Triangle Park, Lock Haven',
       description:
-        "Annual Flags of Honor ceremony celebrating America's 250th birthday. Amy Kowatch will sing the national anthem, Scouts will present the colors, the National Guard will perform the ceremonial flag-folding, Carmen will read the meaning of each fold, and Master Sgt. Anderson will play Taps. The Pennsylvania governor has been invited, Mayor Joel Long will receive a formal invitation to speak, and lunch will follow at Restless Oaks Restaurant.",
+        'Annual Flags of Honor ceremony celebrating America\'s 250th birthday. Please arrive at 11 AM. Amy Kowatch will sing the national anthem, Kim Vance will sing "America the Beautiful," and Janine is inviting the Central Mountain Middle School Choir to sing. The club is inviting 15 or 16 honored guests to sit under the tent and be introduced. Club lunch will follow the ceremony.',
     },
     {
       slug: 'foh-removal-2026',

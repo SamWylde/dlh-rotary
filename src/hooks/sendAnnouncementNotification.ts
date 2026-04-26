@@ -1,11 +1,12 @@
 ﻿import type { CollectionAfterChangeHook } from 'payload'
 
+import { SMTP_CONFIG_ERROR, SMTP_CONFIGURED } from '@/lib/env'
 import { lexicalToPlainText } from '@/lib/richText'
 import { getServerURL } from '@/lib/url'
 
 const EMAIL_BATCH_SIZE = 50
 
-const chunk = <T,>(values: T[], size: number): T[][] => {
+const chunk = <T>(values: T[], size: number): T[][] => {
   if (size <= 0) return [values]
 
   const result: T[][] = []
@@ -20,7 +21,9 @@ const chunk = <T,>(values: T[], size: number): T[][] => {
 const escapeHTML = (value: string): string =>
   value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
-const getRecipientEmails = async (hook: Parameters<CollectionAfterChangeHook>[0]): Promise<string[]> => {
+const getRecipientEmails = async (
+  hook: Parameters<CollectionAfterChangeHook>[0],
+): Promise<string[]> => {
   const emails = new Set<string>()
   let page = 1
   let hasNextPage = true
@@ -67,8 +70,10 @@ export const sendAnnouncementNotification: CollectionAfterChangeHook = async (ho
     return doc
   }
 
-  if (!process.env.RESEND_API_KEY) {
-    hook.req.payload.logger.warn('Skipping announcement notification: RESEND_API_KEY is not configured.')
+  if (!SMTP_CONFIGURED) {
+    hook.req.payload.logger.warn(
+      `Skipping announcement notification: SMTP is not configured (${SMTP_CONFIG_ERROR}).`,
+    )
     return doc
   }
 
@@ -120,4 +125,3 @@ export const sendAnnouncementNotification: CollectionAfterChangeHook = async (ho
 
   return doc
 }
-
