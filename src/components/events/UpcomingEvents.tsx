@@ -5,6 +5,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 
 import type { Event } from '@/payload-types'
+import { formatClubDate } from '@/lib/dateFormat'
 
 import { EventQuickView } from './EventQuickView'
 
@@ -84,7 +85,7 @@ export const UpcomingEvents = ({
                     margin: '2px 0 0',
                   }}
                 >
-                  {new Date(event.date).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}
+                  {formatClubDate(event.date, { dateStyle: 'medium', timeStyle: 'short' })}
                 </p>
               </div>
             </button>

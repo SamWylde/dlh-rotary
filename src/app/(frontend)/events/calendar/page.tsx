@@ -3,6 +3,7 @@ import { LazyEventCalendar } from '@/components/events/LazyEventCalendar'
 import { PageHero } from '@/components/layout/PageHero'
 import { getCurrentUser } from '@/lib/auth'
 import { getEvents } from '@/lib/content'
+import { toClubCalendarDateTime } from '@/lib/dateFormat'
 
 export default async function EventsCalendarPage() {
   const { user } = await getCurrentUser()
@@ -22,8 +23,8 @@ export default async function EventsCalendarPage() {
       return {
         id: event.id,
         text: event.title,
-        start: start.toISOString(),
-        end: end.toISOString(),
+        start: toClubCalendarDateTime(start),
+        end: toClubCalendarDateTime(end),
         slug: event.slug,
         eventType: event.eventType,
       }

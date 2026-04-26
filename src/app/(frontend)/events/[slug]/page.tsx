@@ -7,6 +7,7 @@ import { RSVPControls } from '@/components/events/RSVPControls'
 import { PageHero } from '@/components/layout/PageHero'
 import { getCurrentUser } from '@/lib/auth'
 import { getEventBySlug, getEventRSVPStatus } from '@/lib/content'
+import { formatClubDate } from '@/lib/dateFormat'
 import { makeSlugMetadata } from '@/lib/metadata'
 
 export const generateMetadata = makeSlugMetadata(getEventBySlug, (e) => e.description)
@@ -21,7 +22,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
   }
 
   const existingStatus = await getEventRSVPStatus(event.id, user)
-  const dateStr = new Date(event.date).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
+  const dateStr = formatClubDate(event.date, { dateStyle: 'medium', timeStyle: 'short' })
 
   return (
     <div className="-mt-8 -mb-8">

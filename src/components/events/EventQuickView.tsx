@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { formatClubDate, formatClubTime } from '@/lib/dateFormat'
 
 type EventQuickViewProps = {
   event: Pick<Event, 'id' | 'slug' | 'title' | 'date' | 'endDate' | 'location' | 'description' | 'eventType'> | null
@@ -30,10 +31,8 @@ const eventTypeLabels: Record<string, string> = {
 export const EventQuickView = ({ event, onClose }: EventQuickViewProps) => {
   if (!event) return null
 
-  const dateStr = new Date(event.date).toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' })
-  const endStr = event.endDate
-    ? new Date(event.endDate).toLocaleString('en-US', { timeStyle: 'short' })
-    : null
+  const dateStr = formatClubDate(event.date, { dateStyle: 'long', timeStyle: 'short' })
+  const endStr = event.endDate ? formatClubTime(event.endDate) : null
 
   return (
     <Dialog open={!!event} onOpenChange={(open) => !open && onClose()}>
