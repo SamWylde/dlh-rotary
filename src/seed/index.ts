@@ -9,8 +9,16 @@ import { seedUsers } from '@/seed/steps/seedUsers'
 
 export const seed = async (
   payload: Payload,
-  options?: { force?: boolean },
+  options?: { contentOnly?: boolean; force?: boolean },
 ): Promise<{ ran: boolean; message: string }> => {
+  if (options?.contentOnly) {
+    await seedProjects(payload)
+    await seedEvents(payload)
+    await seedAnnouncements(payload)
+
+    return { ran: true, message: 'Content seed completed successfully.' }
+  }
+
   const force = Boolean(options?.force)
 
   const defaultPassword = process.env.SEED_DEFAULT_PASSWORD
@@ -34,4 +42,3 @@ export const seed = async (
 
   return { ran: true, message: 'Seed completed successfully.' }
 }
-

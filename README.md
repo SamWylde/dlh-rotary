@@ -75,6 +75,7 @@ Seed route:
 - `POST /next/seed`
 - Header: `x-seed-secret: <SEED_SECRET>` if `SEED_SECRET` is set
 - Optional query: `?force=true`
+- Optional query: `?contentOnly=true` to refresh pages/projects/events/announcements without reseeding users
 
 Or enable on init:
 

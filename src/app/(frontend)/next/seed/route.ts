@@ -19,11 +19,12 @@ export const POST = async (request: Request): Promise<NextResponse> => {
   }
 
   const url = new URL(request.url)
+  const contentOnly = url.searchParams.get('contentOnly') === 'true'
   const force = url.searchParams.get('force') === 'true'
 
   try {
     const payload = await getPayload({ config })
-    const result = await seed(payload, { force })
+    const result = await seed(payload, { contentOnly, force })
     return NextResponse.json(result)
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
