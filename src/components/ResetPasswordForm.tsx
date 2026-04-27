@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 
@@ -79,11 +80,24 @@ export const ResetPasswordForm = () => {
           value={confirmPassword}
         />
       </label>
-      {message ? <p className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">{message}</p> : null}
+      {message ? (
+        <div className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+          <p>{message}</p>
+          <Link className="mt-2 inline-block font-semibold underline underline-offset-4" href="/login">
+            Sign in
+          </Link>
+        </div>
+      ) : null}
       {error ? <p className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">{error}</p> : null}
-      <Button disabled={isLoading} type="submit">
-        {isLoading ? 'Saving...' : 'Set Password'}
-      </Button>
+      {message ? (
+        <Button asChild>
+          <Link href="/login">Sign In</Link>
+        </Button>
+      ) : (
+        <Button disabled={isLoading} type="submit">
+          {isLoading ? 'Saving...' : 'Set Password'}
+        </Button>
+      )}
     </form>
   )
 }
