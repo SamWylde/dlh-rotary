@@ -103,6 +103,16 @@ h6 {
   font-family: var(--font-heading);
 }
 
+.manage-ui,
+.manage-ui h1,
+.manage-ui h2,
+.manage-ui h3,
+.manage-ui h4,
+.manage-ui h5,
+.manage-ui h6 {
+  font-family: var(--font-body);
+}
+
 .full-bleed {
   width: 100vw;
   position: relative;

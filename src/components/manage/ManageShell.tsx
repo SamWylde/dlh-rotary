@@ -39,7 +39,7 @@ export const ManageShell = ({ children, user }: { children: React.ReactNode; use
   }
 
   return (
-    <div className="min-h-screen bg-muted/30 text-foreground">
+    <div className="manage-ui min-h-screen bg-muted/30 text-foreground">
       <aside className="fixed inset-y-0 left-0 hidden w-64 border-r bg-background lg:block">
         <div className="flex h-full flex-col">
           <div className="border-b px-5 py-4">
@@ -86,7 +86,7 @@ export const ManageShell = ({ children, user }: { children: React.ReactNode; use
         </div>
       </aside>
 
-      <div className="lg:pl-64">
+      <div className="min-w-0 lg:pl-64">
         <header className="sticky top-0 z-20 border-b bg-background/95 px-4 py-3 backdrop-blur lg:hidden">
           <div className="flex items-center justify-between">
             <Link className="font-semibold" href="/manage">
@@ -104,7 +104,9 @@ export const ManageShell = ({ children, user }: { children: React.ReactNode; use
             ))}
           </nav>
         </header>
-        <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+        <main className="mx-auto w-full min-w-0 max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          {children}
+        </main>
       </div>
     </div>
   )

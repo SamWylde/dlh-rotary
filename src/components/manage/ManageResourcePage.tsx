@@ -423,7 +423,7 @@ const UploadField = ({
   }
 
   return (
-    <div className="grid gap-2 rounded-md border bg-muted/30 p-3">
+    <div className="grid min-w-0 gap-2 rounded-md border bg-muted/30 p-3">
       {value ? (
         <p className="text-sm text-muted-foreground">Current file: {label || `#${value}`}</p>
       ) : null}
@@ -463,7 +463,10 @@ const Field = ({
 
   return (
     <label
-      className={cn('grid gap-1 text-sm', field.type === 'checkbox' && 'flex items-center gap-3')}
+      className={cn(
+        'grid min-w-0 gap-1 text-sm',
+        field.type === 'checkbox' && 'flex items-center gap-3',
+      )}
     >
       {field.type === 'checkbox' ? (
         <>
@@ -668,11 +671,13 @@ export const ManageResourcePage = ({
   const canDelete = config.canDelete?.(userRole) ?? false
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px]">
-      <div className="grid gap-4">
-        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-          <div>
-            <h1 className="text-3xl font-semibold tracking-tight">{config.label}</h1>
+    <div className="grid items-start gap-6 min-[1440px]:grid-cols-[minmax(0,1fr)_420px]">
+      <div className="grid min-w-0 content-start gap-4">
+        <div className="flex min-w-0 flex-col justify-between gap-3 sm:flex-row sm:items-end">
+          <div className="min-w-0">
+            <h1 className="text-3xl font-semibold leading-tight">
+              {config.label}
+            </h1>
             <p className="mt-1 text-muted-foreground">{config.description}</p>
           </div>
           <Button onClick={startCreate}>
@@ -681,16 +686,16 @@ export const ManageResourcePage = ({
           </Button>
         </div>
 
-        <Card>
-          <CardHeader className="gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
+        <Card className="min-w-0">
+          <CardHeader className="gap-3 space-y-0 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
               <CardTitle className="text-base">Saved Items</CardTitle>
               <CardDescription>
                 Search, edit, publish, or delete where your role allows it.
               </CardDescription>
             </div>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <div className="relative">
+            <div className="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-row">
+              <div className="relative min-w-0 sm:w-56">
                 <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   className="pl-8"
@@ -710,7 +715,7 @@ export const ManageResourcePage = ({
                   }}
                   value={filter}
                 >
-                  <SelectTrigger className="w-full sm:w-44">
+                  <SelectTrigger className="w-full sm:w-40">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -738,12 +743,18 @@ export const ManageResourcePage = ({
                   </SelectContent>
                 </Select>
               ) : null}
-              <Button onClick={() => query.refetch()} type="button" variant="outline">
+              <Button
+                aria-label="Refresh saved items"
+                className="w-full sm:w-10 sm:px-0"
+                onClick={() => query.refetch()}
+                type="button"
+                variant="outline"
+              >
                 <RefreshCw className="h-4 w-4" />
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="min-w-0">
             {query.isLoading ? (
               <p className="py-8 text-center text-sm text-muted-foreground">Loading...</p>
             ) : null}
@@ -826,7 +837,7 @@ export const ManageResourcePage = ({
         </Card>
       </div>
 
-      <Card className="h-fit xl:sticky xl:top-6">
+      <Card className="min-w-0 h-fit min-[1440px]:sticky min-[1440px]:top-6">
         <CardHeader>
           <CardTitle className="text-lg">
             {editing ? `Edit ${config.label}` : `New ${config.label}`}
@@ -835,9 +846,9 @@ export const ManageResourcePage = ({
             {editing ? 'Update details and save changes.' : 'Fill in the essentials and save.'}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="min-w-0">
           <form
-            className="grid gap-4"
+            className="grid min-w-0 gap-4"
             onSubmit={(event) => {
               event.preventDefault()
               void save(config.draftable ? 'draft' : undefined)
