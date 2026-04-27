@@ -9,8 +9,12 @@ export const RESERVED_SLUGS = new Set([
   'scholarships',
   'members',
   'account',
+  'dashboard',
   'join',
   'contact',
   'login',
+  'signin',
+  'sign-in',
+  'log-in',
   'donate',
 ])
