@@ -74,7 +74,12 @@ export const ManageDashboard = ({ user }: { user: SessionUser }) => {
           const Icon = action.icon
 
           return (
-            <Button asChild className="h-auto justify-start p-4" key={action.href} variant="outline">
+            <Button
+              asChild
+              className="h-auto justify-start border-foreground/40 p-4 text-foreground hover:border-primary hover:bg-primary/10 hover:text-primary"
+              key={action.href}
+              variant="outline"
+            >
               <Link href={action.href}>
                 <Icon className="h-5 w-5 text-primary" />
                 <span>{action.label}</span>

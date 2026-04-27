@@ -57,13 +57,14 @@ export const ManageShell = ({ children, user }: { children: React.ReactNode; use
               return (
                 <Link
                   className={cn(
-                    'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground',
-                    active && 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+                    'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary',
+                    active &&
+                      'bg-primary !text-primary-foreground shadow-sm hover:bg-primary hover:!text-primary-foreground',
                   )}
                   href={item.href}
                   key={item.href}
                 >
-                  <Icon className="h-4 w-4" />
+                  <Icon className={cn('h-4 w-4', active && '!text-primary-foreground')} />
                   {item.label}
                 </Link>
               )
