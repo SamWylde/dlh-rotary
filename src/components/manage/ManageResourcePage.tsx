@@ -323,7 +323,7 @@ const defaultValues = (resource: ResourceName): FormValues => {
   if (resource === 'announcements') {
     return {
       _status: 'draft',
-      membersOnly: false,
+      membersOnly: true,
       pinned: false,
       priority: 'normal',
       publishedDate: now.toISOString().slice(0, 10),

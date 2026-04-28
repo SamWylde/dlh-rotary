@@ -191,7 +191,7 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
       publishedDate: '2026-04-13T00:00:00.000Z',
       priority: 'normal',
       pinned: false,
-      membersOnly: false,
+      membersOnly: true,
       _status: 'published',
       content: lexical(
         p(
@@ -228,7 +228,7 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
       publishedDate: '2026-04-20T00:00:00.000Z',
       priority: 'normal',
       pinned: false,
-      membersOnly: false,
+      membersOnly: true,
       _status: 'published',
       content: lexical(
         h3('Upcoming Dates'),
@@ -295,7 +295,7 @@ export const seedAnnouncements = async (payload: Payload): Promise<void> => {
       publishedDate: '2026-04-26T00:00:00.000Z',
       priority: 'normal',
       pinned: false,
-      membersOnly: false,
+      membersOnly: true,
       _status: 'published',
       content: lexical(
         h3('Coming Right Up'),

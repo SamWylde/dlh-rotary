@@ -52,9 +52,26 @@ export const publishedAndPublicOrPrivileged: Access = ({ req }) => {
 
   if (!user) {
     return {
+      and: [{ _status: { equals: 'published' } }, { membersOnly: { equals: false } }],
+    } as Where
+  }
+
+  if (isPrivilegedRole(user.role)) return true
+
+  return { _status: { equals: 'published' } }
+}
+
+/** Public announcements should not expose meeting-minute style updates even if old data was seeded public. */
+export const publicAnnouncementOrPrivileged: Access = ({ req }) => {
+  const user = getUser(req)
+
+  if (!user) {
+    return {
       and: [
         { _status: { equals: 'published' } },
         { membersOnly: { equals: false } },
+        { slug: { not_like: 'club-minutes' } },
+        { slug: { not_like: 'club-update' } },
       ],
     } as Where
   }

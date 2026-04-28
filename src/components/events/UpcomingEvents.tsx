@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 
+import { CalendarDays } from 'lucide-react'
 import Link from 'next/link'
 
 import type { Event } from '@/payload-types'
@@ -10,7 +11,12 @@ import { formatClubDate } from '@/lib/dateFormat'
 import { EventQuickView } from './EventQuickView'
 
 export type UpcomingEventsProps = {
-  events: Array<Pick<Event, 'id' | 'slug' | 'title' | 'date' | 'endDate' | 'location' | 'description' | 'eventType'>>
+  events: Array<
+    Pick<
+      Event,
+      'id' | 'slug' | 'title' | 'date' | 'endDate' | 'location' | 'description' | 'eventType'
+    >
+  >
   heading?: string
   emptyMessage?: string
   viewAllHref?: string
@@ -22,7 +28,9 @@ export const UpcomingEvents = ({
   emptyMessage = 'No events posted yet.',
   viewAllHref,
 }: UpcomingEventsProps) => {
-  const [selectedEvent, setSelectedEvent] = useState<UpcomingEventsProps['events'][number] | null>(null)
+  const [selectedEvent, setSelectedEvent] = useState<UpcomingEventsProps['events'][number] | null>(
+    null,
+  )
 
   return (
     <section>
@@ -40,7 +48,9 @@ export const UpcomingEvents = ({
         {heading}
       </h2>
       {events.length === 0 ? (
-        <p style={{ color: 'var(--color-muted-foreground)', fontFamily: 'var(--font-body)' }}>{emptyMessage}</p>
+        <p style={{ color: 'var(--color-muted-foreground)', fontFamily: 'var(--font-body)' }}>
+          {emptyMessage}
+        </p>
       ) : (
         <div>
           {events.map((event) => (
@@ -63,7 +73,12 @@ export const UpcomingEvents = ({
                 width: '100%',
               }}
             >
-              <span style={{ fontSize: 'var(--event-icon-size, 24px)', lineHeight: 1 }}>📅</span>
+              <CalendarDays
+                aria-hidden="true"
+                className="mt-0.5 shrink-0 text-primary"
+                size={22}
+                strokeWidth={2}
+              />
               <div>
                 <p
                   style={{

@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { isAdmin, isAdminOrOfficer, publishedAndPublicOrPrivileged } from '@/access'
+import { isAdmin, isAdminOrOfficer, publicAnnouncementOrPrivileged } from '@/access'
 import { formatSlug } from '@/hooks/formatSlug'
 import { revalidateAfterChange, revalidateAfterDelete } from '@/hooks/revalidate'
 import { sendAnnouncementNotification } from '@/hooks/sendAnnouncementNotification'
@@ -12,7 +12,7 @@ export const Announcements: CollectionConfig = {
     defaultColumns: ['title', 'priority', 'author', 'publishedDate'],
   },
   access: {
-    read: publishedAndPublicOrPrivileged,
+    read: publicAnnouncementOrPrivileged,
     create: isAdminOrOfficer,
     update: isAdminOrOfficer,
     delete: isAdmin,
