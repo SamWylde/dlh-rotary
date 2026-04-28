@@ -76,7 +76,7 @@ export default async function AccountPage() {
                 <Link href="/manage">Open Manage CMS</Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/admin">Advanced Admin</Link>
+                <Link href="/payload-admin">Advanced Admin</Link>
               </Button>
             </CardContent>
           </Card>

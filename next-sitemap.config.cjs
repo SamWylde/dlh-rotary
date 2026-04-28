@@ -7,12 +7,12 @@ const SITE_URL =
 module.exports = {
   siteUrl: SITE_URL,
   generateRobotsTxt: true,
-  exclude: ['/admin/*', '/api/*'],
+  exclude: ['/admin', '/admin/*', '/payload-admin', '/payload-admin/*', '/api/*'],
   robotsTxtOptions: {
     policies: [
       {
         userAgent: '*',
-        disallow: '/admin/*',
+        disallow: ['/admin', '/admin/*', '/payload-admin', '/payload-admin/*'],
       },
     ],
   },

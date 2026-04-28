@@ -16,7 +16,17 @@ const redirects = async () => {
     {
       destination: '/manage',
       permanent: false,
+      source: '/admin',
+    },
+    {
+      destination: '/manage',
+      permanent: false,
       source: '/dashboard',
+    },
+    {
+      destination: '/payload-admin',
+      permanent: false,
+      source: '/advanced-admin',
     },
     {
       destination: '/login',

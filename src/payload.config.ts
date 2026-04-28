@@ -123,6 +123,9 @@ export default buildConfig({
       },
     }),
   ],
+  routes: {
+    admin: '/payload-admin',
+  },
   secret: PAYLOAD_SECRET,
   sharp,
   onInit: async (payload) => {

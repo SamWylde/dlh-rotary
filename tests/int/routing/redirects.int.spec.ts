@@ -11,7 +11,17 @@ describe('route redirects', () => {
         expect.objectContaining({
           destination: '/manage',
           permanent: false,
+          source: '/admin',
+        }),
+        expect.objectContaining({
+          destination: '/manage',
+          permanent: false,
           source: '/dashboard',
+        }),
+        expect.objectContaining({
+          destination: '/payload-admin',
+          permanent: false,
+          source: '/advanced-admin',
         }),
         expect.objectContaining({
           destination: '/login',

@@ -54,7 +54,8 @@ npm run dev
 ```
 
 - Frontend: `http://localhost:3000`
-- Admin: `http://localhost:3000/admin`
+- Manage CMS: `http://localhost:3000/manage` (also available at `/admin` and `/dashboard`)
+- Advanced Payload admin: `http://localhost:3000/payload-admin`
 
 ### Environment Variables
 
