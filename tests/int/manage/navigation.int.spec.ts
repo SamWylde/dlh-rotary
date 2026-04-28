@@ -12,6 +12,8 @@ const resources = [
   ['announcements', '/manage/announcements'],
   ['events', '/manage/events'],
   ['documents', '/manage/documents'],
+  ['forms', '/manage/forms'],
+  ['form-submissions', '/manage/form-submissions'],
   ['pages', '/manage/pages'],
   ['users', '/manage/members'],
 ] as const satisfies readonly [ManageUIResource, string][]
@@ -25,9 +27,12 @@ describe('manage navigation helpers', () => {
     expect(manageCreateHref(resource)).toBe(`${path}?new=1#${MANAGE_FORM_HASH}`)
   })
 
-  it.each(resources)('builds %s edit intent URLs with encoded ids and the form hash', (resource, path) => {
-    expect(manageEditHref(resource, 'minutes 2026')).toBe(
-      `${path}?edit=minutes%202026#${MANAGE_FORM_HASH}`,
-    )
-  })
+  it.each(resources)(
+    'builds %s edit intent URLs with encoded ids and the form hash',
+    (resource, path) => {
+      expect(manageEditHref(resource, 'minutes 2026')).toBe(
+        `${path}?edit=minutes%202026#${MANAGE_FORM_HASH}`,
+      )
+    },
+  )
 })

@@ -14,8 +14,7 @@ export const ConfiguredForm = async ({ formKey, fallbackLabel, user }: Configure
   if (!form) {
     return (
       <p className="rounded border border-dashed border-border bg-card p-4 text-sm text-muted-foreground">
-        {fallbackLabel} is not configured. In Payload Admin, open Site Settings and select a form for the{' '}
-        <b>{fallbackLabel}</b> field.
+        {fallbackLabel} is not configured yet.
       </p>
     )
   }

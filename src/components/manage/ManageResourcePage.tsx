@@ -1,7 +1,7 @@
 'use client'
 
 import { useCreate, useDelete, useList, useUpdate } from '@refinedev/core'
-import { Edit, Mail, Plus, RefreshCw, Search, Trash2, Upload } from 'lucide-react'
+import { Edit, Eye, Mail, Plus, RefreshCw, Search, Trash2, Upload } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -39,18 +39,36 @@ import { lexicalToPlainText } from '@/lib/richText'
 import { cn } from '@/utilities/ui'
 
 type ResourceName = ManageUIResource
+type ManageFormFieldType =
+  | 'checkbox'
+  | 'email'
+  | 'number'
+  | 'select'
+  | 'state'
+  | 'text'
+  | 'textarea'
+type ManageFormField = {
+  id: string
+  label: string
+  name: string
+  optionsText?: string
+  required?: boolean
+  type: ManageFormFieldType
+}
 type FieldType =
   | 'checkbox'
   | 'date'
   | 'datetime'
   | 'email'
+  | 'formBuilder'
   | 'number'
   | 'richText'
   | 'select'
   | 'text'
   | 'textarea'
   | 'upload'
-type FormValues = Record<string, boolean | number | string | undefined>
+type FormValue = boolean | ManageFormField[] | number | string | undefined
+type FormValues = Record<string, FormValue>
 type ManageRecord = Record<string, unknown> & { id: number | string }
 
 type FieldConfig = {
@@ -66,12 +84,14 @@ type FieldConfig = {
 }
 
 type ResourceConfig = {
+  allowCreate?: boolean
   canDelete?: (role: Role | undefined) => boolean
   description: string
   draftable?: boolean
   fields: FieldConfig[]
   filter?: 'category' | 'role' | 'status'
   label: string
+  readOnly?: boolean
   resource: ResourceName
   searchPlaceholder: string
   singularLabel: string
@@ -242,6 +262,32 @@ const RESOURCE_CONFIG: Record<ResourceName, ResourceConfig> = {
     searchPlaceholder: 'Search pages...',
     singularLabel: 'simple page',
   },
+  forms: {
+    description: 'Build contact, sponsor, signup, pledge, and donation-interest forms.',
+    fields: [
+      { label: 'Title', name: 'title', required: true, type: 'text' },
+      { label: 'Fields', name: 'formFields', required: true, type: 'formBuilder' },
+      { label: 'Submit Button Label', name: 'submitButtonLabel', type: 'text' },
+      { label: 'Confirmation Message', name: 'confirmationMessageText', type: 'textarea' },
+      { label: 'Notification Email', name: 'notificationEmail', type: 'email' },
+      { label: 'Notification Subject', name: 'emailSubject', type: 'text' },
+      { label: 'Notification Message', name: 'emailMessageText', type: 'textarea' },
+    ],
+    label: 'Forms',
+    resource: 'forms',
+    searchPlaceholder: 'Search forms...',
+    singularLabel: 'form',
+  },
+  'form-submissions': {
+    allowCreate: false,
+    description: 'Review contact, signup, sponsor, and donation-interest responses.',
+    fields: [],
+    label: 'Form Submissions',
+    readOnly: true,
+    resource: 'form-submissions',
+    searchPlaceholder: 'Search submissions...',
+    singularLabel: 'submission',
+  },
   users: {
     canDelete: (role) => role === 'admin',
     description: 'Add members, update directory information, and send setup emails.',
@@ -304,6 +350,34 @@ const defaultValues = (resource: ResourceName): FormValues => {
     }
   }
 
+  if (resource === 'forms') {
+    return {
+      confirmationMessageText: 'Thanks for your submission.',
+      emailMessageText: 'A new form submission has been received.',
+      formFields: [
+        {
+          id: 'field-1',
+          label: 'Full Name',
+          name: 'full_name',
+          required: true,
+          type: 'text',
+        },
+        {
+          id: 'field-2',
+          label: 'Email',
+          name: 'email',
+          required: true,
+          type: 'email',
+        },
+      ],
+      submitButtonLabel: 'Submit',
+    }
+  }
+
+  if (resource === 'form-submissions') {
+    return {}
+  }
+
   return {
     role: 'member',
     showEmail: true,
@@ -324,6 +398,47 @@ const relationLabel = (value: unknown): string => {
   return record.filename || record.alt || record.title || record.fullName || ''
 }
 
+const toFieldName = (value: string): string =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '') || 'field'
+
+const isManageFormFieldType = (value: unknown): value is ManageFormFieldType =>
+  ['checkbox', 'email', 'number', 'select', 'state', 'text', 'textarea'].includes(String(value))
+
+const normalizeFormBuilderFields = (value: unknown): ManageFormField[] => {
+  if (!Array.isArray(value)) return []
+
+  return value.reduce<ManageFormField[]>((fields, field, index) => {
+    if (!field || typeof field !== 'object') return fields
+    const record = field as {
+      blockType?: unknown
+      id?: string | null
+      label?: string | null
+      name?: string | null
+      options?: { label?: string | null; value?: string | null }[] | null
+      required?: boolean | null
+    }
+    const label = record.label || record.name || `Field ${index + 1}`
+    const type = isManageFormFieldType(record.blockType) ? record.blockType : 'text'
+
+    fields.push({
+      id: record.id || `field-${index + 1}`,
+      label,
+      name: record.name || toFieldName(label),
+      optionsText: (record.options || [])
+        .map((option) => option.label || option.value)
+        .filter(Boolean)
+        .join('\n'),
+      required: Boolean(record.required),
+      type,
+    })
+
+    return fields
+  }, [])
+}
+
 const dateValue = (value: unknown, withTime = false): string => {
   if (!value) return ''
   const date = new Date(String(value))
@@ -338,8 +453,31 @@ const normalizeRecord = (resource: ResourceName, record: ManageRecord): FormValu
     values._status = record._status
   }
 
+  if (resource === 'forms') {
+    values.formFields = normalizeFormBuilderFields(record.fields)
+    values.confirmationMessageText = lexicalToPlainText(record.confirmationMessage)
+
+    const emails = Array.isArray(record.emails) ? record.emails : []
+    const firstEmail = emails[0] as
+      | {
+          emailTo?: string | null
+          message?: unknown
+          subject?: string | null
+        }
+      | undefined
+
+    values.notificationEmail = firstEmail?.emailTo || ''
+    values.emailSubject = firstEmail?.subject || ''
+    values.emailMessageText = lexicalToPlainText(firstEmail?.message)
+  }
+
   for (const field of RESOURCE_CONFIG[resource].fields) {
     const rawValue = record[field.name]
+
+    if (field.type === 'formBuilder') {
+      values[field.name] = normalizeFormBuilderFields(record.fields)
+      continue
+    }
 
     if (
       typeof rawValue === 'string' ||
@@ -368,12 +506,24 @@ const normalizeRecord = (resource: ResourceName, record: ManageRecord): FormValu
 }
 
 const recordTitle = (record: ManageRecord): string =>
-  String(record.title || record.fullName || record.alt || record.filename || 'Untitled')
+  String(
+    record.title ||
+      record.fullName ||
+      record.alt ||
+      record.filename ||
+      relationLabel(record.form) ||
+      `Submission #${record.id}` ||
+      'Untitled',
+  )
 
 const recordMeta = (resource: ResourceName, record: ManageRecord): string => {
   if (resource === 'events' && record.date)
     return new Date(String(record.date)).toLocaleString('en-US')
   if (resource === 'documents' && record.category) return String(record.category)
+  if (resource === 'forms' && Array.isArray(record.fields))
+    return `${record.fields.length} field${record.fields.length === 1 ? '' : 's'}`
+  if (resource === 'form-submissions' && record.createdAt)
+    return `Submitted ${new Date(String(record.createdAt)).toLocaleString('en-US')}`
   if (resource === 'users') return [record.email, record.role].filter(Boolean).join(' - ')
   if (record.updatedAt)
     return `Updated ${new Date(String(record.updatedAt)).toLocaleDateString('en-US')}`
@@ -475,6 +625,163 @@ const UploadField = ({
   )
 }
 
+const FormBuilderField = ({
+  onChange,
+  value,
+}: {
+  onChange: (fields: ManageFormField[]) => void
+  value?: ManageFormField[]
+}) => {
+  const fields = value && value.length > 0 ? value : []
+
+  const updateField = (id: string, updates: Partial<ManageFormField>) => {
+    onChange(
+      fields.map((field) => {
+        if (field.id !== id) return field
+        const nextField = { ...field, ...updates }
+        if (updates.label && (!field.name || field.name === toFieldName(field.label))) {
+          nextField.name = toFieldName(updates.label)
+        }
+        return nextField
+      }),
+    )
+  }
+
+  const addField = () => {
+    const nextIndex = fields.length + 1
+    onChange([
+      ...fields,
+      {
+        id: `field-${Date.now()}`,
+        label: `Field ${nextIndex}`,
+        name: `field_${nextIndex}`,
+        required: false,
+        type: 'text',
+      },
+    ])
+  }
+
+  const removeField = (id: string) => {
+    onChange(fields.filter((field) => field.id !== id))
+  }
+
+  return (
+    <div className="grid gap-3 rounded-md border bg-muted/30 p-3">
+      {fields.map((field, index) => (
+        <div className="grid gap-3 rounded-md border bg-background p-3" key={field.id}>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm font-medium">Field {index + 1}</p>
+            <Button
+              aria-label={`Remove ${field.label}`}
+              onClick={() => removeField(field.id)}
+              size="sm"
+              type="button"
+              variant="outline"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_160px]">
+            <Input
+              onChange={(event) => updateField(field.id, { label: event.target.value })}
+              placeholder="Label"
+              value={field.label}
+            />
+            <Select
+              onValueChange={(nextType) =>
+                updateField(field.id, { type: nextType as ManageFormFieldType })
+              }
+              value={field.type}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="text">Text</SelectItem>
+                <SelectItem value="email">Email</SelectItem>
+                <SelectItem value="textarea">Long Text</SelectItem>
+                <SelectItem value="number">Number</SelectItem>
+                <SelectItem value="select">Dropdown</SelectItem>
+                <SelectItem value="checkbox">Checkbox</SelectItem>
+                <SelectItem value="state">State</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
+            <Input
+              onChange={(event) => updateField(field.id, { name: toFieldName(event.target.value) })}
+              placeholder="field_name"
+              value={field.name}
+            />
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                checked={Boolean(field.required)}
+                className="h-4 w-4 rounded border-input"
+                onChange={(event) => updateField(field.id, { required: event.target.checked })}
+                type="checkbox"
+              />
+              Required
+            </label>
+          </div>
+          {field.type === 'select' ? (
+            <Textarea
+              className="min-h-24"
+              onChange={(event) => updateField(field.id, { optionsText: event.target.value })}
+              placeholder="Option"
+              value={field.optionsText || ''}
+            />
+          ) : null}
+        </div>
+      ))}
+      <Button onClick={addField} type="button" variant="outline">
+        <Plus className="h-4 w-4" />
+        Add Field
+      </Button>
+    </div>
+  )
+}
+
+const SubmissionDetails = ({ record }: { record: ManageRecord | null }) => {
+  if (!record) {
+    return <p className="text-sm text-muted-foreground">Select a submission to review.</p>
+  }
+
+  const submissionData = Array.isArray(record.submissionData) ? record.submissionData : []
+
+  return (
+    <div className="grid gap-4">
+      <div className="rounded-md border bg-muted/30 p-3 text-sm">
+        <p className="font-medium">{relationLabel(record.form) || 'Form submission'}</p>
+        <p className="text-muted-foreground">
+          {record.createdAt
+            ? new Date(String(record.createdAt)).toLocaleString('en-US')
+            : 'Submitted'}
+        </p>
+      </div>
+      <div className="grid gap-3">
+        {submissionData.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No submitted fields were recorded.</p>
+        ) : null}
+        {submissionData.map((entry, index) => {
+          const item =
+            entry && typeof entry === 'object'
+              ? (entry as { field?: unknown; id?: string | null; value?: unknown })
+              : {}
+
+          return (
+            <div className="rounded-md border p-3" key={item.id || `${item.field}-${index}`}>
+              <p className="text-xs font-medium uppercase text-muted-foreground">
+                {String(item.field || `Field ${index + 1}`)}
+              </p>
+              <p className="mt-1 whitespace-pre-wrap text-sm">{String(item.value || '')}</p>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 const Field = ({
   field,
   resource,
@@ -483,7 +790,7 @@ const Field = ({
 }: {
   field: FieldConfig
   resource: ResourceName
-  setValue: (name: string, value: boolean | number | string | undefined) => void
+  setValue: (name: string, value: FormValue) => void
   values: FormValues
 }) => {
   if (field.show && !field.show(values)) return null
@@ -561,6 +868,12 @@ const Field = ({
               value={String(value || '')}
             />
           ) : null}
+          {field.type === 'formBuilder' ? (
+            <FormBuilderField
+              onChange={(fields) => setValue(field.name, fields)}
+              value={Array.isArray(value) ? value : []}
+            />
+          ) : null}
           {field.helper ? (
             <span className="text-xs text-muted-foreground">{field.helper}</span>
           ) : null}
@@ -616,7 +929,7 @@ export const ManageResourcePage = ({
   const rows = useMemo(() => result.data || [], [result.data])
   const canDelete = config.canDelete?.(userRole) ?? false
 
-  const setValue = useCallback((name: string, value: boolean | number | string | undefined) => {
+  const setValue = useCallback((name: string, value: FormValue) => {
     setFormValues((current) => ({ ...current, [name]: value }))
   }, [])
 
@@ -852,12 +1165,14 @@ export const ManageResourcePage = ({
             <h1 className="text-3xl font-semibold leading-tight">{config.label}</h1>
             <p className="mt-1 text-muted-foreground">{config.description}</p>
           </div>
-          <Button asChild>
-            <Link href={manageCreateHref(resource)} onClick={() => openCreate()}>
-              <Plus className="h-4 w-4" />
-              New
-            </Link>
-          </Button>
+          {config.allowCreate !== false ? (
+            <Button asChild>
+              <Link href={manageCreateHref(resource)} onClick={() => openCreate()}>
+                <Plus className="h-4 w-4" />
+                New
+              </Link>
+            </Button>
+          ) : null}
         </div>
 
         {!isFormOpen ? (
@@ -996,7 +1311,11 @@ export const ManageResourcePage = ({
                                 href={manageEditHref(resource, record.id)}
                                 onClick={() => openEdit(record)}
                               >
-                                <Edit className="h-4 w-4" />
+                                {config.readOnly ? (
+                                  <Eye className="h-4 w-4" />
+                                ) : (
+                                  <Edit className="h-4 w-4" />
+                                )}
                               </Link>
                             </Button>
                             {canDelete ? (
@@ -1040,14 +1359,18 @@ export const ManageResourcePage = ({
             <CardHeader className="gap-4 space-y-0 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
                 <CardTitle className="text-lg">
-                  {editing
-                    ? `Edit ${sentenceCase(config.singularLabel)}`
-                    : `New ${sentenceCase(config.singularLabel)}`}
+                  {config.readOnly
+                    ? `View ${sentenceCase(config.singularLabel)}`
+                    : editing
+                      ? `Edit ${sentenceCase(config.singularLabel)}`
+                      : `New ${sentenceCase(config.singularLabel)}`}
                 </CardTitle>
                 <CardDescription className="mt-2">
-                  {editing
-                    ? 'Update details and save changes.'
-                    : 'Fill in the essentials and save.'}
+                  {config.readOnly
+                    ? 'Review the submitted information.'
+                    : editing
+                      ? 'Update details and save changes.'
+                      : 'Fill in the essentials and save.'}
                 </CardDescription>
               </div>
               <Button asChild variant="outline">
@@ -1055,63 +1378,67 @@ export const ManageResourcePage = ({
               </Button>
             </CardHeader>
             <CardContent className="min-w-0">
-              <form
-                className="grid min-w-0 gap-4"
-                onSubmit={(event) => {
-                  event.preventDefault()
-                  void save(config.draftable ? 'draft' : undefined)
-                }}
-              >
-                {isLoadingIntent ? (
-                  <p className="rounded-md border bg-muted/30 p-3 text-sm text-muted-foreground">
-                    Loading selected item...
-                  </p>
-                ) : null}
-                {config.fields.map((field) => (
-                  <Field
-                    field={field}
-                    key={field.name}
-                    resource={resource}
-                    setValue={setValue}
-                    values={formValues}
-                  />
-                ))}
-                {message ? (
-                  <p className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
-                    {message}
-                  </p>
-                ) : null}
-                {error ? (
-                  <p className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
-                    {error}
-                  </p>
-                ) : null}
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  {config.draftable ? (
-                    <>
-                      <Button disabled={isSaving} type="submit" variant="outline">
-                        {savingAction === 'draft' ? 'Saving draft...' : 'Save Draft'}
-                      </Button>
-                      <Button
-                        disabled={isSaving}
-                        onClick={() => void save('published')}
-                        type="button"
-                      >
-                        {savingAction === 'publish' ? 'Publishing...' : 'Publish'}
-                      </Button>
-                    </>
-                  ) : (
-                    <Button disabled={isSaving} type="submit">
-                      {savingAction === 'save' ? 'Saving...' : 'Save'}
-                    </Button>
-                  )}
-                  {editing ? (
-                    <Button asChild variant="ghost">
-                      <Link href={manageResourcePath(resource)}>Cancel</Link>
-                    </Button>
+              {config.readOnly ? (
+                <SubmissionDetails record={editing} />
+              ) : (
+                <form
+                  className="grid min-w-0 gap-4"
+                  onSubmit={(event) => {
+                    event.preventDefault()
+                    void save(config.draftable ? 'draft' : undefined)
+                  }}
+                >
+                  {isLoadingIntent ? (
+                    <p className="rounded-md border bg-muted/30 p-3 text-sm text-muted-foreground">
+                      Loading selected item...
+                    </p>
                   ) : null}
-                </div>
-              </form>
+                  {config.fields.map((field) => (
+                    <Field
+                      field={field}
+                      key={field.name}
+                      resource={resource}
+                      setValue={setValue}
+                      values={formValues}
+                    />
+                  ))}
+                  {message ? (
+                    <p className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+                      {message}
+                    </p>
+                  ) : null}
+                  {error ? (
+                    <p className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+                      {error}
+                    </p>
+                  ) : null}
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    {config.draftable ? (
+                      <>
+                        <Button disabled={isSaving} type="submit" variant="outline">
+                          {savingAction === 'draft' ? 'Saving draft...' : 'Save Draft'}
+                        </Button>
+                        <Button
+                          disabled={isSaving}
+                          onClick={() => void save('published')}
+                          type="button"
+                        >
+                          {savingAction === 'publish' ? 'Publishing...' : 'Publish'}
+                        </Button>
+                      </>
+                    ) : (
+                      <Button disabled={isSaving} type="submit">
+                        {savingAction === 'save' ? 'Saving...' : 'Save'}
+                      </Button>
+                    )}
+                    {editing ? (
+                      <Button asChild variant="ghost">
+                        <Link href={manageResourcePath(resource)}>Cancel</Link>
+                      </Button>
+                    ) : null}
+                  </div>
+                </form>
+              )}
             </CardContent>
           </Card>
         )}

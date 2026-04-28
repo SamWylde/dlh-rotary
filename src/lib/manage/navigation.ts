@@ -4,6 +4,8 @@ export const MANAGE_RESOURCE_PATHS = {
   announcements: '/manage/announcements',
   documents: '/manage/documents',
   events: '/manage/events',
+  forms: '/manage/forms',
+  'form-submissions': '/manage/form-submissions',
   pages: '/manage/pages',
   users: '/manage/members',
 } as const

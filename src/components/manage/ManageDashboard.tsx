@@ -1,18 +1,22 @@
 'use client'
 
 import { useList } from '@refinedev/core'
-import { CalendarDays, FileText, Megaphone, Newspaper, Plus, Users } from 'lucide-react'
+import {
+  CalendarDays,
+  ClipboardList,
+  FileText,
+  Megaphone,
+  Newspaper,
+  Plus,
+  Users,
+} from 'lucide-react'
 import Link from 'next/link'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import type { SessionUser } from '@/lib/auth'
-import {
-  manageCreateHref,
-  manageEditHref,
-  type ManageUIResource,
-} from '@/lib/manage/navigation'
+import { manageCreateHref, manageEditHref, type ManageUIResource } from '@/lib/manage/navigation'
 
 type RecentRecord = {
   _status?: string
@@ -28,6 +32,7 @@ const quickActions = [
   { icon: Newspaper, label: 'New Simple Page', resource: 'pages' },
   { icon: CalendarDays, label: 'New Event', resource: 'events' },
   { icon: FileText, label: 'Upload Document', resource: 'documents' },
+  { icon: ClipboardList, label: 'New Form', resource: 'forms' },
   { adminOnly: true, icon: Users, label: 'Add Member', resource: 'users' },
 ] satisfies {
   adminOnly?: boolean
@@ -65,7 +70,9 @@ const RecentList = ({ resource, title }: { resource: ManageUIResource; title: st
                 {String(item.title || item.fullName || item.alt || 'Untitled')}
               </p>
               <p className="text-xs text-muted-foreground">
-                {item.updatedAt ? new Date(String(item.updatedAt)).toLocaleDateString('en-US') : 'Recently'}
+                {item.updatedAt
+                  ? new Date(String(item.updatedAt)).toLocaleDateString('en-US')
+                  : 'Recently'}
               </p>
             </div>
             {item._status ? (
@@ -94,14 +101,16 @@ export const ManageDashboard = ({ user }: { user: SessionUser }) => {
           <h1 className="text-2xl font-semibold leading-tight sm:text-3xl">
             What would you like to update?
           </h1>
-          <p className="mt-1 text-muted-foreground">Create posts, events, documents, and member updates from one place.</p>
+          <p className="mt-1 text-muted-foreground">
+            Create posts, events, documents, and member updates from one place.
+          </p>
         </div>
         <Button asChild variant="outline">
           <Link href="/">View Site</Link>
         </Button>
       </div>
 
-      <div className="grid min-w-0 gap-3 sm:grid-cols-2 xl:grid-cols-5">
+      <div className="grid min-w-0 gap-3 sm:grid-cols-2 xl:grid-cols-6">
         {visibleActions.map((action) => {
           const Icon = action.icon
 
@@ -126,6 +135,7 @@ export const ManageDashboard = ({ user }: { user: SessionUser }) => {
         <RecentList resource="announcements" title="Recent Announcements" />
         <RecentList resource="events" title="Recent Events" />
         <RecentList resource="documents" title="Recent Documents" />
+        <RecentList resource="forms" title="Recent Forms" />
         {user.role === 'admin' ? <RecentList resource="users" title="Recent Members" /> : null}
       </div>
     </div>

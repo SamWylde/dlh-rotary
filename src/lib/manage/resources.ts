@@ -1,6 +1,15 @@
 import type { CollectionSlug, Where } from 'payload'
 
-export const MANAGE_RESOURCE_SLUGS = ['announcements', 'events', 'documents', 'pages', 'users', 'media'] as const
+export const MANAGE_RESOURCE_SLUGS = [
+  'announcements',
+  'events',
+  'documents',
+  'pages',
+  'users',
+  'media',
+  'forms',
+  'form-submissions',
+] as const
 
 export type ManageResourceSlug = (typeof MANAGE_RESOURCE_SLUGS)[number]
 
@@ -53,6 +62,18 @@ export const MANAGE_RESOURCES: Record<ManageResourceSlug, ManageResourceConfig> 
     defaultSort: '-updatedAt',
     label: 'Media',
     searchFields: ['alt', 'caption', 'filename'],
+  },
+  forms: {
+    collection: 'forms',
+    defaultSort: 'title',
+    label: 'Forms',
+    searchFields: ['title'],
+  },
+  'form-submissions': {
+    collection: 'form-submissions',
+    defaultSort: '-createdAt',
+    label: 'Form Submissions',
+    searchFields: [],
   },
 }
 

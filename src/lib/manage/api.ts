@@ -180,6 +180,11 @@ const toSlug = (value: string): string =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 
+const toFieldName = (value: string): string => {
+  const slug = toSlug(value).replace(/-/g, '_')
+  return slug || 'field'
+}
+
 const omitUndefined = (data: RawData): RawData =>
   Object.fromEntries(Object.entries(data).filter(([, value]) => value !== undefined))
 
@@ -367,12 +372,120 @@ const sanitizeUserResource = (
   })
 }
 
+const FORM_FIELD_TYPES = [
+  'checkbox',
+  'email',
+  'number',
+  'select',
+  'state',
+  'text',
+  'textarea',
+] as const
+
+type ManageFormFieldType = (typeof FORM_FIELD_TYPES)[number]
+
+const isManageFormFieldType = (value: unknown): value is ManageFormFieldType =>
+  typeof value === 'string' && FORM_FIELD_TYPES.includes(value as ManageFormFieldType)
+
+const sanitizeFormFields = (value: unknown): NextResponse | RawData[] => {
+  if (!Array.isArray(value) || value.length === 0) {
+    return manageJsonError('Add at least one form field.', 400)
+  }
+
+  const usedNames = new Set<string>()
+
+  return value.map((field, index) => {
+    const rawField = typeof field === 'object' && field !== null ? (field as RawData) : {}
+    const label = optionalString(rawField.label) || `Field ${index + 1}`
+    const type = isManageFormFieldType(rawField.type) ? rawField.type : 'text'
+    const baseName = toFieldName(optionalString(rawField.name) || label)
+    let name = baseName
+    let suffix = 2
+
+    while (usedNames.has(name)) {
+      name = `${baseName}_${suffix}`
+      suffix += 1
+    }
+
+    usedNames.add(name)
+
+    const base = {
+      name,
+      label,
+      required: optionalBoolean(rawField.required),
+      width: 100,
+      blockType: type,
+    }
+
+    if (type === 'checkbox') {
+      return { ...base, defaultValue: optionalBoolean(rawField.defaultValue) }
+    }
+
+    if (type === 'select') {
+      const options = optionalString(rawField.optionsText)
+        ?.split(/\r?\n|,/)
+        .map((option) => option.trim())
+        .filter(Boolean)
+        .map((option) => ({ label: option, value: toSlug(option) || option }))
+
+      return {
+        ...base,
+        options: options && options.length > 0 ? options : [{ label: 'Yes', value: 'yes' }],
+      }
+    }
+
+    return base
+  })
+}
+
+const sanitizeFormResource = (
+  data: RawData,
+  _operation: 'create' | 'update',
+): RawData | NextResponse => {
+  const title = requiredString(data, 'title', 'Title')
+  if (title instanceof NextResponse) return title
+
+  const fields = sanitizeFormFields(data.formFields)
+  if (fields instanceof NextResponse) return fields
+
+  const notificationEmail = optionalEmail(data.notificationEmail, 'Notification email')
+  if (notificationEmail instanceof NextResponse) return notificationEmail
+
+  const confirmationMessage = plainTextToLexical(
+    optionalString(data.confirmationMessageText) || 'Thanks for your submission.',
+  )
+  const emailMessage = plainTextToLexical(
+    optionalString(data.emailMessageText) || 'A new form submission has been received.',
+  )
+
+  return omitUndefined({
+    title,
+    fields,
+    submitButtonLabel: optionalString(data.submitButtonLabel) || 'Submit',
+    confirmationType: 'message',
+    confirmationMessage,
+    emails: notificationEmail
+      ? [
+          {
+            emailTo: notificationEmail,
+            subject: optionalString(data.emailSubject) || `New ${title} submission`,
+            message: emailMessage,
+          },
+        ]
+      : undefined,
+  })
+}
+
 export const sanitizeManageData = (
   resource: ManageResourceSlug,
   data: RawData,
   operation: 'create' | 'update',
 ): RawData | NextResponse => {
   if (resource === 'users') return sanitizeUserResource(data, operation)
+  if (resource === 'forms') return sanitizeFormResource(data, operation)
+  if (resource === 'form-submissions') {
+    return manageJsonError('Form submissions are read-only in Manage.', 405)
+  }
   if (resource === 'media') {
     return omitUndefined({
       alt: optionalString(data.alt),

@@ -11,6 +11,8 @@ import { plainTextToLexical } from '@/lib/manage/richText'
 describe('manage resources', () => {
   it('rejects unsupported resources', () => {
     expect(isManageResourceSlug('users')).toBe(true)
+    expect(isManageResourceSlug('forms')).toBe(true)
+    expect(isManageResourceSlug('form-submissions')).toBe(true)
     expect(isManageResourceSlug('bad-resource')).toBe(false)
     expect(getManageResourceConfig('bad-resource')).toBeNull()
   })
@@ -87,6 +89,47 @@ describe('manage resources', () => {
     expect(result).toHaveProperty('status', 400)
     await expect((result as Response).json()).resolves.toMatchObject({
       error: 'Email must be a valid email address.',
+    })
+  })
+
+  it('sanitizes Manage form builder data into Payload form fields', () => {
+    const result = sanitizeManageData(
+      'forms',
+      {
+        title: 'Contact Us',
+        formFields: [
+          { label: 'Full Name', name: 'full_name', required: true, type: 'text' },
+          { label: 'Email', name: 'email', required: true, type: 'email' },
+          {
+            label: 'Interest',
+            name: 'interest',
+            optionsText: 'Membership\nDonation',
+            type: 'select',
+          },
+        ],
+        notificationEmail: 'club@example.org',
+      },
+      'create',
+    )
+
+    expect(result).toMatchObject({
+      title: 'Contact Us',
+      fields: [
+        { blockType: 'text', label: 'Full Name', name: 'full_name', required: true },
+        { blockType: 'email', label: 'Email', name: 'email', required: true },
+        {
+          blockType: 'select',
+          label: 'Interest',
+          name: 'interest',
+          options: [
+            { label: 'Membership', value: 'membership' },
+            { label: 'Donation', value: 'donation' },
+          ],
+        },
+      ],
+      submitButtonLabel: 'Submit',
+      confirmationType: 'message',
+      emails: [{ emailTo: 'club@example.org', subject: 'New Contact Us submission' }],
     })
   })
 })

@@ -2,8 +2,10 @@
 
 import {
   CalendarDays,
+  ClipboardList,
   FileText,
   Home,
+  Inbox,
   LogOut,
   Megaphone,
   Newspaper,
@@ -24,10 +26,18 @@ const navItems = [
   { href: '/manage/events', icon: CalendarDays, label: 'Events' },
   { href: '/manage/documents', icon: FileText, label: 'Documents' },
   { href: '/manage/pages', icon: Newspaper, label: 'Pages' },
+  { href: '/manage/forms', icon: ClipboardList, label: 'Forms' },
+  { href: '/manage/form-submissions', icon: Inbox, label: 'Submissions' },
   { href: '/manage/members', icon: Users, label: 'Members', adminOnly: true },
 ]
 
-export const ManageShell = ({ children, user }: { children: React.ReactNode; user: SessionUser }) => {
+export const ManageShell = ({
+  children,
+  user,
+}: {
+  children: React.ReactNode
+  user: SessionUser
+}) => {
   const pathname = usePathname()
   const router = useRouter()
   const visibleItems = navItems.filter((item) => !item.adminOnly || user.role === 'admin')
@@ -98,7 +108,12 @@ export const ManageShell = ({ children, user }: { children: React.ReactNode; use
           </div>
           <nav className="mt-3 flex gap-2 overflow-x-auto pb-1">
             {visibleItems.map((item) => (
-              <Button asChild key={item.href} size="sm" variant={pathname === item.href ? 'default' : 'outline'}>
+              <Button
+                asChild
+                key={item.href}
+                size="sm"
+                variant={pathname === item.href ? 'default' : 'outline'}
+              >
                 <Link href={item.href}>{item.label}</Link>
               </Button>
             ))}
