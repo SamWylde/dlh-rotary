@@ -8,17 +8,36 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import type { SessionUser } from '@/lib/auth'
+import {
+  manageCreateHref,
+  manageEditHref,
+  type ManageUIResource,
+} from '@/lib/manage/navigation'
+
+type RecentRecord = {
+  _status?: string
+  alt?: string
+  fullName?: string
+  id: number | string
+  title?: string
+  updatedAt?: string
+}
 
 const quickActions = [
-  { href: '/manage/announcements', icon: Megaphone, label: 'New Announcement' },
-  { href: '/manage/pages', icon: Newspaper, label: 'New Simple Page' },
-  { href: '/manage/events', icon: CalendarDays, label: 'New Event' },
-  { href: '/manage/documents', icon: FileText, label: 'Upload Document' },
-  { href: '/manage/members', icon: Users, label: 'Add Member', adminOnly: true },
-]
+  { icon: Megaphone, label: 'New Announcement', resource: 'announcements' },
+  { icon: Newspaper, label: 'New Simple Page', resource: 'pages' },
+  { icon: CalendarDays, label: 'New Event', resource: 'events' },
+  { icon: FileText, label: 'Upload Document', resource: 'documents' },
+  { adminOnly: true, icon: Users, label: 'Add Member', resource: 'users' },
+] satisfies {
+  adminOnly?: boolean
+  icon: typeof Megaphone
+  label: string
+  resource: ManageUIResource
+}[]
 
-const RecentList = ({ resource, title }: { resource: string; title: string }) => {
-  const { query, result } = useList({
+const RecentList = ({ resource, title }: { resource: ManageUIResource; title: string }) => {
+  const { query, result } = useList<RecentRecord>({
     resource,
     pagination: { currentPage: 1, pageSize: 5 },
   })
@@ -36,19 +55,28 @@ const RecentList = ({ resource, title }: { resource: string; title: string }) =>
           <p className="text-sm text-muted-foreground">Nothing here yet.</p>
         ) : null}
         {items.map((item) => (
-          <div className="flex min-w-0 items-center justify-between gap-3 rounded-md border p-3" key={item.id}>
+          <Link
+            className="group flex min-w-0 items-center justify-between gap-3 rounded-md border p-3 transition-colors hover:border-primary hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            href={manageEditHref(resource, item.id)}
+            key={item.id}
+          >
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium">{String(item.title || item.fullName || item.alt || 'Untitled')}</p>
+              <p className="truncate text-sm font-medium text-foreground group-hover:text-primary">
+                {String(item.title || item.fullName || item.alt || 'Untitled')}
+              </p>
               <p className="text-xs text-muted-foreground">
                 {item.updatedAt ? new Date(String(item.updatedAt)).toLocaleDateString('en-US') : 'Recently'}
               </p>
             </div>
             {item._status ? (
-              <Badge className="shrink-0" variant={item._status === 'published' ? 'default' : 'secondary'}>
+              <Badge
+                className="shrink-0 cursor-default"
+                variant={item._status === 'published' ? 'default' : 'secondary'}
+              >
                 {String(item._status)}
               </Badge>
             ) : null}
-          </div>
+          </Link>
         ))}
       </CardContent>
     </Card>
@@ -81,10 +109,10 @@ export const ManageDashboard = ({ user }: { user: SessionUser }) => {
             <Button
               asChild
               className="h-auto min-w-0 justify-start border-foreground/40 p-4 text-foreground hover:border-primary hover:bg-primary/10 hover:text-primary"
-              key={action.href}
+              key={action.resource}
               variant="outline"
             >
-              <Link href={action.href}>
+              <Link href={manageCreateHref(action.resource)}>
                 <Icon className="h-5 w-5 text-primary" />
                 <span className="min-w-0 truncate">{action.label}</span>
                 <Plus className="ml-auto h-4 w-4" />

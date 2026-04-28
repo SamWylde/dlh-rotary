@@ -2,7 +2,8 @@
 
 import { useCreate, useDelete, useList, useUpdate } from '@refinedev/core'
 import { Edit, Mail, Plus, RefreshCw, Search, Trash2, Upload } from 'lucide-react'
-import React, { useEffect, useMemo, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -26,10 +27,16 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import type { Role } from '@/constants/roles'
 import { DOCUMENT_CATEGORIES } from '@/constants/documentCategories'
+import {
+  MANAGE_FORM_HASH,
+  manageEditHref,
+  manageResourcePath,
+  type ManageUIResource,
+} from '@/lib/manage/navigation'
 import { lexicalToPlainText } from '@/lib/richText'
 import { cn } from '@/utilities/ui'
 
-type ResourceName = 'announcements' | 'events' | 'documents' | 'pages' | 'users'
+type ResourceName = ManageUIResource
 type FieldType =
   | 'checkbox'
   | 'date'
@@ -65,6 +72,7 @@ type ResourceConfig = {
   label: string
   resource: ResourceName
   searchPlaceholder: string
+  singularLabel: string
 }
 
 const eventTypes = [
@@ -111,6 +119,7 @@ const RESOURCE_CONFIG: Record<ResourceName, ResourceConfig> = {
     label: 'Announcements',
     resource: 'announcements',
     searchPlaceholder: 'Search announcements...',
+    singularLabel: 'announcement',
   },
   events: {
     description: 'Add meetings, speakers, service projects, fundraisers, and social events.',
@@ -173,6 +182,7 @@ const RESOURCE_CONFIG: Record<ResourceName, ResourceConfig> = {
     label: 'Events',
     resource: 'events',
     searchPlaceholder: 'Search events...',
+    singularLabel: 'event',
   },
   documents: {
     canDelete: (role) => role === 'admin',
@@ -207,6 +217,7 @@ const RESOURCE_CONFIG: Record<ResourceName, ResourceConfig> = {
     label: 'Documents',
     resource: 'documents',
     searchPlaceholder: 'Search documents...',
+    singularLabel: 'document',
   },
   pages: {
     description: 'Create simple informational pages. Advanced layout pages stay in Payload admin.',
@@ -227,6 +238,7 @@ const RESOURCE_CONFIG: Record<ResourceName, ResourceConfig> = {
     label: 'Simple Pages',
     resource: 'pages',
     searchPlaceholder: 'Search pages...',
+    singularLabel: 'simple page',
   },
   users: {
     canDelete: (role) => role === 'admin',
@@ -249,6 +261,7 @@ const RESOURCE_CONFIG: Record<ResourceName, ResourceConfig> = {
     label: 'Members',
     resource: 'users',
     searchPlaceholder: 'Search members...',
+    singularLabel: 'member',
   },
 }
 
@@ -365,6 +378,8 @@ const recordMeta = (resource: ResourceName, record: ManageRecord): string => {
   return 'Saved'
 }
 
+const sentenceCase = (value: string): string => value.charAt(0).toUpperCase() + value.slice(1)
+
 const UploadField = ({
   accept,
   isDocument,
@@ -382,6 +397,7 @@ const UploadField = ({
   const [file, setFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
 
   useEffect(() => {
     setAlt(label || '')
@@ -391,6 +407,7 @@ const UploadField = ({
     if (!file) return
     setIsUploading(true)
     setError(null)
+    setNotice(null)
 
     const formData = new FormData()
     formData.append('file', file)
@@ -415,6 +432,7 @@ const UploadField = ({
       onChange(String(body.doc.id), body.doc.filename || file.name)
       setFile(null)
       setAlt(body.doc.filename || file.name)
+      setNotice('Uploaded and attached. Save or Publish to finish.')
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : 'Upload failed.')
     } finally {
@@ -429,7 +447,11 @@ const UploadField = ({
       ) : null}
       <Input
         accept={accept}
-        onChange={(event) => setFile(event.target.files?.[0] || null)}
+        onChange={(event) => {
+          setFile(event.target.files?.[0] || null)
+          setError(null)
+          setNotice(null)
+        }}
         type="file"
       />
       <Input
@@ -438,6 +460,11 @@ const UploadField = ({
         value={alt}
       />
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
+      {notice ? (
+        <p className="rounded-md border border-green-200 bg-green-50 p-2 text-sm text-green-800">
+          {notice}
+        </p>
+      ) : null}
       <Button disabled={!file || isUploading} onClick={upload} type="button" variant="outline">
         <Upload className="h-4 w-4" />
         {isUploading ? 'Uploading...' : 'Upload'}
@@ -549,6 +576,11 @@ export const ManageResourcePage = ({
   userRole?: Role
 }) => {
   const config = RESOURCE_CONFIG[resource]
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const formRef = useRef<HTMLDivElement | null>(null)
+  const handledIntentRef = useRef<string | null>(null)
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
@@ -557,7 +589,10 @@ export const ManageResourcePage = ({
   const [initialFormValues, setInitialFormValues] = useState<FormValues>(defaultValues(resource))
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [isSaving, setIsSaving] = useState(false)
+  const [savingAction, setSavingAction] = useState<'draft' | 'publish' | 'save' | null>(null)
+  const [isLoadingIntent, setIsLoadingIntent] = useState(false)
+  const isSaving = Boolean(savingAction)
+  const resourcePath = pathname || manageResourcePath(resource)
 
   const filters = useMemo(() => {
     const nextFilters = [{ field: 'search', operator: 'eq' as const, value: search }]
@@ -575,33 +610,141 @@ export const ManageResourcePage = ({
   const createMutation = useCreate()
   const updateMutation = useUpdate()
   const deleteMutation = useDelete()
+  const rows = useMemo(() => result.data || [], [result.data])
+  const canDelete = config.canDelete?.(userRole) ?? false
 
-  const setValue = (name: string, value: boolean | number | string | undefined) => {
+  const setValue = useCallback((name: string, value: boolean | number | string | undefined) => {
     setFormValues((current) => ({ ...current, [name]: value }))
-  }
+  }, [])
 
-  const startCreate = () => {
+  const scrollToForm = useCallback(() => {
+    window.requestAnimationFrame(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      formRef.current?.focus({ preventScroll: true })
+    })
+  }, [])
+
+  const resetCreateForm = useCallback((readyMessage?: string | null) => {
     const defaults = defaultValues(resource)
     setEditing(null)
     setFormValues(defaults)
     setInitialFormValues(defaults)
     setError(null)
-    setMessage(null)
-  }
+    setMessage(readyMessage ?? null)
+  }, [resource])
 
-  const startEdit = (record: ManageRecord) => {
+  const loadEditRecord = useCallback((record: ManageRecord, nextMessage?: string | null) => {
     const values = normalizeRecord(resource, record)
     setEditing(record)
     setFormValues(values)
     setInitialFormValues(values)
     setError(null)
+    setMessage(nextMessage ?? null)
+  }, [resource])
+
+  const openCreate = useCallback(() => {
+    resetCreateForm(`Ready for a new ${config.singularLabel}.`)
+    router.replace(`${resourcePath}?new=1#${MANAGE_FORM_HASH}`, { scroll: false })
+    scrollToForm()
+  }, [config.singularLabel, resetCreateForm, resourcePath, router, scrollToForm])
+
+  const openEdit = useCallback((record: ManageRecord) => {
+    loadEditRecord(record)
+    router.replace(manageEditHref(resource, record.id), { scroll: false })
+    scrollToForm()
+  }, [loadEditRecord, resource, router, scrollToForm])
+
+  useEffect(() => {
+    const editID = searchParams.get('edit')
+    const wantsNew = searchParams.get('new') === '1'
+    const intentKey = editID ? `edit:${resource}:${editID}` : wantsNew ? `new:${resource}` : null
+
+    if (!intentKey) {
+      handledIntentRef.current = null
+      setIsLoadingIntent(false)
+      return
+    }
+
+    if (handledIntentRef.current === intentKey) return
+    handledIntentRef.current = intentKey
+
+    if (!editID) {
+      setIsLoadingIntent(false)
+      resetCreateForm(`Ready for a new ${config.singularLabel}.`)
+      scrollToForm()
+      return
+    }
+
+    if (editing && String(editing.id) === editID) {
+      setIsLoadingIntent(false)
+      scrollToForm()
+      return
+    }
+
+    const existingRecord = rows.find((record) => String(record.id) === editID)
+    if (existingRecord) {
+      setIsLoadingIntent(false)
+      loadEditRecord(existingRecord)
+      scrollToForm()
+      return
+    }
+
+    const controller = new AbortController()
+    setIsLoadingIntent(true)
+    setError(null)
     setMessage(null)
-  }
+
+    const loadRecord = async () => {
+      try {
+        const response = await fetch(`/manage/api/${resource}/${encodeURIComponent(editID)}`, {
+          credentials: 'include',
+          signal: controller.signal,
+        })
+        const body = (await response.json().catch(() => ({}))) as {
+          doc?: ManageRecord
+          error?: string
+        }
+
+        if (!response.ok || !body.doc) {
+          throw new Error(body.error || 'Unable to load that item.')
+        }
+
+        loadEditRecord(body.doc)
+        scrollToForm()
+      } catch (loadError) {
+        if (controller.signal.aborted) return
+        setError(loadError instanceof Error ? loadError.message : 'Unable to load that item.')
+        scrollToForm()
+      } finally {
+        if (!controller.signal.aborted) setIsLoadingIntent(false)
+      }
+    }
+
+    void loadRecord()
+
+    return () => {
+      controller.abort()
+    }
+  }, [
+    config.singularLabel,
+    editing,
+    loadEditRecord,
+    resetCreateForm,
+    resource,
+    rows,
+    scrollToForm,
+    searchParams,
+  ])
 
   const save = async (status?: 'draft' | 'published') => {
     setError(null)
     setMessage(null)
     const values: FormValues = { ...formValues, ...(status ? { _status: status } : {}) }
+    const nextSavingAction = config.draftable
+      ? status === 'published'
+        ? 'publish'
+        : 'draft'
+      : 'save'
 
     if (editing) {
       for (const field of config.fields) {
@@ -611,27 +754,42 @@ export const ManageResourcePage = ({
       }
     }
 
-    setIsSaving(true)
+    setSavingAction(nextSavingAction)
 
     try {
       if (editing) {
-        await updateMutation.mutateAsync({ id: editing.id, resource, values })
-        setMessage('Saved changes.')
+        const updateResult = (await updateMutation.mutateAsync({
+          id: editing.id,
+          resource,
+          values,
+        })) as { data?: ManageRecord }
+        if (updateResult.data?.id) {
+          loadEditRecord(updateResult.data, 'Saved changes.')
+        } else {
+          setMessage('Saved changes.')
+        }
       } else {
-        await createMutation.mutateAsync({ resource, values })
-        setMessage(
+        const createResult = (await createMutation.mutateAsync({ resource, values })) as {
+          data?: ManageRecord
+        }
+        const successMessage =
           resource === 'users'
             ? 'Member saved. Invite email was attempted automatically.'
-            : 'Created successfully.',
-        )
+            : 'Created successfully.'
+
+        if (createResult.data?.id) {
+          loadEditRecord(createResult.data, successMessage)
+          router.replace(manageEditHref(resource, createResult.data.id), { scroll: false })
+        } else {
+          setMessage(successMessage)
+        }
       }
 
       await query.refetch()
-      if (!editing) startCreate()
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Unable to save.')
     } finally {
-      setIsSaving(false)
+      setSavingAction(null)
     }
   }
 
@@ -667,9 +825,6 @@ export const ManageResourcePage = ({
     }
   }
 
-  const rows = result.data || []
-  const canDelete = config.canDelete?.(userRole) ?? false
-
   return (
     <div className="grid items-start gap-6 min-[1440px]:grid-cols-[minmax(0,1fr)_420px]">
       <div className="grid min-w-0 content-start gap-4">
@@ -680,7 +835,7 @@ export const ManageResourcePage = ({
             </h1>
             <p className="mt-1 text-muted-foreground">{config.description}</p>
           </div>
-          <Button onClick={startCreate}>
+          <Button onClick={openCreate}>
             <Plus className="h-4 w-4" />
             New
           </Button>
@@ -746,11 +901,13 @@ export const ManageResourcePage = ({
               <Button
                 aria-label="Refresh saved items"
                 className="w-full sm:w-10 sm:px-0"
+                disabled={query.isFetching}
                 onClick={() => query.refetch()}
+                title="Refresh saved items"
                 type="button"
                 variant="outline"
               >
-                <RefreshCw className="h-4 w-4" />
+                <RefreshCw className={cn('h-4 w-4', query.isFetching && 'animate-spin')} />
               </Button>
             </div>
           </CardHeader>
@@ -776,17 +933,30 @@ export const ManageResourcePage = ({
                 <TableBody>
                   {rows.map((record) => (
                     <TableRow key={record.id}>
-                      <TableCell className="font-medium">{recordTitle(record)}</TableCell>
+                      <TableCell className="font-medium">
+                        <button
+                          className="min-w-0 text-left text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                          onClick={() => openEdit(record)}
+                          type="button"
+                        >
+                          {recordTitle(record)}
+                        </button>
+                      </TableCell>
                       <TableCell className="text-muted-foreground">
                         {recordMeta(resource, record)}
                       </TableCell>
                       <TableCell>
                         {record._status ? (
-                          <Badge variant={record._status === 'published' ? 'default' : 'secondary'}>
+                          <Badge
+                            className="cursor-default"
+                            variant={record._status === 'published' ? 'default' : 'secondary'}
+                          >
                             {String(record._status)}
                           </Badge>
                         ) : resource === 'users' ? (
-                          <Badge variant="secondary">{String(record.role || 'member')}</Badge>
+                          <Badge className="cursor-default" variant="secondary">
+                            {String(record.role || 'member')}
+                          </Badge>
                         ) : null}
                       </TableCell>
                       <TableCell>
@@ -801,7 +971,7 @@ export const ManageResourcePage = ({
                               <Mail className="h-4 w-4" />
                             </Button>
                           ) : null}
-                          <Button onClick={() => startEdit(record)} size="sm" variant="outline">
+                          <Button onClick={() => openEdit(record)} size="sm" variant="outline">
                             <Edit className="h-4 w-4" />
                           </Button>
                           {canDelete ? (
@@ -837,10 +1007,17 @@ export const ManageResourcePage = ({
         </Card>
       </div>
 
-      <Card className="min-w-0 h-fit min-[1440px]:sticky min-[1440px]:top-6">
+      <Card
+        className="min-w-0 h-fit scroll-mt-6 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-[1440px]:sticky min-[1440px]:top-6"
+        id={MANAGE_FORM_HASH}
+        ref={formRef}
+        tabIndex={-1}
+      >
         <CardHeader>
           <CardTitle className="text-lg">
-            {editing ? `Edit ${config.label}` : `New ${config.label}`}
+            {editing
+              ? `Edit ${sentenceCase(config.singularLabel)}`
+              : `New ${sentenceCase(config.singularLabel)}`}
           </CardTitle>
           <CardDescription>
             {editing ? 'Update details and save changes.' : 'Fill in the essentials and save.'}
@@ -854,6 +1031,11 @@ export const ManageResourcePage = ({
               void save(config.draftable ? 'draft' : undefined)
             }}
           >
+            {isLoadingIntent ? (
+              <p className="rounded-md border bg-muted/30 p-3 text-sm text-muted-foreground">
+                Loading selected item...
+              </p>
+            ) : null}
             {config.fields.map((field) => (
               <Field
                 field={field}
@@ -877,19 +1059,19 @@ export const ManageResourcePage = ({
               {config.draftable ? (
                 <>
                   <Button disabled={isSaving} type="submit" variant="outline">
-                    Save Draft
+                    {savingAction === 'draft' ? 'Saving draft...' : 'Save Draft'}
                   </Button>
                   <Button disabled={isSaving} onClick={() => void save('published')} type="button">
-                    Publish
+                    {savingAction === 'publish' ? 'Publishing...' : 'Publish'}
                   </Button>
                 </>
               ) : (
                 <Button disabled={isSaving} type="submit">
-                  Save
+                  {savingAction === 'save' ? 'Saving...' : 'Save'}
                 </Button>
               )}
               {editing ? (
-                <Button onClick={startCreate} type="button" variant="ghost">
+                <Button onClick={openCreate} type="button" variant="ghost">
                   Cancel
                 </Button>
               ) : null}
