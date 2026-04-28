@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import type { SessionUser } from '@/lib/auth'
@@ -40,7 +40,22 @@ export const ManageShell = ({
 }) => {
   const pathname = usePathname()
   const router = useRouter()
-  const visibleItems = navItems.filter((item) => !item.adminOnly || user.role === 'admin')
+  const visibleNavItems = useMemo(
+    () => navItems.filter((item) => !item.adminOnly || user.role === 'admin'),
+    [user.role],
+  )
+  const [optimisticPath, setOptimisticPath] = useState(pathname)
+  const activePath = optimisticPath || pathname
+
+  useEffect(() => {
+    setOptimisticPath(pathname)
+  }, [pathname])
+
+  useEffect(() => {
+    visibleNavItems.forEach((item) => {
+      router.prefetch(item.href)
+    })
+  }, [router, visibleNavItems])
 
   const logout = async () => {
     await fetch('/api/users/logout', { method: 'POST' }).catch(() => null)
@@ -60,21 +75,23 @@ export const ManageShell = ({
             <p className="mt-1 text-xs text-muted-foreground">Downtown Lock Haven Rotary</p>
           </div>
           <nav className="flex-1 space-y-1 p-3">
-            {visibleItems.map((item) => {
+            {visibleNavItems.map((item) => {
               const Icon = item.icon
-              const active = pathname === item.href
+              const active = activePath === item.href
 
               return (
                 <Link
                   className={cn(
                     'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary',
-                    active &&
-                      'bg-primary !text-primary-foreground shadow-sm hover:bg-primary hover:!text-primary-foreground',
+                    active && 'bg-primary !text-white shadow-sm hover:bg-primary hover:!text-white',
                   )}
                   href={item.href}
                   key={item.href}
+                  onClick={() => setOptimisticPath(item.href)}
+                  onMouseEnter={() => router.prefetch(item.href)}
+                  prefetch
                 >
-                  <Icon className={cn('h-4 w-4', active && '!text-primary-foreground')} />
+                  <Icon className={cn('h-4 w-4', active && '!text-white')} />
                   {item.label}
                 </Link>
               )
@@ -107,14 +124,21 @@ export const ManageShell = ({
             </Button>
           </div>
           <nav className="mt-3 flex gap-2 overflow-x-auto pb-1">
-            {visibleItems.map((item) => (
+            {visibleNavItems.map((item) => (
               <Button
                 asChild
                 key={item.href}
                 size="sm"
-                variant={pathname === item.href ? 'default' : 'outline'}
+                variant={activePath === item.href ? 'default' : 'outline'}
               >
-                <Link href={item.href}>{item.label}</Link>
+                <Link
+                  href={item.href}
+                  onClick={() => setOptimisticPath(item.href)}
+                  onMouseEnter={() => router.prefetch(item.href)}
+                  prefetch
+                >
+                  {item.label}
+                </Link>
               </Button>
             ))}
           </nav>

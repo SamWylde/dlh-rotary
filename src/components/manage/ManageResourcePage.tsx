@@ -1,7 +1,7 @@
 'use client'
 
 import { useCreate, useDelete, useList, useUpdate } from '@refinedev/core'
-import { Edit, Eye, Mail, Plus, RefreshCw, Search, Trash2, Upload } from 'lucide-react'
+import { ArrowLeft, Edit, Eye, Mail, Plus, RefreshCw, Search, Trash2, Upload } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -120,6 +120,7 @@ const priorityOptions = [
 
 const RESOURCE_CONFIG: Record<ResourceName, ResourceConfig> = {
   announcements: {
+    canDelete: (role) => role === 'admin',
     description: 'Post news and club updates for public visitors or members.',
     draftable: true,
     fields: [
@@ -144,6 +145,7 @@ const RESOURCE_CONFIG: Record<ResourceName, ResourceConfig> = {
     singularLabel: 'announcement',
   },
   events: {
+    canDelete: (role) => role === 'admin',
     description: 'Add meetings, speakers, service projects, fundraisers, and social events.',
     draftable: true,
     fields: [
@@ -242,6 +244,7 @@ const RESOURCE_CONFIG: Record<ResourceName, ResourceConfig> = {
     singularLabel: 'document',
   },
   pages: {
+    canDelete: (role) => role === 'admin',
     description: 'Create simple informational pages. Advanced layout pages stay in Payload admin.',
     draftable: true,
     fields: [
@@ -263,6 +266,7 @@ const RESOURCE_CONFIG: Record<ResourceName, ResourceConfig> = {
     singularLabel: 'simple page',
   },
   forms: {
+    canDelete: (role) => role === 'admin',
     description: 'Build contact, sponsor, signup, pledge, and donation-interest forms.',
     fields: [
       { label: 'Title', name: 'title', required: true, type: 'text' },
@@ -1165,7 +1169,14 @@ export const ManageResourcePage = ({
             <h1 className="text-3xl font-semibold leading-tight">{config.label}</h1>
             <p className="mt-1 text-muted-foreground">{config.description}</p>
           </div>
-          {config.allowCreate !== false ? (
+          {isFormOpen ? (
+            <Button asChild variant="outline">
+              <Link href={manageResourcePath(resource)}>
+                <ArrowLeft className="h-4 w-4" />
+                Back to {config.label}
+              </Link>
+            </Button>
+          ) : config.allowCreate !== false ? (
             <Button asChild>
               <Link href={manageCreateHref(resource)} onClick={() => openCreate()}>
                 <Plus className="h-4 w-4" />
@@ -1262,7 +1273,7 @@ export const ManageResourcePage = ({
                       <TableHead>Name</TableHead>
                       <TableHead>Details</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead className="w-[190px] text-right">Actions</TableHead>
+                      <TableHead className="w-[260px] text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -1304,6 +1315,7 @@ export const ManageResourcePage = ({
                                 variant="outline"
                               >
                                 <Mail className="h-4 w-4" />
+                                Invite
                               </Button>
                             ) : null}
                             <Button asChild size="sm" variant="outline">
@@ -1312,15 +1324,22 @@ export const ManageResourcePage = ({
                                 onClick={() => openEdit(record)}
                               >
                                 {config.readOnly ? (
-                                  <Eye className="h-4 w-4" />
+                                  <>
+                                    <Eye className="h-4 w-4" />
+                                    View
+                                  </>
                                 ) : (
-                                  <Edit className="h-4 w-4" />
+                                  <>
+                                    <Edit className="h-4 w-4" />
+                                    Edit
+                                  </>
                                 )}
                               </Link>
                             </Button>
                             {canDelete ? (
                               <Button onClick={() => remove(record)} size="sm" variant="outline">
                                 <Trash2 className="h-4 w-4" />
+                                Delete
                               </Button>
                             ) : null}
                           </div>
@@ -1374,7 +1393,10 @@ export const ManageResourcePage = ({
                 </CardDescription>
               </div>
               <Button asChild variant="outline">
-                <Link href={manageResourcePath(resource)}>Back to list</Link>
+                <Link href={manageResourcePath(resource)}>
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to {config.label}
+                </Link>
               </Button>
             </CardHeader>
             <CardContent className="min-w-0">
