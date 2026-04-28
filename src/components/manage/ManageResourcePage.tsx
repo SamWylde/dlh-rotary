@@ -2,6 +2,7 @@
 
 import { useCreate, useDelete, useList, useUpdate } from '@refinedev/core'
 import { Edit, Mail, Plus, RefreshCw, Search, Trash2, Upload } from 'lucide-react'
+import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
@@ -29,6 +30,7 @@ import type { Role } from '@/constants/roles'
 import { DOCUMENT_CATEGORIES } from '@/constants/documentCategories'
 import {
   MANAGE_FORM_HASH,
+  manageCreateHref,
   manageEditHref,
   manageResourcePath,
   type ManageUIResource,
@@ -590,6 +592,7 @@ export const ManageResourcePage = ({
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [savingAction, setSavingAction] = useState<'draft' | 'publish' | 'save' | null>(null)
+  const [isFormOpen, setIsFormOpen] = useState(false)
   const [isLoadingIntent, setIsLoadingIntent] = useState(false)
   const isSaving = Boolean(savingAction)
   const resourcePath = pathname || manageResourcePath(resource)
@@ -624,35 +627,46 @@ export const ManageResourcePage = ({
     })
   }, [])
 
-  const resetCreateForm = useCallback((readyMessage?: string | null) => {
-    const defaults = defaultValues(resource)
-    setEditing(null)
-    setFormValues(defaults)
-    setInitialFormValues(defaults)
-    setError(null)
-    setMessage(readyMessage ?? null)
-  }, [resource])
+  const resetCreateForm = useCallback(
+    (readyMessage?: string | null) => {
+      const defaults = defaultValues(resource)
+      setEditing(null)
+      setFormValues(defaults)
+      setInitialFormValues(defaults)
+      setError(null)
+      setMessage(readyMessage ?? null)
+    },
+    [resource],
+  )
 
-  const loadEditRecord = useCallback((record: ManageRecord, nextMessage?: string | null) => {
-    const values = normalizeRecord(resource, record)
-    setEditing(record)
-    setFormValues(values)
-    setInitialFormValues(values)
-    setError(null)
-    setMessage(nextMessage ?? null)
-  }, [resource])
+  const loadEditRecord = useCallback(
+    (record: ManageRecord, nextMessage?: string | null) => {
+      const values = normalizeRecord(resource, record)
+      setEditing(record)
+      setFormValues(values)
+      setInitialFormValues(values)
+      setError(null)
+      setMessage(nextMessage ?? null)
+    },
+    [resource],
+  )
 
   const openCreate = useCallback(() => {
+    setIsFormOpen(true)
     resetCreateForm(`Ready for a new ${config.singularLabel}.`)
-    router.replace(`${resourcePath}?new=1#${MANAGE_FORM_HASH}`, { scroll: false })
+    router.push(`${resourcePath}?new=1#${MANAGE_FORM_HASH}`, { scroll: false })
     scrollToForm()
   }, [config.singularLabel, resetCreateForm, resourcePath, router, scrollToForm])
 
-  const openEdit = useCallback((record: ManageRecord) => {
-    loadEditRecord(record)
-    router.replace(manageEditHref(resource, record.id), { scroll: false })
-    scrollToForm()
-  }, [loadEditRecord, resource, router, scrollToForm])
+  const openEdit = useCallback(
+    (record: ManageRecord) => {
+      setIsFormOpen(true)
+      loadEditRecord(record)
+      router.push(manageEditHref(resource, record.id), { scroll: false })
+      scrollToForm()
+    },
+    [loadEditRecord, resource, router, scrollToForm],
+  )
 
   useEffect(() => {
     const editID = searchParams.get('edit')
@@ -661,6 +675,7 @@ export const ManageResourcePage = ({
 
     if (!intentKey) {
       handledIntentRef.current = null
+      setIsFormOpen(false)
       setIsLoadingIntent(false)
       return
     }
@@ -669,6 +684,7 @@ export const ManageResourcePage = ({
     handledIntentRef.current = intentKey
 
     if (!editID) {
+      setIsFormOpen(true)
       setIsLoadingIntent(false)
       resetCreateForm(`Ready for a new ${config.singularLabel}.`)
       scrollToForm()
@@ -676,6 +692,7 @@ export const ManageResourcePage = ({
     }
 
     if (editing && String(editing.id) === editID) {
+      setIsFormOpen(true)
       setIsLoadingIntent(false)
       scrollToForm()
       return
@@ -683,6 +700,7 @@ export const ManageResourcePage = ({
 
     const existingRecord = rows.find((record) => String(record.id) === editID)
     if (existingRecord) {
+      setIsFormOpen(true)
       setIsLoadingIntent(false)
       loadEditRecord(existingRecord)
       scrollToForm()
@@ -690,6 +708,7 @@ export const ManageResourcePage = ({
     }
 
     const controller = new AbortController()
+    setIsFormOpen(true)
     setIsLoadingIntent(true)
     setError(null)
     setMessage(null)
@@ -826,259 +845,277 @@ export const ManageResourcePage = ({
   }
 
   return (
-    <div className="grid items-start gap-6 min-[1440px]:grid-cols-[minmax(0,1fr)_420px]">
+    <div className="grid items-start gap-6">
       <div className="grid min-w-0 content-start gap-4">
         <div className="flex min-w-0 flex-col justify-between gap-3 sm:flex-row sm:items-end">
           <div className="min-w-0">
-            <h1 className="text-3xl font-semibold leading-tight">
-              {config.label}
-            </h1>
+            <h1 className="text-3xl font-semibold leading-tight">{config.label}</h1>
             <p className="mt-1 text-muted-foreground">{config.description}</p>
           </div>
-          <Button onClick={openCreate}>
-            <Plus className="h-4 w-4" />
-            New
+          <Button asChild>
+            <Link href={manageCreateHref(resource)} onClick={() => openCreate()}>
+              <Plus className="h-4 w-4" />
+              New
+            </Link>
           </Button>
         </div>
 
-        <Card className="min-w-0">
-          <CardHeader className="gap-3 space-y-0 sm:flex-row sm:items-center sm:justify-between">
-            <div className="min-w-0">
-              <CardTitle className="text-base">Saved Items</CardTitle>
-              <CardDescription>
-                Search, edit, publish, or delete where your role allows it.
-              </CardDescription>
-            </div>
-            <div className="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-row">
-              <div className="relative min-w-0 sm:w-56">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  className="pl-8"
-                  onChange={(event) => {
-                    setPage(1)
-                    setSearch(event.target.value)
-                  }}
-                  placeholder={config.searchPlaceholder}
-                  value={search}
-                />
+        {!isFormOpen ? (
+          <Card className="min-w-0">
+            <CardHeader className="gap-3 space-y-0 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <CardTitle className="text-base">Saved Items</CardTitle>
+                <CardDescription>
+                  Search, edit, publish, or delete where your role allows it.
+                </CardDescription>
               </div>
-              {config.filter ? (
-                <Select
-                  onValueChange={(value) => {
-                    setPage(1)
-                    setFilter(value)
-                  }}
-                  value={filter}
+              <div className="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-row">
+                <div className="relative min-w-0 sm:w-56">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    className="pl-8"
+                    onChange={(event) => {
+                      setPage(1)
+                      setSearch(event.target.value)
+                    }}
+                    placeholder={config.searchPlaceholder}
+                    value={search}
+                  />
+                </div>
+                {config.filter ? (
+                  <Select
+                    onValueChange={(value) => {
+                      setPage(1)
+                      setFilter(value)
+                    }}
+                    value={filter}
+                  >
+                    <SelectTrigger className="w-full sm:w-40">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All</SelectItem>
+                      {config.filter === 'status' ? (
+                        <>
+                          <SelectItem value="draft">Draft</SelectItem>
+                          <SelectItem value="published">Published</SelectItem>
+                        </>
+                      ) : null}
+                      {config.filter === 'category'
+                        ? DOCUMENT_CATEGORIES.map((category) => (
+                            <SelectItem key={category.value} value={category.value}>
+                              {category.label}
+                            </SelectItem>
+                          ))
+                        : null}
+                      {config.filter === 'role'
+                        ? roleOptions.map((role) => (
+                            <SelectItem key={role.value} value={role.value}>
+                              {role.label}
+                            </SelectItem>
+                          ))
+                        : null}
+                    </SelectContent>
+                  </Select>
+                ) : null}
+                <Button
+                  aria-label="Refresh saved items"
+                  className="w-full sm:w-10 sm:px-0"
+                  disabled={query.isFetching}
+                  onClick={() => query.refetch()}
+                  title="Refresh saved items"
+                  type="button"
+                  variant="outline"
                 >
-                  <SelectTrigger className="w-full sm:w-40">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
-                    {config.filter === 'status' ? (
-                      <>
-                        <SelectItem value="draft">Draft</SelectItem>
-                        <SelectItem value="published">Published</SelectItem>
-                      </>
-                    ) : null}
-                    {config.filter === 'category'
-                      ? DOCUMENT_CATEGORIES.map((category) => (
-                          <SelectItem key={category.value} value={category.value}>
-                            {category.label}
-                          </SelectItem>
-                        ))
-                      : null}
-                    {config.filter === 'role'
-                      ? roleOptions.map((role) => (
-                          <SelectItem key={role.value} value={role.value}>
-                            {role.label}
-                          </SelectItem>
-                        ))
-                      : null}
-                  </SelectContent>
-                </Select>
+                  <RefreshCw className={cn('h-4 w-4', query.isFetching && 'animate-spin')} />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="min-w-0">
+              {query.isLoading ? (
+                <p className="py-8 text-center text-sm text-muted-foreground">Loading...</p>
               ) : null}
-              <Button
-                aria-label="Refresh saved items"
-                className="w-full sm:w-10 sm:px-0"
-                disabled={query.isFetching}
-                onClick={() => query.refetch()}
-                title="Refresh saved items"
-                type="button"
-                variant="outline"
-              >
-                <RefreshCw className={cn('h-4 w-4', query.isFetching && 'animate-spin')} />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="min-w-0">
-            {query.isLoading ? (
-              <p className="py-8 text-center text-sm text-muted-foreground">Loading...</p>
-            ) : null}
-            {!query.isLoading && rows.length === 0 ? (
-              <p className="py-8 text-center text-sm text-muted-foreground">
-                No matching items yet.
-              </p>
-            ) : null}
-            {rows.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Details</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="w-[190px] text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {rows.map((record) => (
-                    <TableRow key={record.id}>
-                      <TableCell className="font-medium">
-                        <button
-                          className="min-w-0 text-left text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                          onClick={() => openEdit(record)}
-                          type="button"
-                        >
-                          {recordTitle(record)}
-                        </button>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {recordMeta(resource, record)}
-                      </TableCell>
-                      <TableCell>
-                        {record._status ? (
-                          <Badge
-                            className="cursor-default"
-                            variant={record._status === 'published' ? 'default' : 'secondary'}
-                          >
-                            {String(record._status)}
-                          </Badge>
-                        ) : resource === 'users' ? (
-                          <Badge className="cursor-default" variant="secondary">
-                            {String(record.role || 'member')}
-                          </Badge>
-                        ) : null}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex justify-end gap-2">
-                          {resource === 'users' ? (
-                            <Button
-                              onClick={() => sendInvite(record)}
-                              size="sm"
-                              title="Send invite"
-                              variant="outline"
-                            >
-                              <Mail className="h-4 w-4" />
-                            </Button>
-                          ) : null}
-                          <Button onClick={() => openEdit(record)} size="sm" variant="outline">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          {canDelete ? (
-                            <Button onClick={() => remove(record)} size="sm" variant="outline">
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          ) : null}
-                        </div>
-                      </TableCell>
+              {!query.isLoading && rows.length === 0 ? (
+                <p className="py-8 text-center text-sm text-muted-foreground">
+                  No matching items yet.
+                </p>
+              ) : null}
+              {rows.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Details</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="w-[190px] text-right">Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            ) : null}
-            <div className="mt-4 flex items-center justify-between">
-              <Button
-                disabled={page <= 1}
-                onClick={() => setPage((current) => Math.max(1, current - 1))}
-                variant="outline"
-              >
-                Previous
-              </Button>
-              <span className="text-sm text-muted-foreground">Page {page}</span>
-              <Button
-                disabled={(result.total || 0) <= page * 10}
-                onClick={() => setPage((current) => current + 1)}
-                variant="outline"
-              >
-                Next
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card
-        className="min-w-0 h-fit scroll-mt-6 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-[1440px]:sticky min-[1440px]:top-6"
-        id={MANAGE_FORM_HASH}
-        ref={formRef}
-        tabIndex={-1}
-      >
-        <CardHeader>
-          <CardTitle className="text-lg">
-            {editing
-              ? `Edit ${sentenceCase(config.singularLabel)}`
-              : `New ${sentenceCase(config.singularLabel)}`}
-          </CardTitle>
-          <CardDescription>
-            {editing ? 'Update details and save changes.' : 'Fill in the essentials and save.'}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="min-w-0">
-          <form
-            className="grid min-w-0 gap-4"
-            onSubmit={(event) => {
-              event.preventDefault()
-              void save(config.draftable ? 'draft' : undefined)
-            }}
-          >
-            {isLoadingIntent ? (
-              <p className="rounded-md border bg-muted/30 p-3 text-sm text-muted-foreground">
-                Loading selected item...
-              </p>
-            ) : null}
-            {config.fields.map((field) => (
-              <Field
-                field={field}
-                key={field.name}
-                resource={resource}
-                setValue={setValue}
-                values={formValues}
-              />
-            ))}
-            {message ? (
-              <p className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
-                {message}
-              </p>
-            ) : null}
-            {error ? (
-              <p className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
-                {error}
-              </p>
-            ) : null}
-            <div className="flex flex-col gap-2 sm:flex-row">
-              {config.draftable ? (
-                <>
-                  <Button disabled={isSaving} type="submit" variant="outline">
-                    {savingAction === 'draft' ? 'Saving draft...' : 'Save Draft'}
-                  </Button>
-                  <Button disabled={isSaving} onClick={() => void save('published')} type="button">
-                    {savingAction === 'publish' ? 'Publishing...' : 'Publish'}
-                  </Button>
-                </>
-              ) : (
-                <Button disabled={isSaving} type="submit">
-                  {savingAction === 'save' ? 'Saving...' : 'Save'}
-                </Button>
-              )}
-              {editing ? (
-                <Button onClick={openCreate} type="button" variant="ghost">
-                  Cancel
-                </Button>
+                  </TableHeader>
+                  <TableBody>
+                    {rows.map((record) => (
+                      <TableRow key={record.id}>
+                        <TableCell className="font-medium">
+                          <Link
+                            className="min-w-0 text-left text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            href={manageEditHref(resource, record.id)}
+                            onClick={() => openEdit(record)}
+                          >
+                            {recordTitle(record)}
+                          </Link>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {recordMeta(resource, record)}
+                        </TableCell>
+                        <TableCell>
+                          {record._status ? (
+                            <Badge
+                              className="cursor-default"
+                              variant={record._status === 'published' ? 'default' : 'secondary'}
+                            >
+                              {String(record._status)}
+                            </Badge>
+                          ) : resource === 'users' ? (
+                            <Badge className="cursor-default" variant="secondary">
+                              {String(record.role || 'member')}
+                            </Badge>
+                          ) : null}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex justify-end gap-2">
+                            {resource === 'users' ? (
+                              <Button
+                                onClick={() => sendInvite(record)}
+                                size="sm"
+                                title="Send invite"
+                                variant="outline"
+                              >
+                                <Mail className="h-4 w-4" />
+                              </Button>
+                            ) : null}
+                            <Button asChild size="sm" variant="outline">
+                              <Link
+                                href={manageEditHref(resource, record.id)}
+                                onClick={() => openEdit(record)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Link>
+                            </Button>
+                            {canDelete ? (
+                              <Button onClick={() => remove(record)} size="sm" variant="outline">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            ) : null}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               ) : null}
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+              <div className="mt-4 flex items-center justify-between">
+                <Button
+                  disabled={page <= 1}
+                  onClick={() => setPage((current) => Math.max(1, current - 1))}
+                  variant="outline"
+                >
+                  Previous
+                </Button>
+                <span className="text-sm text-muted-foreground">Page {page}</span>
+                <Button
+                  disabled={(result.total || 0) <= page * 10}
+                  onClick={() => setPage((current) => current + 1)}
+                  variant="outline"
+                >
+                  Next
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card
+            className="mx-auto min-w-0 w-full max-w-3xl scroll-mt-6 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            id={MANAGE_FORM_HASH}
+            ref={formRef}
+            tabIndex={-1}
+          >
+            <CardHeader className="gap-4 space-y-0 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <CardTitle className="text-lg">
+                  {editing
+                    ? `Edit ${sentenceCase(config.singularLabel)}`
+                    : `New ${sentenceCase(config.singularLabel)}`}
+                </CardTitle>
+                <CardDescription className="mt-2">
+                  {editing
+                    ? 'Update details and save changes.'
+                    : 'Fill in the essentials and save.'}
+                </CardDescription>
+              </div>
+              <Button asChild variant="outline">
+                <Link href={manageResourcePath(resource)}>Back to list</Link>
+              </Button>
+            </CardHeader>
+            <CardContent className="min-w-0">
+              <form
+                className="grid min-w-0 gap-4"
+                onSubmit={(event) => {
+                  event.preventDefault()
+                  void save(config.draftable ? 'draft' : undefined)
+                }}
+              >
+                {isLoadingIntent ? (
+                  <p className="rounded-md border bg-muted/30 p-3 text-sm text-muted-foreground">
+                    Loading selected item...
+                  </p>
+                ) : null}
+                {config.fields.map((field) => (
+                  <Field
+                    field={field}
+                    key={field.name}
+                    resource={resource}
+                    setValue={setValue}
+                    values={formValues}
+                  />
+                ))}
+                {message ? (
+                  <p className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+                    {message}
+                  </p>
+                ) : null}
+                {error ? (
+                  <p className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+                    {error}
+                  </p>
+                ) : null}
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  {config.draftable ? (
+                    <>
+                      <Button disabled={isSaving} type="submit" variant="outline">
+                        {savingAction === 'draft' ? 'Saving draft...' : 'Save Draft'}
+                      </Button>
+                      <Button
+                        disabled={isSaving}
+                        onClick={() => void save('published')}
+                        type="button"
+                      >
+                        {savingAction === 'publish' ? 'Publishing...' : 'Publish'}
+                      </Button>
+                    </>
+                  ) : (
+                    <Button disabled={isSaving} type="submit">
+                      {savingAction === 'save' ? 'Saving...' : 'Save'}
+                    </Button>
+                  )}
+                  {editing ? (
+                    <Button asChild variant="ghost">
+                      <Link href={manageResourcePath(resource)}>Cancel</Link>
+                    </Button>
+                  ) : null}
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   )
 }
