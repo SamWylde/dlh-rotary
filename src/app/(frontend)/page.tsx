@@ -1,5 +1,5 @@
-import { UpcomingEvents } from '@/components/events/UpcomingEvents'
 import { FlagsOfHonorCampaignPopup } from '@/components/home/FlagsOfHonorCampaignPopup'
+import { HomeDatesSection } from '@/components/home/HomeDatesSection'
 import { HomeHero } from '@/components/home/HomeHero'
 import { HomeProjectsGrid } from '@/components/home/HomeProjectsGrid'
 import { MeetingCalloutBar } from '@/components/home/MeetingCalloutBar'
@@ -11,7 +11,7 @@ import { getProjects, getUpcomingEvents } from '@/lib/content'
 const getHomeContent = async () => {
   try {
     const { user } = await getCurrentUser()
-    const [events, projects] = await Promise.all([getUpcomingEvents(5, user), getProjects(user)])
+    const [events, projects] = await Promise.all([getUpcomingEvents(6, user), getProjects(user)])
 
     return {
       events: events.docs,
@@ -36,22 +36,7 @@ export default async function HomePage() {
       <HomeHero />
       <MeetingCalloutBar />
       <WhoWeAreSection />
-
-      <section
-        style={{
-          maxWidth: 'var(--section-ea-max-width, 760px)',
-          margin: '0 auto',
-          padding:
-            'var(--section-ea-padding-top, 20px) 40px var(--section-ea-padding-bottom, 56px)',
-        }}
-      >
-        <UpcomingEvents
-          emptyMessage="No upcoming dates posted yet."
-          events={events}
-          heading="Upcoming Dates"
-          viewAllHref="/events"
-        />
-      </section>
+      <HomeDatesSection events={events} />
 
       <HomeProjectsGrid projects={projects} />
 

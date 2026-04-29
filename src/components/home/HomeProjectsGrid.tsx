@@ -17,23 +17,21 @@ const PROJECT_ICONS_BY_SLUG: Record<string, string> = {
 
 const CATEGORY_ICONS: Record<string, string> = {
   'community-service': '🤝',
-  'youth': '🎓',
-  'international': '🌍',
-  'fundraiser': '💰',
+  youth: '🎓',
+  international: '🌍',
+  fundraiser: '💰',
 }
 
 export type HomeProject = Pick<Project, 'id' | 'slug' | 'title' | 'category' | 'description'>
 
 export const HomeProjectsGrid = ({ projects }: { projects: HomeProject[] }) => (
-  <div
-    className="full-bleed"
-    style={{ background: 'var(--color-background-white, #fff)' }}
-  >
+  <div className="full-bleed" style={{ background: 'var(--color-background-white, #fff)' }}>
     <div
       style={{
         maxWidth: 'var(--section-projects-max-width, 1000px)',
         margin: '0 auto',
-        padding: 'var(--section-projects-padding-y, 56px) var(--section-projects-padding-x, 40px)',
+        padding:
+          'var(--section-projects-padding-top, 28px) var(--section-projects-padding-x, 40px) var(--section-projects-padding-bottom, 56px)',
       }}
     >
       <h2
@@ -49,14 +47,19 @@ export const HomeProjectsGrid = ({ projects }: { projects: HomeProject[] }) => (
       </h2>
 
       {projects.length === 0 ? (
-        <p style={{ color: 'var(--color-muted-foreground)', fontFamily: 'var(--font-body)' }}>No projects yet.</p>
+        <p style={{ color: 'var(--color-muted-foreground)', fontFamily: 'var(--font-body)' }}>
+          No projects yet.
+        </p>
       ) : (
         <div
           className="grid md:grid-cols-2 lg:grid-cols-3"
           style={{ gap: 'var(--project-grid-gap, 20px)' }}
         >
           {projects.map((project) => {
-            const icon = PROJECT_ICONS_BY_SLUG[project.slug] || (project.category && CATEGORY_ICONS[project.category]) || '🤝'
+            const icon =
+              PROJECT_ICONS_BY_SLUG[project.slug] ||
+              (project.category && CATEGORY_ICONS[project.category]) ||
+              '🤝'
 
             return (
               <Link
@@ -72,7 +75,12 @@ export const HomeProjectsGrid = ({ projects }: { projects: HomeProject[] }) => (
                   display: 'block',
                 }}
               >
-                <div style={{ fontSize: 'var(--project-icon-size, 32px)', marginBottom: 'var(--project-icon-mb, 12px)' }}>
+                <div
+                  style={{
+                    fontSize: 'var(--project-icon-size, 32px)',
+                    marginBottom: 'var(--project-icon-mb, 12px)',
+                  }}
+                >
                   {icon}
                 </div>
                 <p

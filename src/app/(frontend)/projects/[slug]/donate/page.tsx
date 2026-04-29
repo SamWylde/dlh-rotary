@@ -10,7 +10,7 @@ import { getProjectBySlug } from '@/lib/content'
 
 export const metadata: Metadata = {
   title: 'Support Flags of Honor | Rotary Club of Downtown Lock Haven',
-  description: 'Corporate sponsorship and support information for Flags of Honor 2026.',
+  description: 'Flag sponsorship and corporate sponsorship information for Flags of Honor 2026.',
 }
 
 export default async function ProjectDonatePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -38,7 +38,7 @@ export default async function ProjectDonatePage({ params }: { params: Promise<{ 
         style={{
           maxWidth: '1180px',
           margin: '0 auto',
-          padding: '40px 40px 48px',
+          padding: '32px clamp(0px, 4vw, 40px) 48px',
         }}
       >
         <div className="mb-6 flex flex-wrap gap-3">

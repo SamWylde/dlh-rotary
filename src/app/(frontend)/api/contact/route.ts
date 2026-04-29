@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 
+import { verifyContactChallenge } from '@/lib/contactProtection'
 import { SMTP_CONFIG_ERROR, SMTP_CONFIGURED } from '@/lib/env'
 import { getPayloadClient } from '@/lib/payload'
 
@@ -9,11 +10,23 @@ const CONTACT_RECIPIENTS = ['dlhrotary@gmail.com', 'thomasdarby@dlhrotary.org'] 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 type ContactRequestBody = {
+  challengeAnswer?: unknown
+  challengeToken?: unknown
   email?: unknown
   message?: unknown
   name?: unknown
   phone?: unknown
+  website?: unknown
 }
+
+type RateLimitEntry = {
+  count: number
+  resetAt: number
+}
+
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000
+const RATE_LIMIT_MAX_ATTEMPTS = 5
+const rateLimits = new Map<string, RateLimitEntry>()
 
 const getString = (value: unknown): string => (typeof value === 'string' ? value.trim() : '')
 
@@ -29,6 +42,31 @@ const parseBody = async (request: Request): Promise<ContactRequestBody | null> =
   }
 }
 
+const getClientKey = (request: Request): string => {
+  const forwardedFor = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+  return forwardedFor || request.headers.get('x-real-ip') || 'unknown'
+}
+
+const isRateLimited = (key: string, now = Date.now()): boolean => {
+  for (const [entryKey, entry] of rateLimits) {
+    if (entry.resetAt <= now) {
+      rateLimits.delete(entryKey)
+    }
+  }
+
+  const entry = rateLimits.get(key)
+
+  if (!entry) {
+    rateLimits.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
+    return false
+  }
+
+  entry.count += 1
+  rateLimits.set(key, entry)
+
+  return entry.count > RATE_LIMIT_MAX_ATTEMPTS
+}
+
 export const POST = async (request: Request): Promise<NextResponse> => {
   const body = await parseBody(request)
 
@@ -40,6 +78,22 @@ export const POST = async (request: Request): Promise<NextResponse> => {
   const email = getString(body.email).toLowerCase()
   const phone = getString(body.phone)
   const message = getString(body.message)
+  const honeypot = getString(body.website)
+  const challengeAnswer = getString(body.challengeAnswer)
+  const challengeToken = getString(body.challengeToken)
+
+  if (honeypot) {
+    return NextResponse.json({ ok: true })
+  }
+
+  const challenge = verifyContactChallenge({
+    answer: challengeAnswer,
+    token: challengeToken,
+  })
+
+  if (!challenge.ok) {
+    return NextResponse.json({ error: challenge.error }, { status: 400 })
+  }
 
   if (name.length < 2 || name.length > 120) {
     return NextResponse.json({ error: 'Please enter your name.' }, { status: 400 })
@@ -57,6 +111,18 @@ export const POST = async (request: Request): Promise<NextResponse> => {
     return NextResponse.json(
       { error: 'Please enter a message between 10 and 5,000 characters.' },
       { status: 400 },
+    )
+  }
+
+  const rateLimitKey = `contact:${getClientKey(request)}`
+
+  if (isRateLimited(rateLimitKey)) {
+    return NextResponse.json(
+      { error: 'Too many messages were sent from this connection. Please wait and try again.' },
+      {
+        headers: { 'Retry-After': String(Math.ceil(RATE_LIMIT_WINDOW_MS / 1000)) },
+        status: 429,
+      },
     )
   }
 
